@@ -1,0 +1,2167 @@
+swagger: '2.0'
+info:
+  description: |2
+     A set of APIs have been made available for applications to integrate with The Kroger Co. family of stores data.
+  version: 1.0.0
+  title: The Kroger Co.
+  termsOfService: 'https://www.kroger.com/topic/terms-and-conditions-2'
+  contact:
+    name: API Support
+    email: APISupport@kroger.com
+# basePath: /v1
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+security:
+  - Public:
+      - profile.full
+      - profile.basic
+      - profile.loyalty
+      - product.personalized
+      - cart.basic
+      - 'cart.basic:rw'
+paths:
+  /products:
+    get:
+      tags:
+        - products
+      summary: Returns a list of all products
+      description: product api get function
+      operationId: productGet
+      produces:
+        - application/json
+      parameters:
+        - name: filter.term
+          in: query
+          description: 'Input term to filter by (i.e. milk, bread, salt)'
+          required: false
+          type: string
+        - name: filter.locationId
+          in: query
+          description: LocationID for a Kroger Family of stores location
+          required: false
+          type: string
+          maxLength: 8
+          minLength: 8
+        - name: filter.productId
+          in: query
+          description: >-
+            A comma-separated list of product ids to retrieve. Must be used with
+            location id filter to enhance items with prices. Ignores all other
+            filters when used.
+          required: false
+          type: string
+        - name: filter.brand
+          in: query
+          description: >-
+            A pipe-separated list of case-sensitive brand names to be applied as
+            filters
+          required: false
+          type: string
+        - name: filter.fulfillment
+          in: query
+          description: >-
+            A comma-separated list of fulfillment types; case-insensitive. 'ais'
+            is Available In Store, 'csp' is Curb Side Pickup, 'dth' is Delivery
+            To Home, 'sth' is Ship To Home
+          required: false
+          type: string
+        - name: filter.start
+          in: query
+          description: The number of records to skip
+          required: false
+          type: integer
+        - name: filter.limit
+          in: query
+          description: The number of records to return to a maximum of 200
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ProductsPayloadModel'
+        '400':
+          description: BAD REQUEST
+          schema:
+            $ref: '#/definitions/APIError'
+      security:
+        - Public:
+            - product.personalized
+  '/products/{id}':
+    get:
+      tags:
+        - products
+      summary: Returns one product based on item id or upc
+      description: ''
+      operationId: productGetID
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          maxLength: 13
+          minLength: 13
+        - name: filter.locationId
+          in: query
+          description: LocationID for a Kroger Family of stores location
+          required: false
+          type: string
+          maxLength: 8
+          minLength: 8
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ProductPayloadModel'
+  /carts:
+    get:
+      tags:
+        - carts
+      summary: Returns a list of all carts for user
+      description: cart api get function
+      operationId: getCarts
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CartsPayloadModel'
+        '400':
+          description: BAD REQUEST
+          schema:
+            $ref: '#/definitions/APIError'
+      security:
+        - Public:
+            - cart.basic
+    post:
+      tags:
+        - carts
+      summary: Create new cart for user
+      description: ''
+      operationId: createCart
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: items
+          required: false
+          schema:
+            $ref: '#/definitions/CartRequestModel'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/CartsPayloadModel'
+      security:
+        - Public:
+            - 'cart.basic:rw'
+  '/carts/{id}':
+    get:
+      tags:
+        - carts
+      summary: Returns a cart based on the id
+      description: cart api get function
+      operationId: getCart
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CartPayloadModel'
+        '400':
+          description: BAD REQUEST
+          schema:
+            $ref: '#/definitions/APIError'
+        '409':
+          description: cart not fulfillable
+          schema:
+            $ref: '#/definitions/APIError'
+      security:
+        - Public:
+            - cart.basic
+    put:
+      tags:
+        - carts
+      summary: Update cart for a user
+      operationId: putCart
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+        - in: body
+          name: items
+          required: false
+          schema:
+            $ref: '#/definitions/CartRequestModel'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CartsPayloadModel'
+        '400':
+          description: BAD REQUEST
+          schema:
+            $ref: '#/definitions/APIError'
+        '409':
+          description: cart not fulfillable
+          schema:
+            $ref: '#/definitions/APIError'
+      security:
+        - Public:
+            - 'cart.basic:rw'
+  '/carts/{id}/items':
+    post:
+      tags:
+        - carts
+      summary: Adds item in a cart for a user
+      operationId: postCartItem
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: items
+          required: false
+          schema:
+            $ref: '#/definitions/CartItemPostRequestModel'
+      responses:
+        '201':
+          description: created
+        '400':
+          description: BAD REQUEST
+          schema:
+            $ref: '#/definitions/APIError'
+        '409':
+          description: cart not fulfillable
+          schema:
+            $ref: '#/definitions/APIError'
+      security:
+        - Public:
+            - 'cart.basic:rw'
+  '/carts/{id}/items/{upc}':
+    put:
+      tags:
+        - carts
+      summary: Updates quantity for an item in a cart for a user
+      operationId: putCartItem
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - name: upc
+          in: path
+          required: true
+          type: string
+          maxLength: 13
+          minLength: 13
+        - in: body
+          name: items
+          required: false
+          schema:
+            $ref: '#/definitions/CartItemPutRequestModel'
+      responses:
+        '204':
+          description: NO CONTENT
+        '400':
+          description: BAD REQUEST
+          schema:
+            $ref: '#/definitions/APIError'
+        '409':
+          description: cart not fulfillable
+          schema:
+            $ref: '#/definitions/APIError'
+      security:
+        - Public:
+            - 'cart.basic:rw'
+    delete:
+      tags:
+        - carts
+      summary: Deletes item from a cart for a user
+      operationId: deleteCartItem
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - name: upc
+          in: path
+          required: true
+          type: string
+          maxLength: 13
+          minLength: 13
+      responses:
+        '204':
+          description: NO CONTENT
+        '400':
+          description: BAD REQUEST
+          schema:
+            $ref: '#/definitions/APIError'
+        '409':
+          description: cart not fulfillable
+          schema:
+            $ref: '#/definitions/APIError'
+      security:
+        - Public:
+            - profile.full
+  /chains:
+    get:
+      tags:
+        - locations
+      summary: Get a list of chains
+      description: Get a list of chains
+      operationId: ListChains
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/locations.ChainsResponse'
+        '400':
+          description: BAD REQUEST
+          schema:
+            $ref: '#/definitions/APIError'
+      security: []
+  '/chains/{name}':
+    get:
+      tags:
+        - locations
+      summary: Get chain details for a specific chain name
+      description: Get chain details for a specific chain name
+      operationId: GetChain
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: name
+          in: path
+          description: Chain Name
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/locations.ChainResponse'
+        '404':
+          description: NOT FOUND
+      security: []
+    head:
+      tags:
+        - locations
+      summary: Determine if a specific chain exists
+      description: Determine if a specific chain exists
+      operationId: ChainExists
+      parameters:
+        - name: name
+          in: path
+          description: Chain Name
+          required: true
+          type: string
+      responses:
+        '204':
+          description: OK
+        '404':
+          description: NOT FOUND
+      security: []
+  /departments:
+    get:
+      tags:
+        - locations
+      summary: Get a list of departments
+      description: Get a list of departments
+      operationId: ListDepartments
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/locations.DepartmentsResponse'
+      security: []
+  '/departments/{id}':
+    get:
+      tags:
+        - locations
+      summary: Get department details for a specific department id
+      description: Get department details for a specific department id
+      operationId: GetDepartment
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Department ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/locations.DepartmentResponse'
+        '400':
+          description: BAD REQUEST
+          schema:
+            $ref: '#/definitions/APIError'
+        '404':
+          description: NOT FOUND
+      security: []
+    head:
+      tags:
+        - locations
+      summary: Determine if a specific department exists
+      description: Determine if a specific department exists
+      operationId: DepartmentExists
+      parameters:
+        - name: id
+          in: path
+          description: Department ID
+          required: true
+          type: string
+      responses:
+        '204':
+          description: OK
+        '404':
+          description: NOT FOUND
+      security: []
+  /locations:
+    get:
+      tags:
+        - locations
+      summary: Get a list of locations matching the given criteria.
+      description: >-
+        <p>Get a list of locations matching the given criteria. You must specify
+        a starting point for the search, either as a Zip Code (using the zipCode
+        query parameter), or a Latitude and Longitude (using the lat and lon or
+        latLong query parameter). If multiple query parameters are present for
+        the starting point, an error will be returned asking you to reduce the
+        number of starting points to a single point. The default distance limit
+        is 10 miles from the center point of the location coordinate. The
+        default result limit is 10 locations.
+      operationId: SearchLocations
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: filter.zipCode.near
+          in: query
+          description: >-
+            Zip Code (required, unless filter.latLong.near or filter.lat.near
+            and filter.lon.near are provided)
+          required: false
+          type: string
+        - name: filter.latLong.near
+          in: query
+          description: >-
+            Latitude,Longitude (required, unless filter.zipCode.near or
+            filter.lat.near and filter.lon.near are provided)
+          required: false
+          type: string
+        - name: filter.lat.near
+          in: query
+          description: >-
+            Latitude (required, unless filter.zipCode.near or
+            filter.latLong.near are provided)
+          required: false
+          type: string
+        - name: filter.lon.near
+          in: query
+          description: >-
+            Longitude (required, unless filter.zipCode.near or
+            filter.latLong.near are provided)
+          required: false
+          type: string
+        - name: filter.radiusInMiles
+          in: query
+          description: >-
+            Seach Area Limit (optional, limits the search area of the results
+            displayed from the center of the search location. Range is between 1
+            and 100, if not provided the default limit is 10 miles)
+          required: false
+          type: integer
+        - name: filter.limit
+          in: query
+          description: >-
+            Result Limit (optional, limits the number of results displayed.
+            Range is between 1 and 200, if not provided the default result size
+            of 10 is provided)
+          required: false
+          type: integer
+        - name: filter.chain
+          in: query
+          description: >-
+            Chain Name (optional, only stores matching this chain will be
+            returned.)
+          required: false
+          type: string
+        - name: filter.department
+          in: query
+          description: >-
+            Department ID (optional, A comma-separated list of departments. Only
+            stores who have all of the departments specified will be returned.)
+          required: false
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/locations.LocationSearchResponse'
+        '400':
+          description: BAD REQUEST
+          schema:
+            $ref: '#/definitions/APIError'
+      security: []
+  '/locations/{locationId}':
+    get:
+      tags:
+        - locations
+      summary: Returns one location based on location ID.
+      description: >-
+        Retrieves details for a single location for a given locationID.  This is
+        the same locationID that is returned from the locations search.  It is
+        an 8-digit ID, composed of the Management Division Number followed by
+        the Store Number.
+      operationId: LocationsGetByID
+      produces:
+        - application/json
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          type: string
+          maxLength: 8
+          minLength: 8
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/locations.LocationResponse'
+        '400':
+          description: incorrect locationId format
+          schema:
+            $ref: '#/definitions/APIError'
+        '404':
+          description: location not found
+        '500':
+          description: error looking up location
+      security: []
+    head:
+      tags:
+        - locations
+      summary: Determines existence of one location based on location ID.
+      description: >-
+        Determines existence of one location for a given locationID.  This is
+        the same locationID that is returned from the locations search.  It is
+        an 8-digit ID, composed of the Management Division Number followed by
+        the Store Number.
+      operationId: LocationsExistsByID
+      produces:
+        - application/json
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          type: string
+          maxLength: 8
+          minLength: 8
+      responses:
+        '204':
+          description: location exists
+        '400':
+          description: incorrect locationId format
+          schema:
+            $ref: '#/definitions/APIError'
+        '404':
+          description: location does not exist
+        '500':
+          description: error looking up location
+      security: []
+securityDefinitions:
+  Public:
+    description: >2
+       The Kroger Co. utilizes the OAuth2 protocol to the RFC Specification (RFC6749). Currently we support both the **_authorization code_** and **_client credentials_** flow. Most applications/integrations will leverage the **_authorization code_** flow while service to service integrations will leverage the limited **_client credentials_** flow.
+
+      Please refer to [OAuth RFC](https://tools.ietf.org/html/rfc6749) to find
+      out in details how all those flows work and pick the right one for your
+      use case.
+    type: oauth2
+    authorizationUrl: 'https://api.kroger.com/v1/connect/oauth2/authorize'
+    tokenUrl: 'https://api.kroger.com/v1/connect/oauth2/token'
+    flow: accessCode
+    scopes:
+      profile.full: >-
+        Grants read access to profile information only. Note that this scope
+        includes profile.basic and profile.loyalty.
+      profile.basic: >-
+        Grants read access to profile information only. Includes email, name,
+        address and phone number.
+      profile.loyalty: >-
+        Grants read access to profile loyalty information only. Includes loyalty
+        card number.
+      product.personalized: Grants read access to personalized product information.
+      cart.basic: Grants read access to the basic version of the cart.
+      'cart.basic:rw': Grants read/write access to the basic version of the cart.
+definitions:
+  CartModel:
+    type: object
+    properties:
+      id:
+        type: string
+      createdDate:
+        type: string
+        example: '2018-01-18T16:05:05.206Z'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/CartItemResponseModel'
+      name:
+        type: string
+    example:
+      createdDate: '2018-01-18T16:05:05.206Z'
+      name: name
+      id: id
+      items:
+        - createdDate: '2018-01-18T16:05:05.206Z'
+          quantity: 0
+          allowSubstitutes: true
+          specialInstructions: specialInstructions
+          upc: upc
+          description: description
+        - createdDate: '2018-01-18T16:05:05.206Z'
+          quantity: 0
+          allowSubstitutes: true
+          specialInstructions: specialInstructions
+          upc: upc
+          description: description
+  CartPayloadModel:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/CartModel'
+      meta:
+        type: object
+        properties: {}
+    example:
+      data:
+        createdDate: '2018-01-18T16:05:05.206Z'
+        name: name
+        id: id
+        items:
+          - createdDate: '2018-01-18T16:05:05.206Z'
+            quantity: 0
+            allowSubstitutes: true
+            specialInstructions: specialInstructions
+            upc: upc
+            description: description
+          - createdDate: '2018-01-18T16:05:05.206Z'
+            quantity: 0
+            allowSubstitutes: true
+            specialInstructions: specialInstructions
+            upc: upc
+            description: description
+      meta: '{}'
+  CartsPayloadModel:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/CartModel'
+      meta:
+        type: object
+        properties: {}
+    example:
+      data:
+        - createdDate: '2018-01-18T16:05:05.206Z'
+          name: name
+          id: id
+          items:
+            - createdDate: '2018-01-18T16:05:05.206Z'
+              quantity: 0
+              allowSubstitutes: true
+              specialInstructions: specialInstructions
+              upc: upc
+              description: description
+            - createdDate: '2018-01-18T16:05:05.206Z'
+              quantity: 0
+              allowSubstitutes: true
+              specialInstructions: specialInstructions
+              upc: upc
+              description: description
+        - createdDate: '2018-01-18T16:05:05.206Z'
+          name: name
+          id: id
+          items:
+            - createdDate: '2018-01-18T16:05:05.206Z'
+              quantity: 0
+              allowSubstitutes: true
+              specialInstructions: specialInstructions
+              upc: upc
+              description: description
+            - createdDate: '2018-01-18T16:05:05.206Z'
+              quantity: 0
+              allowSubstitutes: true
+              specialInstructions: specialInstructions
+              upc: upc
+              description: description
+      meta: '{}'
+  CartItemRequestModel:
+    type: object
+    required:
+      - quantity
+      - upc
+    properties:
+      allowSubstitutes:
+        type: boolean
+      quantity:
+        type: integer
+      specialInstructions:
+        type: string
+      upc:
+        type: string
+    example:
+      quantity: 0
+      allowSubstitutes: true
+      specialInstructions: specialInstructions
+      upc: upc
+  CartItemResponseModel:
+    type: object
+    properties:
+      allowSubstitutes:
+        type: boolean
+      createdDate:
+        type: string
+        example: '2018-01-18T16:05:05.206Z'
+      quantity:
+        type: integer
+      specialInstructions:
+        type: string
+      upc:
+        type: string
+      description:
+        type: string
+    example:
+      createdDate: '2018-01-18T16:05:05.206Z'
+      quantity: 0
+      allowSubstitutes: true
+      specialInstructions: specialInstructions
+      upc: upc
+      description: description
+  CartRequestModel:
+    type: object
+    properties:
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/CartItemRequestModel'
+    example:
+      items:
+        - quantity: 0
+          allowSubstitutes: true
+          specialInstructions: specialInstructions
+          upc: upc
+        - quantity: 0
+          allowSubstitutes: true
+          specialInstructions: specialInstructions
+          upc: upc
+  CartItemPostRequestModel:
+    type: object
+    required:
+      - quantity
+      - upc
+    properties:
+      upc:
+        type: string
+      allowSubstitutes:
+        type: boolean
+      quantity:
+        type: integer
+      specialInstructions:
+        type: string
+    example:
+      quantity: 0
+      allowSubstitutes: true
+      specialInstructions: specialInstructions
+      upc: upc
+  CartItemPutRequestModel:
+    type: object
+    required:
+      - quantity
+    properties:
+      allowSubstitutes:
+        type: boolean
+      quantity:
+        type: integer
+      specialInstructions:
+        type: string
+    example:
+      quantity: 0
+      allowSubstitutes: true
+      specialInstructions: specialInstructions
+  ProductModel:
+    type: object
+    properties:
+      productId:
+        type: string
+      brand:
+        type: string
+      categories:
+        type: array
+        items:
+          type: string
+      countryOrigin:
+        type: string
+      description:
+        type: string
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/ProductItemsModel'
+      temperature:
+        $ref: '#/definitions/ProductTemperatureModel'
+      images:
+        type: array
+        items:
+          $ref: '#/definitions/ProductImageModel'
+      taxonomies:
+        type: array
+        items:
+          $ref: '#/definitions/ProductTaxonomyModel'
+      upc:
+        type: string
+    example:
+      images:
+        - default: true
+          sizes:
+            - size: size
+              id: id
+              url: url
+            - size: size
+              id: id
+              url: url
+          perspective: perspective
+          id: id
+        - default: true
+          sizes:
+            - size: size
+              id: id
+              url: url
+            - size: size
+              id: id
+              url: url
+          perspective: perspective
+          id: id
+      productId: productId
+      taxonomies:
+        - commodity:
+            code: code
+            name: name
+          subCommodity:
+            code: code
+            name: name
+          department:
+            code: code
+            name: name
+        - commodity:
+            code: code
+            name: name
+          subCommodity:
+            code: code
+            name: name
+          department:
+            code: code
+            name: name
+      temperature:
+        indicator: indicator
+        heatSensitive: true
+      description: description
+      upc: upc
+      categories:
+        - categories
+        - categories
+      countryOrigin: countryOrigin
+      brand: brand
+      items:
+        - ''
+        - ''
+  ProductPayloadModel:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/ProductModel'
+      meta:
+        type: object
+        properties: {}
+    example:
+      data:
+        images:
+          - default: true
+            sizes:
+              - size: size
+                id: id
+                url: url
+              - size: size
+                id: id
+                url: url
+            perspective: perspective
+            id: id
+          - default: true
+            sizes:
+              - size: size
+                id: id
+                url: url
+              - size: size
+                id: id
+                url: url
+            perspective: perspective
+            id: id
+        productId: productId
+        taxonomies:
+          - commodity:
+              code: code
+              name: name
+            subCommodity:
+              code: code
+              name: name
+            department:
+              code: code
+              name: name
+          - commodity:
+              code: code
+              name: name
+            subCommodity:
+              code: code
+              name: name
+            department:
+              code: code
+              name: name
+        temperature:
+          indicator: indicator
+          heatSensitive: true
+        description: description
+        upc: upc
+        categories:
+          - categories
+          - categories
+        countryOrigin: countryOrigin
+        brand: brand
+        items:
+          - ''
+          - ''
+      meta: '{}'
+  ProductsPayloadModel:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ProductModel'
+      meta:
+        type: object
+        properties: {}
+    example:
+      data:
+        - images:
+            - default: true
+              sizes:
+                - size: size
+                  id: id
+                  url: url
+                - size: size
+                  id: id
+                  url: url
+              perspective: perspective
+              id: id
+            - default: true
+              sizes:
+                - size: size
+                  id: id
+                  url: url
+                - size: size
+                  id: id
+                  url: url
+              perspective: perspective
+              id: id
+          productId: productId
+          taxonomies:
+            - commodity:
+                code: code
+                name: name
+              subCommodity:
+                code: code
+                name: name
+              department:
+                code: code
+                name: name
+            - commodity:
+                code: code
+                name: name
+              subCommodity:
+                code: code
+                name: name
+              department:
+                code: code
+                name: name
+          temperature:
+            indicator: indicator
+            heatSensitive: true
+          description: description
+          upc: upc
+          categories:
+            - categories
+            - categories
+          countryOrigin: countryOrigin
+          brand: brand
+          items:
+            - ''
+            - ''
+        - images:
+            - default: true
+              sizes:
+                - size: size
+                  id: id
+                  url: url
+                - size: size
+                  id: id
+                  url: url
+              perspective: perspective
+              id: id
+            - default: true
+              sizes:
+                - size: size
+                  id: id
+                  url: url
+                - size: size
+                  id: id
+                  url: url
+              perspective: perspective
+              id: id
+          productId: productId
+          taxonomies:
+            - commodity:
+                code: code
+                name: name
+              subCommodity:
+                code: code
+                name: name
+              department:
+                code: code
+                name: name
+            - commodity:
+                code: code
+                name: name
+              subCommodity:
+                code: code
+                name: name
+              department:
+                code: code
+                name: name
+          temperature:
+            indicator: indicator
+            heatSensitive: true
+          description: description
+          upc: upc
+          categories:
+            - categories
+            - categories
+          countryOrigin: countryOrigin
+          brand: brand
+          items:
+            - ''
+            - ''
+      meta: '{}'
+  ProductItemModel:
+    type: object
+    properties:
+      itemId:
+        type: string
+      favorite:
+        type: boolean
+      fulfillment:
+        $ref: '#/definitions/ProductItemFulfillmentModel'
+      price:
+        $ref: '#/definitions/ProductItemPriceModel'
+      size:
+        type: string
+  ProductItemFulfillmentModel:
+    type: object
+    properties:
+      curbside:
+        type: boolean
+      delivery:
+        type: boolean
+  ProductItemPriceModel:
+    type: object
+    properties:
+      regular:
+        type: number
+      promo:
+        type: number
+  ProductItemsModel:
+    type: array
+    items: {}
+  ProductImageModel:
+    type: object
+    properties:
+      id:
+        type: string
+      perspective:
+        type: string
+      default:
+        type: boolean
+      sizes:
+        type: array
+        items:
+          $ref: '#/definitions/ProductImageSizeModel'
+    example:
+      default: true
+      sizes:
+        - size: size
+          id: id
+          url: url
+        - size: size
+          id: id
+          url: url
+      perspective: perspective
+      id: id
+  ProductImageSizeModel:
+    type: object
+    properties:
+      id:
+        type: string
+      size:
+        type: string
+      url:
+        type: string
+    example:
+      size: size
+      id: id
+      url: url
+  ProductTaxonomyModel:
+    type: object
+    properties:
+      department:
+        $ref: '#/definitions/ProductTaxonomyDepartmentModel'
+      commodity:
+        $ref: '#/definitions/ProductTaxonomyCommodityModel'
+      subCommodity:
+        $ref: '#/definitions/ProductTaxonomySubCommodityModel'
+    example:
+      commodity:
+        code: code
+        name: name
+      subCommodity:
+        code: code
+        name: name
+      department:
+        code: code
+        name: name
+  ProductTaxonomyDepartmentModel:
+    type: object
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+    example:
+      code: code
+      name: name
+  ProductTaxonomyCommodityModel:
+    type: object
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+    example:
+      code: code
+      name: name
+  ProductTaxonomySubCommodityModel:
+    type: object
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+    example:
+      code: code
+      name: name
+  ProductTemperatureModel:
+    type: object
+    properties:
+      indicator:
+        type: string
+      heatSensitive:
+        type: boolean
+    example:
+      indicator: indicator
+      heatSensitive: true
+  APIError:
+    type: object
+    properties:
+      errors:
+        type: object
+        properties: {}
+  RootCauseModel:
+    type: object
+    properties:
+      root_cause:
+        type: array
+        items:
+          $ref: '#/definitions/ErrorModel'
+  MetaModel:
+    type: object
+    properties:
+      pagination:
+        $ref: '#/definitions/MetaModel_pagination'
+      warnings:
+        type: array
+        items:
+          type: string
+    example:
+      pagination:
+        total: 1.4658129805029452
+        start: 0.8008281904610115
+        limit: 6.027456183070403
+      warnings:
+        - warnings
+        - warnings
+  ErrorModel:
+    type: object
+    properties:
+      code:
+        type: string
+      reason:
+        type: string
+      timestamp:
+        type: number
+  locations.Address:
+    type: object
+    properties:
+      addressLine1:
+        type: string
+        example: 2900 W. St. Rt. 22 & 3
+      addressLine2:
+        type: string
+      city:
+        type: string
+        example: Maineville
+      county:
+        type: string
+        example: WARREN COUNTY
+      state:
+        type: string
+        example: OH
+      zipCode:
+        type: string
+        example: '45039'
+    example:
+      zipCode: '45039'
+      city: Maineville
+      county: WARREN COUNTY
+      addressLine1: 2900 W. St. Rt. 22 & 3
+      addressLine2: addressLine2
+      state: OH
+  locations.Chain:
+    type: object
+    properties:
+      name:
+        type: string
+        example: KROGER
+        description: the unique name for a chain
+      divisionNumbers:
+        type: array
+        example:
+          - '01'
+          - '02'
+        description: a list of all management division numbers within this brand
+        items:
+          type: string
+    example:
+      name: KROGER
+      divisionNumbers:
+        - '01'
+        - '02'
+  locations.ChainResponse:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/locations.Chain'
+      meta:
+        type: object
+        properties: {}
+    example:
+      data:
+        name: KROGER
+        divisionNumbers:
+          - '01'
+          - '02'
+      meta: '{}'
+  locations.ChainsResponse:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/locations.Chain'
+      meta:
+        $ref: '#/definitions/MetaModel'
+    example:
+      data:
+        - name: KROGER
+          divisionNumbers:
+            - '01'
+            - '02'
+        - name: KROGER
+          divisionNumbers:
+            - '01'
+            - '02'
+      meta:
+        pagination:
+          total: 1.4658129805029452
+          start: 0.8008281904610115
+          limit: 6.027456183070403
+        warnings:
+          - warnings
+          - warnings
+  locations.DailyHours:
+    type: object
+    properties:
+      open:
+        type: string
+        example: '05:00'
+        description: the opening time for a location or department
+      close:
+        type: string
+        example: '23:00'
+        description: the closing time for a location or department
+      open24:
+        type: boolean
+        example: false
+        description: indicates if this location or department is open 24 hours on this day
+    example:
+      close: '23:00'
+      open: '05:00'
+      open24: false
+  locations.DepartmentAtLocation:
+    type: object
+    properties:
+      departmentId:
+        type: string
+        example: '01'
+        description: the 2-digit department code
+      name:
+        type: string
+        example: Drug & General Merchandise
+        description: the name of the department
+      phone:
+        type: string
+        example: '5551234567'
+        description: 'the phone number, if any, for the department'
+      hours:
+        $ref: '#/definitions/locations.DepartmentHours'
+    example:
+      hours:
+        sunday:
+          close: '23:00'
+          open: '05:00'
+          open24: false
+        saturday:
+          close: '23:00'
+          open: '05:00'
+          open24: false
+        tuesday:
+          close: '23:00'
+          open: '05:00'
+          open24: false
+        Open24: false
+        wednesday:
+          close: '23:00'
+          open: '05:00'
+          open24: false
+        thursday:
+          close: '23:00'
+          open: '05:00'
+          open24: false
+        friday:
+          close: '23:00'
+          open: '05:00'
+          open24: false
+        monday:
+          close: '23:00'
+          open: '05:00'
+          open24: false
+      phone: '5551234567'
+      departmentId: '01'
+      name: Drug & General Merchandise
+  locations.Department:
+    type: object
+    properties:
+      departmentId:
+        type: string
+        example: '01'
+        description: the 2-digit department code
+      name:
+        type: string
+        example: Drug & General Merchandise
+        description: the name of the department
+    example:
+      departmentId: '01'
+      name: Drug & General Merchandise
+  locations.DepartmentResponse:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/locations.Department'
+      meta:
+        type: object
+        properties: {}
+    example:
+      data:
+        departmentId: '01'
+        name: Drug & General Merchandise
+      meta: '{}'
+  locations.DepartmentsResponse:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/locations.Department'
+      meta:
+        $ref: '#/definitions/MetaModel'
+    example:
+      data:
+        - departmentId: '01'
+          name: Drug & General Merchandise
+        - departmentId: '01'
+          name: Drug & General Merchandise
+      meta:
+        pagination:
+          total: 1.4658129805029452
+          start: 0.8008281904610115
+          limit: 6.027456183070403
+        warnings:
+          - warnings
+          - warnings
+  locations.GeoLocation:
+    type: object
+    properties:
+      latLng:
+        type: string
+        example: '39.3110881,-84.2751167'
+      latitude:
+        type: number
+        example: 39.3110881
+      longitude:
+        type: number
+        example: -84.2751167
+    example:
+      latitude: 39.3110881
+      latLng: '39.3110881,-84.2751167'
+      longitude: -84.2751167
+  locations.LocationHours:
+    type: object
+    properties:
+      Open24:
+        type: boolean
+      gmtOffset:
+        type: string
+        example: '(UTC-05:00) Eastern Time (US Canada)'
+        description: utc timezone offset from gmt
+      timezone:
+        type: string
+        example: America/New_York
+        description: timezone for the location
+      friday:
+        $ref: '#/definitions/locations.DailyHours'
+      monday:
+        $ref: '#/definitions/locations.DailyHours'
+      saturday:
+        $ref: '#/definitions/locations.DailyHours'
+      sunday:
+        $ref: '#/definitions/locations.DailyHours'
+      thursday:
+        $ref: '#/definitions/locations.DailyHours'
+      tuesday:
+        $ref: '#/definitions/locations.DailyHours'
+      wednesday:
+        $ref: '#/definitions/locations.DailyHours'
+    example:
+      sunday:
+        close: '23:00'
+        open: '05:00'
+        open24: false
+      saturday:
+        close: '23:00'
+        open: '05:00'
+        open24: false
+      tuesday:
+        close: '23:00'
+        open: '05:00'
+        open24: false
+      Open24: true
+      gmtOffset: '(UTC-05:00) Eastern Time (US Canada)'
+      timezone: America/New_York
+      friday:
+        close: '23:00'
+        open: '05:00'
+        open24: false
+      thursday:
+        close: '23:00'
+        open: '05:00'
+        open24: false
+      wednesday:
+        close: '23:00'
+        open: '05:00'
+        open24: false
+      monday:
+        close: '23:00'
+        open: '05:00'
+        open24: false
+  locations.DepartmentHours:
+    type: object
+    properties:
+      Open24:
+        type: boolean
+        example: false
+      monday:
+        $ref: '#/definitions/locations.DailyHours'
+      tuesday:
+        $ref: '#/definitions/locations.DailyHours'
+      wednesday:
+        $ref: '#/definitions/locations.DailyHours'
+      thursday:
+        $ref: '#/definitions/locations.DailyHours'
+      friday:
+        $ref: '#/definitions/locations.DailyHours'
+      saturday:
+        $ref: '#/definitions/locations.DailyHours'
+      sunday:
+        $ref: '#/definitions/locations.DailyHours'
+    example:
+      sunday:
+        close: '23:00'
+        open: '05:00'
+        open24: false
+      saturday:
+        close: '23:00'
+        open: '05:00'
+        open24: false
+      tuesday:
+        close: '23:00'
+        open: '05:00'
+        open24: false
+      Open24: false
+      wednesday:
+        close: '23:00'
+        open: '05:00'
+        open24: false
+      thursday:
+        close: '23:00'
+        open: '05:00'
+        open24: false
+      friday:
+        close: '23:00'
+        open: '05:00'
+        open24: false
+      monday:
+        close: '23:00'
+        open: '05:00'
+        open24: false
+  locations.Location:
+    type: object
+    properties:
+      address:
+        $ref: '#/definitions/locations.Address'
+      chain:
+        type: string
+        example: KROGER
+        description: 'the subsidiary, like KROGER, FRED, etc'
+      phone:
+        type: string
+        example: '5551234567'
+        description: the phone number for the location
+      departments:
+        type: array
+        description: the departments available at this location
+        items:
+          $ref: '#/definitions/locations.DepartmentAtLocation'
+      geolocation:
+        $ref: '#/definitions/locations.GeoLocation'
+      hours:
+        $ref: '#/definitions/locations.LocationHours'
+      locationId:
+        type: string
+        example: '01400376'
+        description: the 3-digit management division followed by the 5-digit store number
+      name:
+        type: string
+        example: Kroger Landen
+        description: >-
+          the name of this location, which is the facility name (like 'Kroger')
+          followed by the vanity name (like 'Landen')
+    example:
+      chain: KROGER
+      hours:
+        sunday:
+          close: '23:00'
+          open: '05:00'
+          open24: false
+        saturday:
+          close: '23:00'
+          open: '05:00'
+          open24: false
+        tuesday:
+          close: '23:00'
+          open: '05:00'
+          open24: false
+        Open24: true
+        gmtOffset: '(UTC-05:00) Eastern Time (US Canada)'
+        timezone: America/New_York
+        friday:
+          close: '23:00'
+          open: '05:00'
+          open24: false
+        thursday:
+          close: '23:00'
+          open: '05:00'
+          open24: false
+        wednesday:
+          close: '23:00'
+          open: '05:00'
+          open24: false
+        monday:
+          close: '23:00'
+          open: '05:00'
+          open24: false
+      address:
+        zipCode: '45039'
+        city: Maineville
+        county: WARREN COUNTY
+        addressLine1: 2900 W. St. Rt. 22 & 3
+        addressLine2: addressLine2
+        state: OH
+      phone: '5551234567'
+      locationId: '01400376'
+      name: Kroger Landen
+      departments:
+        - hours:
+            sunday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            saturday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            tuesday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            Open24: false
+            wednesday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            thursday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            friday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            monday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+          phone: '5551234567'
+          departmentId: '01'
+          name: Drug & General Merchandise
+        - hours:
+            sunday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            saturday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            tuesday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            Open24: false
+            wednesday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            thursday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            friday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            monday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+          phone: '5551234567'
+          departmentId: '01'
+          name: Drug & General Merchandise
+      geolocation:
+        latitude: 39.3110881
+        latLng: '39.3110881,-84.2751167'
+        longitude: -84.2751167
+  locations.LocationCount:
+    type: object
+    properties:
+      data:
+        type: array
+        example: []
+        items:
+          type: object
+          properties: {}
+      meta:
+        $ref: '#/definitions/MetaModel'
+  locations.LocationSearchResponse:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/locations.Location'
+      meta:
+        $ref: '#/definitions/MetaModel'
+    example:
+      data:
+        - chain: KROGER
+          hours:
+            sunday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            saturday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            tuesday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            Open24: true
+            gmtOffset: '(UTC-05:00) Eastern Time (US Canada)'
+            timezone: America/New_York
+            friday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            thursday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            wednesday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            monday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+          address:
+            zipCode: '45039'
+            city: Maineville
+            county: WARREN COUNTY
+            addressLine1: 2900 W. St. Rt. 22 & 3
+            addressLine2: addressLine2
+            state: OH
+          phone: '5551234567'
+          locationId: '01400376'
+          name: Kroger Landen
+          departments:
+            - hours:
+                sunday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                saturday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                tuesday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                Open24: false
+                wednesday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                thursday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                friday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                monday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+              phone: '5551234567'
+              departmentId: '01'
+              name: Drug & General Merchandise
+            - hours:
+                sunday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                saturday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                tuesday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                Open24: false
+                wednesday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                thursday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                friday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                monday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+              phone: '5551234567'
+              departmentId: '01'
+              name: Drug & General Merchandise
+          geolocation:
+            latitude: 39.3110881
+            latLng: '39.3110881,-84.2751167'
+            longitude: -84.2751167
+        - chain: KROGER
+          hours:
+            sunday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            saturday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            tuesday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            Open24: true
+            gmtOffset: '(UTC-05:00) Eastern Time (US Canada)'
+            timezone: America/New_York
+            friday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            thursday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            wednesday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+            monday:
+              close: '23:00'
+              open: '05:00'
+              open24: false
+          address:
+            zipCode: '45039'
+            city: Maineville
+            county: WARREN COUNTY
+            addressLine1: 2900 W. St. Rt. 22 & 3
+            addressLine2: addressLine2
+            state: OH
+          phone: '5551234567'
+          locationId: '01400376'
+          name: Kroger Landen
+          departments:
+            - hours:
+                sunday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                saturday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                tuesday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                Open24: false
+                wednesday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                thursday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                friday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                monday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+              phone: '5551234567'
+              departmentId: '01'
+              name: Drug & General Merchandise
+            - hours:
+                sunday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                saturday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                tuesday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                Open24: false
+                wednesday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                thursday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                friday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+                monday:
+                  close: '23:00'
+                  open: '05:00'
+                  open24: false
+              phone: '5551234567'
+              departmentId: '01'
+              name: Drug & General Merchandise
+          geolocation:
+            latitude: 39.3110881
+            latLng: '39.3110881,-84.2751167'
+            longitude: -84.2751167
+      meta:
+        pagination:
+          total: 1.4658129805029452
+          start: 0.8008281904610115
+          limit: 6.027456183070403
+        warnings:
+          - warnings
+          - warnings
+  locations.LocationResponse:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/locations.Location'
+      meta:
+        $ref: '#/definitions/MetaModel'
+    example:
+      data:
+        chain: KROGER
+        hours:
+          sunday:
+            close: '23:00'
+            open: '05:00'
+            open24: false
+          saturday:
+            close: '23:00'
+            open: '05:00'
+            open24: false
+          tuesday:
+            close: '23:00'
+            open: '05:00'
+            open24: false
+          Open24: true
+          gmtOffset: '(UTC-05:00) Eastern Time (US Canada)'
+          timezone: America/New_York
+          friday:
+            close: '23:00'
+            open: '05:00'
+            open24: false
+          thursday:
+            close: '23:00'
+            open: '05:00'
+            open24: false
+          wednesday:
+            close: '23:00'
+            open: '05:00'
+            open24: false
+          monday:
+            close: '23:00'
+            open: '05:00'
+            open24: false
+        address:
+          zipCode: '45039'
+          city: Maineville
+          county: WARREN COUNTY
+          addressLine1: 2900 W. St. Rt. 22 & 3
+          addressLine2: addressLine2
+          state: OH
+        phone: '5551234567'
+        locationId: '01400376'
+        name: Kroger Landen
+        departments:
+          - hours:
+              sunday:
+                close: '23:00'
+                open: '05:00'
+                open24: false
+              saturday:
+                close: '23:00'
+                open: '05:00'
+                open24: false
+              tuesday:
+                close: '23:00'
+                open: '05:00'
+                open24: false
+              Open24: false
+              wednesday:
+                close: '23:00'
+                open: '05:00'
+                open24: false
+              thursday:
+                close: '23:00'
+                open: '05:00'
+                open24: false
+              friday:
+                close: '23:00'
+                open: '05:00'
+                open24: false
+              monday:
+                close: '23:00'
+                open: '05:00'
+                open24: false
+            phone: '5551234567'
+            departmentId: '01'
+            name: Drug & General Merchandise
+          - hours:
+              sunday:
+                close: '23:00'
+                open: '05:00'
+                open24: false
+              saturday:
+                close: '23:00'
+                open: '05:00'
+                open24: false
+              tuesday:
+                close: '23:00'
+                open: '05:00'
+                open24: false
+              Open24: false
+              wednesday:
+                close: '23:00'
+                open: '05:00'
+                open24: false
+              thursday:
+                close: '23:00'
+                open: '05:00'
+                open24: false
+              friday:
+                close: '23:00'
+                open: '05:00'
+                open24: false
+              monday:
+                close: '23:00'
+                open: '05:00'
+                open24: false
+            phone: '5551234567'
+            departmentId: '01'
+            name: Drug & General Merchandise
+        geolocation:
+          latitude: 39.3110881
+          latLng: '39.3110881,-84.2751167'
+          longitude: -84.2751167
+      meta:
+        pagination:
+          total: 1.4658129805029452
+          start: 0.8008281904610115
+          limit: 6.027456183070403
+        warnings:
+          - warnings
+          - warnings
+  MetaModel_pagination:
+    properties:
+      start:
+        type: number
+      limit:
+        type: number
+      total:
+        type: number
+    example:
+      total: 1.4658129805029452
+      start: 0.8008281904610115
+      limit: 6.027456183070403
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /ioneyed/The-Kroger-Co/1.0.0
