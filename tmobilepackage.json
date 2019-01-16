@@ -1,0 +1,2000 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "This API will send valid devices, rate plans, services and accessories for a given sales scenario in a channel.",
+    "version" : "1.0.0",
+    "title" : "Create Package",
+    "contact" : {
+      "name" : "OMNI Team",
+      "email" : "siddharth.sharma116@T-mobile.com"
+    }
+  },
+  "host" : "esp.t-mobile.com",
+  "basePath" : "/service/rest/v1",
+  "schemes" : [ "https", "http" ],
+  "paths" : {
+    "/CommerceManagement/Package/CreatePackage" : {
+      "post" : {
+        "tags" : [ "Create Package" ],
+        "summary" : "This Generic API shall be used by client to submit request to create package",
+        "operationId" : "Createpackage",
+        "consumes" : [ "application/json", "application/xml" ],
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "XX",
+          "description" : "XX",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Request"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/Response"
+            }
+          },
+          "201" : {
+            "description" : "A",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        },
+        "security" : [ ]
+      }
+    }
+  },
+  "definitions" : {
+    "Request" : {
+      "type" : "object",
+      "required" : [ "header" ],
+      "properties" : {
+        "locationType" : {
+          "type" : "string",
+          "example" : "Instant",
+          "description" : "Location Type"
+        },
+        "marketCode" : {
+          "type" : "string",
+          "example" : "NYN",
+          "description" : "Market code of the billing account"
+        },
+        "deliveryMethod" : {
+          "type" : "string",
+          "example" : "SHP",
+          "description" : "deliveryMethod. Shipto or InStore"
+        },
+        "salesScenario" : {
+          "type" : "string",
+          "example" : "UpgradeRedemption",
+          "description" : "scenario on which user wants to work on like ShopForPhones, ShopForVoicePlans etc"
+        },
+        "userId" : {
+          "type" : "string",
+          "example" : "superusr",
+          "description" : "UserID of the rep who is initiating this transaction"
+        },
+        "orderCategory" : {
+          "type" : "string",
+          "example" : "Sale",
+          "description" : "Order category 0001 - salesorder, 0003 - return, 0005 - purchaseOrder (if the order is placed to an external vendor)t",
+          "enum" : [ "Sale", "Return", "Purchase" ]
+        },
+        "orderType" : {
+          "type" : "string",
+          "example" : "001",
+          "description" : "type of the order.(exchange, standard only for0001 documentType)"
+        },
+        "country" : {
+          "type" : "string",
+          "example" : "US",
+          "description" : "refers to the country, default is US."
+        },
+        "currencyCode" : {
+          "type" : "string",
+          "example" : "USD",
+          "description" : "refers to the currency, default is USD"
+        },
+        "language" : {
+          "type" : "string",
+          "example" : "English",
+          "description" : "refers to the language, default is English"
+        },
+        "originalOrderId" : {
+          "type" : "string",
+          "example" : "xx",
+          "description" : "refers to the original order id, required for exchange sales scenario."
+        },
+        "returnOrderId" : {
+          "type" : "string",
+          "example" : "xx",
+          "description" : "refers to the return order id, required for exchange sales scenario"
+        },
+        "orderId" : {
+          "type" : "string",
+          "example" : "xx",
+          "description" : "refers to the unique order number generated for each order"
+        },
+        "orderLineId" : {
+          "type" : "string",
+          "example" : "xx",
+          "description" : "refers to the unique id generated for each bundle for an order"
+        },
+        "zipCode" : {
+          "type" : "integer",
+          "example" : 30350,
+          "description" : "zipCode"
+        },
+        "corporateNode" : {
+          "type" : "string",
+          "example" : "75903",
+          "description" : "Zip Code"
+        },
+        "stateCode" : {
+          "type" : "string",
+          "example" : "xx",
+          "description" : "Billing statecode for Web, Care and Retail Ship-To cases and Store statecode for Retail In-store"
+        },
+        "calculatePromotions" : {
+          "type" : "boolean",
+          "example" : true,
+          "description" : "indicates if promotions needs to be calculated for this request"
+        },
+        "accountInfo" : {
+          "$ref" : "#/definitions/accountInfo"
+        },
+        "customerInfo" : {
+          "$ref" : "#/definitions/customerInfo"
+        },
+        "subscriberInfo" : {
+          "$ref" : "#/definitions/subscriberInfo"
+        },
+        "coverageDevice" : {
+          "$ref" : "#/definitions/coverageDevice"
+        },
+        "eligibleCSDLines" : {
+          "type" : "integer",
+          "example" : "xxx",
+          "description" : "Number of CSD lines passed in the request"
+        },
+        "viewOptions" : {
+          "type" : "string",
+          "example" : "List",
+          "description" : "decides the service output behaviour. refers to 'List' for product basic information and 'Details' for detailed information like product image etc",
+          "enum" : [ "List", "Details" ]
+        },
+        "desiredLine" : {
+          "$ref" : "#/definitions/desiredLine"
+        },
+        "includeFilter" : {
+          "type" : "boolean",
+          "example" : true,
+          "description" : "If true then the response would include the applicable subCategory/attribute filters for the chosen category, but it does not return the count per each filter/ facets"
+        },
+        "eipEligibleDealer" : {
+          "type" : "boolean",
+          "example" : true,
+          "description" : "set to true if the rep is eligible for doing EIP Upgrade, UI is responsible for validating the permission of the dealer by calling OER"
+        },
+        "allowedSubsidyTypeList" : {
+          "type" : "string",
+          "example" : "FULL EIP",
+          "description" : "List of allowed Device Activation Types for the dealer"
+        },
+        "optOutReason" : {
+          "type" : "string",
+          "example" : "Wants to keep their device",
+          "description" : "Reason for opting out from the TradeIn,which will be used by OMNI to call LogOptReasonservice.UI has to send any valid reference data which they get from the service getOptOutReasons"
+        },
+        "storeTaxAreaID" : {
+          "type" : "string",
+          "example" : "370270520",
+          "description" : "taxAreaID of a particular storen"
+        },
+        "includeWarrantyDetails" : {
+          "type" : "boolean",
+          "example" : true,
+          "description" : "Flag to indicate whether warranty details (eg. apple care plus program) to be populated in the response"
+        },
+        "includeServiceDetails" : {
+          "type" : "boolean",
+          "example" : true,
+          "description" : "Flag to indicate whether Optional Services Details (for example eligible PHP SOCs) should be sent back in the in the response, if there is no value it is assumed to be false."
+        },
+        "financeModel" : {
+          "type" : "string",
+          "example" : "x",
+          "description" : "financeModel"
+        },
+        "interactionId" : {
+          "type" : "string",
+          "example" : "xxx",
+          "description" : "Id of the particular interaction"
+        },
+        "delinquencyOverride" : {
+          "type" : "boolean",
+          "example" : true,
+          "description" : "override/disable EIP for Bulk order if delinquency status is passed as true"
+        },
+        "header" : {
+          "$ref" : "#/definitions/Request_header"
+        }
+      }
+    },
+    "sender" : {
+      "type" : "object",
+      "required" : [ "applicationId", "channelId", "senderId" ],
+      "properties" : {
+        "senderId" : {
+          "type" : "string",
+          "example" : "ACUI",
+          "description" : "Uniquely identifies an Operation consumer. Used for Tracking and in Business Rules."
+        },
+        "channelId" : {
+          "type" : "string",
+          "example" : "RETAIL",
+          "description" : "Identifies the business unit or sales channel for the Request. Property values relating to the target system are derived using partner, application, and channel information. This value may control business logic and data routing"
+        },
+        "applicationId" : {
+          "type" : "string",
+          "example" : "ACUI",
+          "description" : "Identifies the application, system, or tool that is being used to perform the transaction(s) related to this request. Property values relating to the target system are derived using partner, application, and channel information"
+        },
+        "applicationUserId" : {
+          "type" : "string",
+          "example" : "superusr",
+          "description" : "Id of application user"
+        },
+        "sessionId" : {
+          "type" : "string",
+          "example" : "cf36a531d7d9bd2a:-7fe56d85:1660c0facda:-4070",
+          "description" : "A value populated by the Sender used to track the transactions that occur during a session, a long-lasting interaction that is maintained by the sender. Senders are encouraged to develop a useful scheme. Do not use customer-sensitive information"
+        },
+        "workflowId" : {
+          "type" : "string",
+          "example" : "9709348726537831",
+          "description" : "A value populated by the Sender used to track their workflow within the confines of a session. Senders are encouraged to develop a useful scheme. Do not use customer-sensitive informatio"
+        },
+        "activityId" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "A value populated by the Sender used to track a unit of work within a workflow. Senders are encouraged to develop a useful scheme. Do not use customer-sensitive information"
+        },
+        "timestamp" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : "XXX",
+          "description" : "A timestamp provided by Sender to track their workflow. Usually set to the moment when a request is made."
+        },
+        "storeId" : {
+          "type" : "string",
+          "example" : "378",
+          "description" : "For tracking purposes only. Unique identifier for the store"
+        },
+        "dealerCode" : {
+          "type" : "string",
+          "example" : "0000002",
+          "description" : "For tracking purposes only. Code that uniquely identifies the dealer."
+        },
+        "accessChannel" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Represents the channel (access) type of the dealer who process this requestÂ  for e.g. AtWorks"
+        }
+      }
+    },
+    "target" : {
+      "type" : "object",
+      "properties" : {
+        "targetSystemId" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/target_targetSystemId"
+          }
+        },
+        "userCompanyId" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "xx."
+        },
+        "customerCompanyId" : {
+          "type" : "string",
+          "example" : "TMobileUS",
+          "description" : "xx."
+        },
+        "servicePartnerId" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "xx."
+        },
+        "transactionType" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "transaction Type"
+        }
+      }
+    },
+    "desiredLine" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/desiredLine_inner"
+      }
+    },
+    "customerInfo" : {
+      "type" : "object",
+      "properties" : {
+        "creditClassification" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The calculated credit classification of the customer"
+        },
+        "creditClassificationRequestDate" : {
+          "type" : "string",
+          "format" : "date",
+          "example" : "XXX",
+          "description" : "date at which request was submitted for credit class verification."
+        },
+        "creditRiskProfileId" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "creditRiskProfileId"
+        }
+      }
+    },
+    "accountInfo" : {
+      "type" : "object",
+      "properties" : {
+        "accountNumber" : {
+          "type" : "string",
+          "example" : "959840267",
+          "description" : "Customer Billing Account Number"
+        },
+        "accountStatus" : {
+          "type" : "string",
+          "example" : "OPENED",
+          "description" : "The Billing Account Status"
+        },
+        "serviceStartDate" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The service start date of an account"
+        },
+        "accountType" : {
+          "type" : "string",
+          "example" : "INDIVIDUAL",
+          "description" : "Specific classification of account."
+        },
+        "accountSubType" : {
+          "type" : "string",
+          "example" : "INDIVIDUAL_REGULAR",
+          "description" : "Specific subclassification of account"
+        },
+        "accountTenure" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Tenure of the account."
+        },
+        "futureBillFormat" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Furture bill format of the account"
+        },
+        "currentBillFormat" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Current bill format of the account"
+        },
+        "creditClass" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "credit class of the customer"
+        },
+        "billingContact" : {
+          "$ref" : "#/definitions/billingContact"
+        },
+        "billingMethod" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Billing method for a customer"
+        },
+        "billingCycle" : {
+          "type" : "string",
+          "example" : "3",
+          "description" : "Customer billing cycle period"
+        },
+        "availableVoiceLines" : {
+          "type" : "integer",
+          "example" : "XXX",
+          "description" : "the number of available voice lines for a customer"
+        },
+        "availableDataLines" : {
+          "type" : "integer",
+          "example" : "XXX",
+          "description" : "the number of available data lines for a customer."
+        },
+        "birthdate" : {
+          "type" : "string",
+          "format" : "date",
+          "example" : "XXX",
+          "description" : "drivingLicensing"
+        },
+        "bridgeToValueEligible" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "drivingLicensing"
+        },
+        "creditRiskProfile" : {
+          "$ref" : "#/definitions/creditRiskProfile"
+        },
+        "eipInfo" : {
+          "$ref" : "#/definitions/eipInfo"
+        },
+        "totalMigrationFee" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "total migration fee associated with the transaction. For Pooled accounts total of all the lines and for non-pooled it total of the lines part of the upgrade will be returned"
+        },
+        "prepaidSubscriberID" : {
+          "type" : "integer",
+          "example" : "XXX",
+          "description" : "the number of available pre paid subscriber’s for a custome"
+        },
+        "taxExemptIndicator" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Indicates if the customer is tax exempted or not"
+        }
+      }
+    },
+    "creditRiskProfile" : {
+      "type" : "object",
+      "properties" : {
+        "identifier" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "A unique value that represents the credit risk profile of a Customer based on various credentials of his account. This may be a number such as '1', '2'."
+        },
+        "description" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Briefly describes the profile"
+        },
+        "behaviorScore" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "A value that is dynamically assigned to a Customer based on his various account activities. For new Customers this may not be returned."
+        },
+        "decisionCriteria" : {
+          "type" : "string",
+          "example" : "CREDIT_CLASS_BASED",
+          "description" : "This element specifies what has been used to assign the credit risk profile ID. A valid value is 'CREDIT_CLASS_BASED'."
+        },
+        "creditApplicationReferenceNumber" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "A unique reference number that can locate the Customer’s credit application. On rare conditions when the System does not have this information, it will be defaulted to '0'."
+        },
+        "loanCRP" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "A unique value that represents the credit risk profile of a Customer based on various credentials of his account for Loan. This may be a number such as '1', '2'."
+        },
+        "leaseCRP" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "A unique value that represents the credit risk profile of a Customer based on various credentials of his account for Lease. This may be a number such as '1','2'."
+        }
+      }
+    },
+    "eipInfo" : {
+      "type" : "object",
+      "properties" : {
+        "monthlyPayment" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "monthlyPayment"
+        },
+        "firstInstallment" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "firstInstallment"
+        },
+        "actualInstallmentPaid" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "Indicates the actual payment done towards EIP which may include an additional amount on top of the down payment"
+        },
+        "downPayment" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "downPayment"
+        },
+        "maximumFinancedAmount" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "refers to MPEC"
+        },
+        "financedAmount" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "financedAmount"
+        },
+        "remainingFinancedAmount" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "remainingFinancedAmount"
+        },
+        "availableCredit" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "line contribution amount(ECLA)."
+        },
+        "creditLimit" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "ECL."
+        },
+        "lineContributionAmount" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "line contribution amount(LCA)."
+        },
+        "creditBalance" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "ECB"
+        },
+        "eipTax" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "eipTax"
+        },
+        "eipEligiblity" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "eligible for EIP or not"
+        },
+        "adjustedDownPayment" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "The down payment when the Financed amount is more than the available ECA - calculated by Configurator"
+        },
+        "finalDownPayment" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "The balance between downpayment/adjustedDownPayment and jumpTradeInCredit - calculated by Configurator"
+        },
+        "jumpCreditEIPPayOff" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "jumpCredit applied to PayOff device credit balance"
+        },
+        "jumpCreditDownPayment" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "jumpCredit applied to subscriber's down payment"
+        },
+        "jumpBillCredit" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "jumpBillCredit applied to the subscriber installment account"
+        },
+        "term" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "number of eipterms of the installment account"
+        },
+        "adjustedTerm" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Adjusted total No of EIP Months, term-1"
+        },
+        "transactionType" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Identifies the type of EIP transaction.Below are the possible values. U - JUMP/Regualar Upgrade A - ResumeActivation L- ResumeAAL P - JUMP/Regular Exchange"
+        }
+      }
+    },
+    "subscriberInfo" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/subscriberInfo_inner"
+      }
+    },
+    "tradeInDetails" : {
+      "type" : "object",
+      "properties" : {
+        "TradeInInfoType" : {
+          "$ref" : "#/definitions/tradeInDetails_TradeInInfoType"
+        }
+      }
+    },
+    "tierInfo" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/tierInfo_inner"
+      }
+    },
+    "ProductDiscount" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/ProductDiscount_inner"
+      }
+    },
+    "deviceInfo" : {
+      "type" : "object",
+      "properties" : {
+        "createdBy" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Basic Device Created By"
+        },
+        "description" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Basic Device description"
+        },
+        "IMEI" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Device IMEI Number"
+        },
+        "IMSI" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "IMSI that is currently associated with this sim device"
+        },
+        "make" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "manufacturer Name"
+        },
+        "model" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "phone model as per manufacturer"
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Basic Device name"
+        },
+        "SKU Number" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "xx."
+        },
+        "status" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "xx."
+        },
+        "type" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Device PartNumber Type"
+        },
+        "SIM" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Sim device number that is associated with this record"
+        },
+        "SKU" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "SKU Details of the device"
+        },
+        "supported" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "T-Mobile supported handset"
+        },
+        "faveCapable" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Boolean flag indicating the status(Fave capable or not"
+        },
+        "umaCapable" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Boolean flag indicating the status(UMA capable or not)"
+        },
+        "nfcCapable" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Boolean flag indicating the NFC capability of the device"
+        }
+      }
+    },
+    "claimInfo" : {
+      "type" : "object",
+      "properties" : {
+        "claimType" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The type of loss being claimed • Physical Damage • Mechanical Breakdown - NOT USED • Missing or Lost – NOT USED • Theft– NOT USED"
+        },
+        "authorizationCode" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The claim authorization that would serve as the traded in device for the JUMP transaction"
+        },
+        "deductibleAmount" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "The deductible that is due on this claim submission"
+        },
+        "programType" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "It refers to the program type of the claim. values are DRP, JUMP"
+        },
+        "claimNumber" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "The unique identifier for a created claim"
+        },
+        "numberOfClaims" : {
+          "type" : "integer",
+          "example" : "XXX",
+          "description" : "Number of insurance claims made in last 12 months."
+        },
+        "deviceCollectionRequired" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "xx."
+        },
+        "acceptedAmount" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "The amount that will be paid for the device being traded in. This should be the EIP balance from  the Offer or the Device Recovery amount from the Offer."
+        },
+        "deviceLevelBalance" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "Balance on the EIP agreement at the time of the JUMP upgrade"
+        },
+        "quoteDisposition" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "quote Disposition"
+        },
+        "quoteId" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "unique id of the quote"
+        },
+        "eipPlanId" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "EIP unique Identifier for the EIP agreement"
+        },
+        "installmentEquipmentId" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Unique ID assigned to each installment equipment in EIP."
+        },
+        "damagedDeviceCollected" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "set to true if damaged device is collected"
+        },
+        "claimCollectedUpfront" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Set to true when the claim amount is collected upfront"
+        },
+        "claimDate" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "date when Claim is made"
+        },
+        "RMANumber" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Return Merchandise Authorization number associated with the claim"
+        },
+        "numOfRedemptionsLeft" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "total number of redemptions left in the line"
+        },
+        "RMAExpirationDate" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Last date for the customer to ship RMA to the Vendo"
+        },
+        "deductibleSKU" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "SKU associated with the claim deductible amount"
+        },
+        "residualValue" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Value of the leased property at the end of the lease term"
+        },
+        "damageFeeBreakdown" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "Contains Fee details and damage type of the damaged devices"
+          }
+        }
+      }
+    },
+    "promotionInfo" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Promotion identifier"
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Customer facing name"
+        },
+        "autoSelected" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Defines whether the promotion is manually or automatically added to a cart/order"
+        },
+        "groupid" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Promo group ID"
+        },
+        "tradeInIntent" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Describes the intent of the trade in Possible values PROMO STANDARD"
+        },
+        "excludeFairMarketValue" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Decision for the EFPE (Enterprise Promotion Enrollment)system response for fair market value amount"
+        },
+        "discount" : {
+          "$ref" : "#/definitions/discount"
+        }
+      }
+    },
+    "discount" : {
+      "type" : "object",
+      "properties" : {
+        "recurringAmount" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "Monthly discount in dollars associated to a promotion"
+        },
+        "period" : {
+          "type" : "integer",
+          "example" : "XXX",
+          "description" : "Tenure of the promo in months"
+        },
+        "totalAmount" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "TotalAmount of promo (Promo price *Tenure of the promo in months)"
+        }
+      }
+    },
+    "coverageDevice" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/coverageDevice_inner"
+      }
+    },
+    "damageFeeAssessment" : {
+      "type" : "object",
+      "properties" : {
+        "assessmentInfo" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/damageFeeAssessment_assessmentInfo"
+          }
+        }
+      }
+    },
+    "ProductAttribute" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "name of the attribute"
+        },
+        "description" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "description of the attribute"
+        },
+        "dataType" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "data type of the attribute"
+        },
+        "usage" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "how this attribute can be used."
+        },
+        "value" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "value of the attribute."
+          }
+        }
+      }
+    },
+    "Device" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/Device_inner"
+      }
+    },
+    "properties" : {
+      "type" : "object",
+      "properties" : {
+        "systemProperties" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "Includes the backend specific properties"
+          }
+        },
+        "displayProperties" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "Properties that decribes how the item should be displayed in the UI"
+          }
+        },
+        "customProperties" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "Includes the T-Mobile customized properties."
+          }
+        }
+      }
+    },
+    "billingContact" : {
+      "type" : "object",
+      "properties" : {
+        "PersonExtention" : {
+          "$ref" : "#/definitions/billingContact_PersonExtention"
+        },
+        "Contact" : {
+          "$ref" : "#/definitions/billingContact_Contact"
+        }
+      }
+    },
+    "websiteCommunication" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/websiteCommunication_inner"
+      }
+    },
+    "emailCommunication" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/emailCommunication_inner"
+      }
+    },
+    "phoneCommunication" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/phoneCommunication_inner"
+      }
+    },
+    "addressCommunication" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/addressCommunication_inner"
+      }
+    },
+    "address" : {
+      "type" : "object",
+      "properties" : {
+        "addressFormatType" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "A code specifying the format of this address(STREET_ADDRESS, POBOX_ADDRESS,MILITARY_ADDRESS,FOREIGN_ADDRESS,HWY_ADDRESS,RURALROUTE_ADDRESS)"
+        },
+        "addressType" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "A code specifying the type of this address(BILLING,E911,USER,MAILING,PPU)"
+        },
+        "addressLine1" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The first free form line, expressed as text, of an address"
+        },
+        "addressLine2" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The second free form line, expressed as text, of an address"
+        },
+        "addressLine3" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The third free form line, expressed as text, of an address"
+        },
+        "addressLine4" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The fourth free form line, expressed as text, of an address"
+        },
+        "building" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "A building name or number. An office park or campus may have several buildings that are distinguished by the building name or number."
+        },
+        "floor" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "A floor in a building"
+        },
+        "area" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Refers to an area of the building such as left wing, right wing etc."
+        },
+        "cityName" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The name, expressed as text, of the city, town or village of this address"
+        },
+        "stateName" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Name of the state in which the city falls, where applicable"
+        },
+        "stateCode" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Code of the state in which the city falls, where applicable(WA, TX, GA)"
+        },
+        "provinceName" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Name of the province where the address is located, if applicable"
+        },
+        "provinceCode" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Code of the province where the address is located, if applicable(OX,PQ)"
+        },
+        "ruralRoute" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Rural Route Number for the address, if applicable"
+        },
+        "countyName" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "County Name, if applicable"
+        },
+        "countryCode" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The unique identifier of a country for this address (Reference ISO 3166 and UN/ECE Rec 3)"
+        },
+        "countryName" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The name of a country for this address (Reference ISO 3166 and UN/ECE Rec 3)"
+        },
+        "countrySubDivisionID" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "An identification of a country sub-division of this address such as a department in France. To be used only if there is no named term that represents the countrysubdivision concept being expressed"
+        },
+        "citySubDivisionName" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "A name, expressed as text, of a sub-division of a city for this address, for example a district or borough. To be used only if there is no named term that represents the citysubdivision concept being expressed"
+        },
+        "attentionOf" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The name, expressed as text, of a person or department in the organization to whom incoming mail is marked with words such as 'for the attention of' or 'FAO' or 'ATTN' for this address"
+        },
+        "careOf" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "he name, expressed as text, of a person or organization at this address to whom incoming mail is marked with words such as 'care of' or 'C/O'"
+        },
+        "postalCode" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "A code specifying the postalcode of the address"
+        },
+        "postalCodeExtension" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "An extension to the postalcode of the address, e.g., in 94070-3541, the extension is 3541."
+        },
+        "geoCodeID" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "A unique code that represents a geospatial coordinate measurement of an exact geographic location and time at, below, or above the surface of the earth"
+        },
+        "uncertaintyIndicator" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Uncertainty code for geo-code 'FULL'-Full Address, 'ZIP'-Rural Zip+4"
+        },
+        "inCityLimitIndicator" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Indicates whether or not this address is within the taxing boundary of the jurisdiction that's provided in the address."
+        },
+        "timeZoneCode" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Code indicating the time zone of the address, e.g., EST, PST, UTC-8, UTC-5"
+        },
+        "geographicCoordinate" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Coordinates"
+        },
+        "countyCode" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "A numeric code identifying the county from the Federal Information Processing Standard (FIPS)"
+        },
+        "taxAreaID" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "An unique ID that identifies the area of an address for tax purposes"
+        },
+        "urbanizationName" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "urbanization Name"
+        },
+        "additionalNotes" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "additional Notes"
+        }
+      }
+    },
+    "preference" : {
+      "type" : "object",
+      "properties" : {
+        "preferred" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Start"
+        },
+        "ranking" : {
+          "type" : "integer",
+          "example" : "XXX",
+          "description" : "Start"
+        }
+      }
+    },
+    "status" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/definitions/status_inner"
+      }
+    },
+    "effectivePeriod" : {
+      "type" : "object",
+      "properties" : {
+        "startTime" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : "XXX",
+          "description" : "Start DateTime of the Time Period"
+        },
+        "duration" : {
+          "type" : "string",
+          "format" : "duration",
+          "example" : "XXX",
+          "description" : "Start DateTime of the Time Period"
+        },
+        "endTime" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : "XXX",
+          "description" : "End Date Time of the Time Period"
+        }
+      }
+    },
+    "personName" : {
+      "type" : "object",
+      "properties" : {
+        "nameType" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Type of name such as Legal name, official name and so on."
+        },
+        "fullName" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "full name."
+        },
+        "firstName" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Persons given name or first name"
+        },
+        "lastName" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Persons last name"
+        },
+        "middleName" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "persons middle name or initial"
+          }
+        },
+        "familyName" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "persons family name"
+          }
+        },
+        "maidenName" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "the family name that the married name replaces"
+        },
+        "title" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "title of the person. For example Dr, Senator, Mr.."
+          }
+        },
+        "salutation" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "Way the person is addressed e.g. Honorable etc"
+          }
+        },
+        "prefix" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Prefix to the last name that is not considered part of the last name, such as German von or French dela, etc"
+        },
+        "suffix" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Suffix to the last name, such as Senior, III, the Third etc"
+        },
+        "militaryRank" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Military Rank"
+        },
+        "preferredName" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Name by which the person prefers to be addressed"
+        },
+        "aliasName" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "Alias by which the person is known"
+          }
+        },
+        "effectivePeriod" : {
+          "$ref" : "#/definitions/effectivePeriod"
+        }
+      }
+    },
+    "Response" : {
+      "type" : "object",
+      "properties" : {
+        "XX" : {
+          "type" : "string",
+          "example" : "XX",
+          "description" : "aa"
+        }
+      }
+    },
+    "Error" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "string",
+          "description" : "A specific T-Mobile error code."
+        },
+        "userMessage" : {
+          "type" : "string",
+          "description" : "A human-readable message describing the error."
+        },
+        "systemMessage" : {
+          "type" : "string",
+          "description" : "Backend system error message."
+        }
+      },
+      "description" : "Error object."
+    },
+    "Request_header" : {
+      "required" : [ "sender" ],
+      "properties" : {
+        "sender" : {
+          "$ref" : "#/definitions/sender"
+        },
+        "target" : {
+          "$ref" : "#/definitions/target"
+        }
+      }
+    },
+    "target_targetSystemId" : {
+      "required" : [ "systemId", "userId" ],
+      "properties" : {
+        "systemId" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "xx."
+        },
+        "userId" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "xx"
+        }
+      }
+    },
+    "desiredLine_inner" : {
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "specifies the line for which details need to be retrieved"
+        },
+        "desiredCategory" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "specifies the category names for this active line e.g Device, Plan",
+            "enum" : [ "All", "Device", "Plan", "Accessory", "Service" ]
+          }
+        }
+      }
+    },
+    "subscriberInfo_inner_socIndicator" : {
+      "properties" : {
+        "ServiceIndicator" : {
+          "type" : "string",
+          "example" : "NYD",
+          "description" : "Uniquely identifies the type of Soc (3 character representation such as CLS, NEO, FPC, FPN, etc)"
+        }
+      }
+    },
+    "subscriberInfo_inner_listLoadInfo" : {
+      "properties" : {
+        "listLoadScore" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Indicates AAL Upgrade score used to calculate List load eligibility"
+        },
+        "listLoadEligibleTier" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Indicates Device Tier"
+        }
+      }
+    },
+    "subscriberInfo_inner" : {
+      "properties" : {
+        "dualEIP" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Indicator to identify 2 EIP plans for the device on the MSISDNs"
+        },
+        "MSISDN" : {
+          "type" : "string",
+          "example" : "5168516038",
+          "description" : "Mobile Subscriber Integrated Services Digital Network Number. A number uniquely identifying a subscription in a GSM or a UMTS mobile network. Simply put, it is the telephone number to the SIM card in a mobile/cellular phone"
+        },
+        "productType" : {
+          "type" : "string",
+          "example" : "GSM",
+          "description" : "ProductType of the subscriber, G - GSM, B - MBB"
+        },
+        "SIM" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Sim device number that is associated with this record."
+        },
+        "serialNumber" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "IMEI"
+        },
+        "universalLineId" : {
+          "type" : "string",
+          "example" : "2-B2KY9LT",
+          "description" : "Universal line id"
+        },
+        "jumpEligibilityReasonCode" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Reason Code for the subscriber's eligibility/ineligibility"
+        },
+        "tradeInDetails" : {
+          "$ref" : "#/definitions/tradeInDetails"
+        },
+        "contractTerm" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Rate Plan contract duration in months"
+        },
+        "breakContractInd" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "indicates if a rate plan change breaks the subscriber’s existing contract or not"
+        },
+        "currentDeviceSKU" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "refers to the current device SKU for an existing customer."
+        },
+        "currentPlanCode" : {
+          "type" : "string",
+          "example" : "FRLTUNL",
+          "description" : "Uniquely identifies a plan, option, or feature within a market for an existing customer"
+        },
+        "currentPlanType" : {
+          "type" : "string",
+          "example" : "NEO",
+          "description" : "refers to the current plan type of the customer"
+        },
+        "currentPlanLevel" : {
+          "type" : "string",
+          "example" : "SUBNO_LEVEL",
+          "description" : "the current rateplan level of the customer. Pooled or nonPooled"
+        },
+        "futurePlanType" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "the future plan type of the customer"
+        },
+        "futurePlanCode" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Soc code of the rateplan which subscriber has migrated during the upgrade"
+        },
+        "futurePlanName" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "short description of the rateplan which subscriber has migrated during the upgrade"
+        },
+        "futurePlanDescription" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "description of the rateplan which subscriber has migrated during the upgrade"
+        },
+        "currentFeatureCode" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "refers to the current feature code of the customer."
+          }
+        },
+        "socIndicator" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/subscriberInfo_inner_socIndicator"
+          }
+        },
+        "socCode" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "PDNYPHPG4",
+            "description" : "Refers to Service Code"
+          }
+        },
+        "socChangeMode" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "xx."
+        },
+        "futureSocCode" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "This field indicates the New SOC code Selected"
+        },
+        "classicToValue" : {
+          "type" : "string",
+          "example" : "Tentative",
+          "description" : "Represents the available criteria for classic to value, whether just the plan (primary or AAL) is eligible or the data soc is eligible or both.",
+          "enum" : [ "None", "Tentative", "INVALID_ACCOUNT_TYPE_SUB_TYPE", "RATEPLAN", "ADD_A_LINE", "RATEPLAN_AND_DATA", "DATA", "ADD_A_LINE_AND_DATA", "NON_POOLED_VOICE", "NON_POOLED_DATA" ]
+        },
+        "migrationFeeTenure" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "migrationFeeTenure"
+        },
+        "migrationFee" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "refers to the fee to be paid when a subscriber switches from classic to value plan."
+        },
+        "eligibleForEarlyUpgrade" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Indicates if eligible for early upgrade."
+        },
+        "activationFee" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "refers to the activation fee of the line"
+        },
+        "activationDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : "XXX",
+          "description" : "refers to the date of activation of this line."
+        },
+        "financeType" : {
+          "type" : "string",
+          "example" : "LOAN",
+          "description" : "refers to the finance type of the device say LEASE or LOAN",
+          "enum" : [ "LOAN", "LEASE", "REGULAR", "SCORE", "POIP", "LISTLOAD" ]
+        },
+        "totalDamageFee" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "refers to the total fee details of all the damaged devices"
+        },
+        "eipInfo" : {
+          "$ref" : "#/definitions/eipInfo"
+        },
+        "tierInfo" : {
+          "$ref" : "#/definitions/tierInfo"
+        },
+        "customerAccountType" : {
+          "type" : "string",
+          "example" : "POSTPAID",
+          "description" : "applicable only for non-JUMP upgrades, should be set to for PREPAID for prepaid customers and POSTPAID for postpaid customers",
+          "enum" : [ "PREPAID", "POSTPAID" ]
+        },
+        "lineType" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "xx.",
+          "enum" : [ "VIRTUAL", "DUPLICATE", "MAINLINE_AND_IVR", "CONFERENCE", "FAX", "IOT" ]
+        },
+        "recentActivationIndicator" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Indicates whether the account includes recent Activations"
+        },
+        "listLoadInfo" : {
+          "$ref" : "#/definitions/subscriberInfo_inner_listLoadInfo"
+        },
+        "socEffectiveDate" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Refers to Service effective date"
+        },
+        "PHPIndicator" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Refers to PHP Indicator"
+        },
+        "SAPWarrantyType" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Refers to SAP warranty type"
+        },
+        "warrantyType" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Refers to warranty type"
+        }
+      }
+    },
+    "tradeInDetails_TradeInInfoType" : {
+      "properties" : {
+        "quoteRejectionReason" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Reason for rejecting the quote which will be used by OMS to call SetQuoteDisposition.UI has to send any valid reference data which they get from the service getQuoteRejectReasons"
+        },
+        "deviceInfo" : {
+          "$ref" : "#/definitions/deviceInfo"
+        },
+        "claimInfo" : {
+          "$ref" : "#/definitions/claimInfo"
+        },
+        "promotionInfo" : {
+          "$ref" : "#/definitions/promotionInfo"
+        }
+      }
+    },
+    "tierInfo_inner" : {
+      "properties" : {
+        "type" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Defines the nature of the program for which the Customer may be categorized under a Tier. If the Customer has enrolled in a SCORE program, 'SCORE' is returned. If the Customer is active on JUMP!, SEGMENTED_JUMP is returned."
+        },
+        "price" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "Contains the actual amount of reduction in price that may be offered for a Device of interest"
+        },
+        "tierValue" : {
+          "type" : "integer",
+          "example" : "XXX",
+          "description" : "A non negative number that indicates the current Tier of a Customer. It can range anywhere from 1 to 6."
+        },
+        "nextEligibleTierValue" : {
+          "type" : "integer",
+          "example" : "XXX",
+          "description" : "Indicates the next upper Tier to which the Customer shall be promoted to"
+        },
+        "nextEligibleTierDate" : {
+          "type" : "string",
+          "format" : "date",
+          "example" : "XXX",
+          "description" : "Indicates a date by when the Customer shall be promoted to the next higher Tier."
+        },
+        "discount" : {
+          "$ref" : "#/definitions/ProductDiscount"
+        }
+      }
+    },
+    "ProductDiscount_inner" : {
+      "properties" : {
+        "type" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "type of discount"
+        },
+        "amount" : {
+          "type" : "number",
+          "example" : "XXX",
+          "description" : "amount"
+        },
+        "percentage" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "discount percentage applied on the price"
+        },
+        "effectiveDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : "XXX",
+          "description" : "amount"
+        },
+        "expirationDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : "XXX",
+          "description" : "amount"
+        }
+      }
+    },
+    "coverageDevice_inner" : {
+      "properties" : {
+        "quantity" : {
+          "type" : "integer",
+          "example" : "XXX",
+          "description" : "Device Type Requirement"
+        },
+        "eligibleHandsetDevice" : {
+          "$ref" : "#/definitions/Device"
+        },
+        "ineligibleHandsetDevice" : {
+          "$ref" : "#/definitions/Device"
+        },
+        "deviceTypeDisabled" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Property used by Clients to enable/disable the CoverageSolutionDevices"
+        },
+        "csdEligible" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Property to indicate CSD eligble or not"
+        },
+        "properties" : {
+          "$ref" : "#/definitions/properties"
+        },
+        "damageFeeAssessment" : {
+          "$ref" : "#/definitions/damageFeeAssessment"
+        },
+        "chargeDamageFee" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "Backend will return this flag to indicate Damage Fee to be charged to customer or not based on damage Waiver flag and damage Fee applicable"
+        },
+        "damageFeeApplicable" : {
+          "type" : "boolean",
+          "example" : false,
+          "description" : "flag to apply Damage Fee or not based on Question/Answers provided during return"
+        },
+        "orderReturnDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : "XXX",
+          "description" : "The date on which SAP drops the order to FW Return Center"
+        },
+        "nonReturnFeeChargeDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : "XXX",
+          "description" : "The date on which the NRF will be charged"
+        },
+        "nonReturnFeeExpiryDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : "XXX",
+          "description" : "The date on which the return expires"
+        },
+        "Device" : {
+          "$ref" : "#/definitions/Device"
+        }
+      }
+    },
+    "damageFeeAssessment_assessmentInfo" : {
+      "required" : [ "question" ],
+      "properties" : {
+        "question" : {
+          "$ref" : "#/definitions/ProductAttribute"
+        },
+        "answer" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ProductAttribute"
+          }
+        }
+      }
+    },
+    "Device_inner" : {
+      "properties" : {
+        "sku" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The unique alphanumeric code associated with this product/item."
+        },
+        "deviceItem" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "xx."
+          }
+        },
+        "availableColors" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "Available colors of the device. i.e white"
+          }
+        },
+        "availableMemorySize" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "Available memory sizes for this device."
+          }
+        },
+        "tacCode" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Customer existing Handset device TAC Code information."
+        }
+      }
+    },
+    "billingContact_PersonExtention" : {
+      "properties" : {
+        "birthPlace" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Place of birth"
+        },
+        "drivingLicensing" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "drivingLicensing"
+        },
+        "nationalIdentityDocumen" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "nationalIdentityDocumen"
+        },
+        "citizenship" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "citizenship"
+        },
+        "passport" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "passport"
+        },
+        "visa" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "visa"
+        },
+        "ssn" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "ssn"
+        }
+      }
+    },
+    "billingContact_Contact" : {
+      "properties" : {
+        "personName" : {
+          "$ref" : "#/definitions/personName"
+        },
+        "status" : {
+          "$ref" : "#/definitions/status"
+        },
+        "preference" : {
+          "$ref" : "#/definitions/preference"
+        },
+        "addressCommunication" : {
+          "$ref" : "#/definitions/addressCommunication"
+        },
+        "phoneCommunication" : {
+          "$ref" : "#/definitions/phoneCommunication"
+        },
+        "emailCommunication" : {
+          "$ref" : "#/definitions/emailCommunication"
+        },
+        "websiteCommunication" : {
+          "$ref" : "#/definitions/websiteCommunication"
+        },
+        "preferredLanguage" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "The preferred language of communication in the specified usage context. ISO 639-1 Code (en-US,en-CA,en-GB)"
+          }
+        }
+      }
+    },
+    "websiteCommunication_inner" : {
+      "properties" : {
+        "websiteURI" : {
+          "type" : "string",
+          "format" : "URI",
+          "example" : "XXX",
+          "description" : "URI or URL for the communication"
+        }
+      }
+    },
+    "emailCommunication_inner" : {
+      "properties" : {
+        "emailAddress" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "URI in the case of email communication"
+        },
+        "emailFormat" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "ndicates that the communication is preferred in HTML format, Plain Text, Rich Tex"
+        },
+        "lastEmailUpdate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : "XXX",
+          "description" : "Last updated email date-time"
+        }
+      }
+    },
+    "phoneCommunication_inner" : {
+      "properties" : {
+        "phoneType" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "Indicates the type of Phone Communication. Recognized \"usageContext\" values are found in"
+        },
+        "phoneNumber" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The complete number without separation between country code, area code etc"
+        },
+        "countryCode" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The country dialing code for a communication number"
+        },
+        "areaCode" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The area dialing code for a communication number"
+        },
+        "localNumber" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The communication number, not including country dialing or area dialing codes"
+        },
+        "phoneExtension" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The extension of the associated communication number"
+        },
+        "accessCode" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The text that permits access to the electronic network of the associated ommunication number such as telephone network, for example 9, *70."
+        },
+        "serviceUsageType" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "example" : "XXX",
+            "description" : "Indicates what type of phone service is governed by this Communication. Example, SMS, MMS Recognized \"usageContext\" values are found in"
+          }
+        }
+      }
+    },
+    "addressCommunication_inner" : {
+      "properties" : {
+        "address" : {
+          "$ref" : "#/definitions/address"
+        }
+      }
+    },
+    "status_inner" : {
+      "properties" : {
+        "effectivePeriod" : {
+          "$ref" : "#/definitions/effectivePeriod"
+        },
+        "lastUpdateDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : "XXX",
+          "description" : "last update DateTime for the Status"
+        },
+        "description" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "An explanation of the status"
+        },
+        "reason" : {
+          "type" : "string",
+          "example" : "XXX",
+          "description" : "The reason for the status"
+        }
+      }
+    }
+  }
+}
