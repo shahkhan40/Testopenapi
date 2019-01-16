@@ -1,0 +1,1427 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "API Specification for MasterCard",
+    "version" : "1.0.0",
+    "title" : "Master Card",
+    "contact" : {
+      "name" : "Sagar Nadagoud",
+      "email" : "sagar.nadagoud@wildjasmine.com"
+    }
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/AFFINION-GROUP3/Master_Card/1.0.0",
+  "schemes" : [ "https" ],
+  "security" : [ {
+    "accessCode" : [ "read", "write" ]
+  } ],
+  "paths" : {
+    "/mastercard/v1/{Id}/user_profile" : {
+      "get" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Get user details by passing the id.",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Id",
+          "in" : "path",
+          "description" : "Provide ID to get user details. it will return the object based on the ID",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/get_user_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v1/user_profile" : {
+      "post" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Create a user profile..",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "Attributes",
+          "description" : "Pass the number for user_type_id i.e for admin 1,manager 2,supermanager 3 etc.. and required attribute name and attribute value for the user creation.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/create_user_attribute"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/create_user_response_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v2/{Id}/user_profile" : {
+      "put" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Update a record to user profile..",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Id",
+          "in" : "path",
+          "description" : "Provide the  Id to update the user profile",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "Attributes",
+          "description" : "pass the attribute name and attribute value.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/update_user_attribute"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/update_user_response_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v3/{Id}/user_profile" : {
+      "delete" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Delete User profile By Passing Id",
+        "consumes" : [ "appication/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Id",
+          "in" : "path",
+          "description" : "Provide Id for the User to Delete the profile",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/user_delete_response_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are  required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v1/{Id}/user_type" : {
+      "get" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Get user type by passing the id.",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Id",
+          "in" : "path",
+          "description" : "Provide ID to get user type. it will return the object based on the ID",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/get_main_user_type_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v1/user_type" : {
+      "post" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Create a user type.",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "Attributes",
+          "description" : "Pass the number for user_type_id i.e for admin 1,manager 2,supermanager 3 etc.. and required attribute name and attribute value for the user creation.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/create_main_user_type_attribute"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/create_main_user_type_response_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v2/{Id}/user_type" : {
+      "put" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Update a record to user type.",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Id",
+          "in" : "path",
+          "description" : "Provide the  Id to update the user type",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "Attributes",
+          "description" : "pass the attribute name and attribute value.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/update_main_user_type_attribute"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/update_main_user_type_response_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v3/{Id}/user_type" : {
+      "delete" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Delete User Type By Passing Id",
+        "consumes" : [ "appication/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Id",
+          "in" : "path",
+          "description" : "Provide Id for the User to Delete the type",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/delete_user_type_response_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are  required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v5/user_type" : {
+      "get" : {
+        "tags" : [ "User Management" ],
+        "summary" : "get all user type.",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/get_all_main_user_type_attribute"
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v1/{Id}/module" : {
+      "get" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Get module details by passing the id.",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Id",
+          "in" : "path",
+          "description" : "Provide ID to get module details. it will return the object based on the ID",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/get_h2ng_module_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v1/module" : {
+      "post" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Create a module.",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "Attributes",
+          "description" : "Pass the required attribute name and attribute value for the user creation.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/create_module_attribute"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/create_module_response_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v2/{Id}/module" : {
+      "put" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Update a record to module.",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Id",
+          "in" : "path",
+          "description" : "Provide the  Id to update the module",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "Attributes",
+          "description" : "pass the attribute name and attribute value.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/update_module_attribute"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/update_module_response_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v3/{Id}/module" : {
+      "delete" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Delete module Type By Passing Id",
+        "consumes" : [ "appication/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Id",
+          "in" : "path",
+          "description" : "Provide Id for the module to Delete",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/delete_module_response_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are  required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v1/{Id}/user_type_acl" : {
+      "get" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Get user acl details by passing the id.",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Id",
+          "in" : "path",
+          "description" : "Provide ID to get user acl details. it will return the object based on the ID",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/get_user_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v1/user_type_acl" : {
+      "post" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Create a user acl.",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "Attributes",
+          "description" : "Pass the required attribute name and attribute value for the user creation.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/create_user_type_acl_attribute"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/create_user_type_acl_response_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v2/{Id}/user_type_acl" : {
+      "put" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Update a record to user acl.",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Id",
+          "in" : "path",
+          "description" : "Provide the  Id to update the user acl",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "Attributes",
+          "description" : "pass the attribute name and attribute value.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/update_user_type_acl_attribute"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/update_user_type_acl_response_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    },
+    "/mastercard/v3/{Id}/user_type_acl" : {
+      "delete" : {
+        "tags" : [ "User Management" ],
+        "summary" : "Delete user acl by Passing Id",
+        "consumes" : [ "appication/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Id",
+          "in" : "path",
+          "description" : "Provide Id for the user acl to Delete",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK. The request was successful and the response body contains the representation requested",
+            "schema" : {
+              "$ref" : "#/definitions/user_delete_response_attribute"
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHORIZED. Authentication credentials are  required to access the resource. All requests must be authenticated."
+          },
+          "403" : {
+            "description" : "FORBIDDEN. The View Scope applied is invalid, or the authentication credentials are not sufficient to access the resource."
+          },
+          "404" : {
+            "description" : "NOT FOUND. A resource specified in the request could not be located.",
+            "schema" : {
+              "$ref" : "#/definitions/errors"
+            }
+          },
+          "415" : {
+            "description" : "UNSUPPORTED MEDIA TYPE. You did not specify the request Content-Type header to have a value of application/json."
+          },
+          "500" : {
+            "description" : "SERVER ERROR. Updates or actions requested did not succeed. Please try again"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "accessCode" : {
+      "type" : "oauth2",
+      "authorizationUrl" : "http://example.com/oauth/auth",
+      "tokenUrl" : "http://example.com/oauth/token",
+      "flow" : "accessCode",
+      "scopes" : {
+        "write" : "allows modifying resources",
+        "read" : "allows reading resources"
+      }
+    }
+  },
+  "definitions" : {
+    "get_user_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_id" : {
+          "type" : "string",
+          "example" : "user name"
+        },
+        "user_name" : {
+          "type" : "string",
+          "example" : "user name"
+        },
+        "user_password" : {
+          "type" : "string",
+          "example" : "12345"
+        },
+        "created_date" : {
+          "type" : "string",
+          "example" : "2019-01-09 20.42:28.29"
+        },
+        "first_name" : {
+          "type" : "string",
+          "example" : "first name"
+        },
+        "last_name" : {
+          "type" : "string",
+          "example" : "last name"
+        },
+        "profile_pic" : {
+          "type" : "string",
+          "example" : "image"
+        },
+        "user_type" : {
+          "$ref" : "#/definitions/get_user_type_attribute"
+        }
+      }
+    },
+    "get_user_type_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "created_date" : {
+          "type" : "string",
+          "example" : "2019-01-09 20.42:28.29"
+        },
+        "created_by" : {
+          "type" : "string",
+          "example" : "admin"
+        },
+        "user_type_name" : {
+          "type" : "string",
+          "example" : "admin"
+        }
+      }
+    },
+    "create_user_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type" : {
+          "$ref" : "#/definitions/create_user_type_attribute"
+        },
+        "user_name" : {
+          "type" : "string",
+          "example" : "user name"
+        },
+        "user_password" : {
+          "type" : "string",
+          "example" : "12345"
+        },
+        "user_desc" : {
+          "type" : "string",
+          "example" : "description"
+        },
+        "first_name" : {
+          "type" : "string",
+          "example" : "first name"
+        },
+        "last_name" : {
+          "type" : "string",
+          "example" : "last name"
+        },
+        "profile_pic" : {
+          "type" : "string",
+          "example" : "image"
+        }
+      }
+    },
+    "create_user_type_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_id" : {
+          "type" : "integer",
+          "example" : 1
+        }
+      }
+    },
+    "create_user_response_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_id" : {
+          "type" : "integer",
+          "example" : 8457846
+        }
+      }
+    },
+    "update_user_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type" : {
+          "$ref" : "#/definitions/update_user_type_attribute"
+        },
+        "user_name" : {
+          "type" : "string",
+          "example" : "user name"
+        },
+        "user_password" : {
+          "type" : "string",
+          "example" : "12345"
+        },
+        "user_desc" : {
+          "type" : "string",
+          "example" : "description"
+        },
+        "first_name" : {
+          "type" : "string",
+          "example" : "first name"
+        },
+        "last_name" : {
+          "type" : "string",
+          "example" : "last name"
+        },
+        "profile_pic" : {
+          "type" : "string",
+          "example" : "image"
+        }
+      }
+    },
+    "update_user_type_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_id" : {
+          "type" : "integer",
+          "example" : 1
+        }
+      }
+    },
+    "update_user_response_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_id" : {
+          "type" : "integer",
+          "example" : 8457846
+        },
+        "user_name" : {
+          "type" : "string",
+          "example" : "user name"
+        },
+        "user_type" : {
+          "$ref" : "#/definitions/update_user_response_attribute2"
+        }
+      }
+    },
+    "update_user_response_attribute2" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_id" : {
+          "type" : "integer",
+          "example" : 125
+        },
+        "user_type_name" : {
+          "type" : "string",
+          "example" : "sadmin"
+        }
+      }
+    },
+    "user_delete_response_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "Id" : {
+          "type" : "integer",
+          "example" : 12345
+        },
+        "status" : {
+          "type" : "boolean",
+          "example" : false
+        }
+      }
+    },
+    "get_main_user_type_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "user_type_name" : {
+          "type" : "string",
+          "example" : "admin"
+        },
+        "user_type_desc" : {
+          "type" : "string",
+          "example" : "admin"
+        },
+        "created_date" : {
+          "type" : "string",
+          "example" : "2019-01-09 20.42:28.29"
+        },
+        "created_by" : {
+          "type" : "string",
+          "example" : "admin"
+        }
+      }
+    },
+    "create_main_user_type_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_name" : {
+          "type" : "string",
+          "example" : "sadmin"
+        },
+        "user_type_desc" : {
+          "type" : "string",
+          "example" : "sadmin"
+        },
+        "created_date" : {
+          "type" : "string",
+          "example" : "2019-01-09 20.42:28.29"
+        },
+        "created_by" : {
+          "type" : "string",
+          "example" : "sadmin"
+        }
+      }
+    },
+    "create_main_user_type_response_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_id" : {
+          "type" : "integer",
+          "example" : 8457846
+        },
+        "user_type_name" : {
+          "type" : "string",
+          "example" : "sadmin"
+        }
+      }
+    },
+    "update_main_user_type_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_name" : {
+          "type" : "string",
+          "example" : "sadmin"
+        },
+        "user_type_desc" : {
+          "type" : "string",
+          "example" : "sadmin"
+        },
+        "updated_date" : {
+          "type" : "string",
+          "example" : "2019-01-09 20.42:28.29"
+        },
+        "updated_by" : {
+          "type" : "string",
+          "example" : "admin"
+        }
+      }
+    },
+    "update_main_user_type_response_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_id" : {
+          "type" : "integer",
+          "example" : 8457846
+        },
+        "user_type_name" : {
+          "type" : "string",
+          "example" : "sadmin"
+        }
+      }
+    },
+    "delete_user_type_response_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "Id" : {
+          "type" : "integer",
+          "example" : 12345
+        },
+        "status" : {
+          "type" : "boolean",
+          "example" : false
+        }
+      }
+    },
+    "get_all_main_user_type_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "user_type_name" : {
+          "type" : "string",
+          "example" : "admin"
+        },
+        "user_type_desc" : {
+          "type" : "string",
+          "example" : "admin"
+        },
+        "created_date" : {
+          "type" : "string",
+          "example" : "2019-01-09 20.42:28.29"
+        },
+        "created_by" : {
+          "type" : "string",
+          "example" : "admin"
+        }
+      }
+    },
+    "get_h2ng_module_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "module_id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "module_name" : {
+          "type" : "string",
+          "example" : "name"
+        },
+        "module_desc" : {
+          "type" : "string",
+          "example" : "desc"
+        },
+        "feature_name" : {
+          "type" : "string",
+          "example" : "feature name"
+        },
+        "feature_desc" : {
+          "type" : "string",
+          "example" : "feature descrption"
+        },
+        "created_date" : {
+          "type" : "string",
+          "example" : "2019-01-09 20.42:28.29"
+        },
+        "created_by" : {
+          "type" : "string",
+          "example" : "sadmin"
+        }
+      }
+    },
+    "create_module_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "module_name" : {
+          "type" : "string",
+          "example" : "name"
+        },
+        "module_desc" : {
+          "type" : "string",
+          "example" : "desc"
+        },
+        "feature_name" : {
+          "type" : "string",
+          "example" : "feature name"
+        },
+        "feature_desc" : {
+          "type" : "string",
+          "example" : "feature descrption"
+        },
+        "created_date" : {
+          "type" : "string",
+          "example" : "2019-01-09 20.42:28.29"
+        },
+        "created_by" : {
+          "type" : "string",
+          "example" : "sadmin"
+        }
+      }
+    },
+    "create_module_response_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "module_id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "module_name" : {
+          "type" : "string",
+          "example" : "name"
+        }
+      }
+    },
+    "update_module_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "module_name" : {
+          "type" : "string",
+          "example" : "name"
+        },
+        "module_desc" : {
+          "type" : "string",
+          "example" : "desc"
+        },
+        "feature_name" : {
+          "type" : "string",
+          "example" : "feature name"
+        },
+        "feature_desc" : {
+          "type" : "string",
+          "example" : "feature descrption"
+        },
+        "updated_date" : {
+          "type" : "string",
+          "example" : "2019-01-09 20.42:28.29"
+        },
+        "updated_by" : {
+          "type" : "string",
+          "example" : "sadmin"
+        }
+      }
+    },
+    "update_module_response_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "module_id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "module_name" : {
+          "type" : "string",
+          "example" : "name"
+        },
+        "module_desc" : {
+          "type" : "string",
+          "example" : "desc"
+        },
+        "feature_name" : {
+          "type" : "string",
+          "example" : "feature name"
+        },
+        "feature_desc" : {
+          "type" : "string",
+          "example" : "feature descrption"
+        },
+        "updated_date" : {
+          "type" : "string",
+          "example" : "2019-01-09 20.42:28.29"
+        },
+        "updated_by" : {
+          "type" : "string",
+          "example" : "sadmin"
+        }
+      }
+    },
+    "delete_module_response_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "Id" : {
+          "type" : "integer",
+          "example" : 12345
+        },
+        "status" : {
+          "type" : "boolean",
+          "example" : false
+        }
+      }
+    },
+    "create_user_type_acl_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type" : {
+          "$ref" : "#/definitions/create_user_type_for_acl_attribute2"
+        },
+        "h2ng_module" : {
+          "$ref" : "#/definitions/create_h2ng_module_acl_attribute2"
+        },
+        "acl" : {
+          "type" : "string",
+          "example" : "read,write,update,delete"
+        },
+        "created_by" : {
+          "type" : "string",
+          "example" : "sadmin"
+        }
+      }
+    },
+    "create_user_type_for_acl_attribute2" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_id" : {
+          "type" : "integer",
+          "example" : 12
+        }
+      }
+    },
+    "create_h2ng_module_acl_attribute2" : {
+      "type" : "object",
+      "properties" : {
+        "module_id" : {
+          "type" : "integer",
+          "example" : 231
+        }
+      }
+    },
+    "create_user_type_acl_response_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_acl_id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "user_type" : {
+          "$ref" : "#/definitions/create_user_type_response_acl_attribute2"
+        },
+        "h2ng_module" : {
+          "$ref" : "#/definitions/create_h2ng_module_response_acl_attribute2"
+        },
+        "acl" : {
+          "type" : "string",
+          "example" : "read,write,update,delete"
+        }
+      }
+    },
+    "create_user_type_response_acl_attribute2" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_id" : {
+          "type" : "integer",
+          "example" : 12
+        }
+      }
+    },
+    "create_h2ng_module_response_acl_attribute2" : {
+      "type" : "object",
+      "properties" : {
+        "module_id" : {
+          "type" : "integer",
+          "example" : 231
+        }
+      }
+    },
+    "update_user_type_acl_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type" : {
+          "$ref" : "#/definitions/update_user_type_for_acl_attribute"
+        },
+        "h2ng_module" : {
+          "$ref" : "#/definitions/update_h2ng_module_acl_attribute"
+        },
+        "acl" : {
+          "type" : "string",
+          "example" : "read,write,update,delete"
+        },
+        "created_date" : {
+          "type" : "string",
+          "example" : "2019-01-09 20.42:28.29"
+        },
+        "created_by" : {
+          "type" : "string",
+          "example" : "sadmin"
+        }
+      }
+    },
+    "update_user_type_for_acl_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_id" : {
+          "type" : "integer",
+          "example" : 12
+        }
+      }
+    },
+    "update_h2ng_module_acl_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "module_id" : {
+          "type" : "integer",
+          "example" : 231
+        }
+      }
+    },
+    "update_user_type_acl_response_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_acl_id" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "user_type" : {
+          "$ref" : "#/definitions/update_user_type_response_acl_attribute"
+        },
+        "h2ng_module" : {
+          "$ref" : "#/definitions/update_h2ng_module_response_acl_attribute"
+        },
+        "acl" : {
+          "type" : "string",
+          "example" : "read,write,update,delete"
+        }
+      }
+    },
+    "update_user_type_response_acl_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "user_type_id" : {
+          "type" : "integer",
+          "example" : 12
+        },
+        "user_type_name" : {
+          "type" : "string",
+          "example" : "sadmin"
+        }
+      }
+    },
+    "update_h2ng_module_response_acl_attribute" : {
+      "type" : "object",
+      "properties" : {
+        "module_id" : {
+          "type" : "integer",
+          "example" : 231
+        }
+      }
+    },
+    "errors" : {
+      "type" : "array",
+      "description" : "List of errors. Atleast one should be expected, for error codes.",
+      "items" : {
+        "$ref" : "#/definitions/errors_inner"
+      }
+    },
+    "errors_inner" : {
+      "required" : [ "code", "status", "title" ],
+      "properties" : {
+        "status" : {
+          "type" : "integer",
+          "example" : 400,
+          "description" : "HTTP error code."
+        },
+        "code" : {
+          "type" : "string",
+          "example" : "MISSING_REQUIRED_ATTRIBUTES",
+          "description" : "Error code, often indicating the application context."
+        },
+        "title" : {
+          "type" : "string",
+          "example" : "Entity Name and Id must required to perform some opeartion.",
+          "description" : "Short description of the error, in the application context."
+        },
+        "developer_message" : {
+          "type" : "string",
+          "example" : "Entity must contain atleast one attribute name and attribute value.Ensure mandatory attributes are provided.",
+          "description" : "Long description of the error."
+        }
+      }
+    }
+  }
+}
