@@ -1,0 +1,3668 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "APIs to be exposed by US Bank as per Durable Data API specification defined by FS-ISAC as part of OpenFinancial Exchange ",
+    "version" : "2.0.0",
+    "title" : "U.S. Bank Open API Financial API specfication",
+    "contact" : {
+      "name" : "US Bank API Team",
+      "email" : "apicoe@usbank.com"
+    },
+    "license" : {
+      "name" : "US Bank Operating Rules"
+    }
+  },
+  "host" : "api-alpha.usbank.com",
+  "basePath" : "/api/acm",
+  "schemes" : [ "https" ],
+  "consumes" : [ "application/json" ],
+  "produces" : [ "application/json" ],
+  "paths" : {
+    "/v2/accountlist" : {
+      "get" : {
+        "tags" : [ "accounts" ],
+        "summary" : "Get a  list of accounts for the current user access token.",
+        "description" : "Gets a list of accounts for the given token.\n    \n*Example request for JSON *\n```\nGET /accountlist HTTP/1.1\nHost: api-alpha.usbank.com\nAccept: application/json\nAuthorization: Bearer w0mcJylzCn-AfvuGdqkty2-KP48=\nX-FI-ID: INT\nX-Partner-ID: INT\nX-Request-ID: INT121212\n  \n```\n*Example JSON response *\n```\nHTTP/1.1 200 OK\nContent-Type: application/json; charset=utf-8\n{\n \"accountDescriptorList\": [\n  {\n      \"accountId\": \"066d358f-12c0-2f03-dd38-d9b39237489a\",\n      \"accountType\": \"LOAN\",\n      \"displayName\": \"Reserve Line/Bus ... - 3005\",\n      \"status\": \"OPEN\",\n      \"description\": \"Reserve Line/Bus Res Line\",\n      \"fiAttributes\": null,\n      \"error\": null\n  },\n  {\n      \"accountId\": \"96c27058-8769-3398-1bbc-4133f12f8a75\",\n      \"accountType\": \"CHECKING\",\n      \"displayName\": \"Savings - 9044\",\n      \"status\": \"OPEN\",\n      \"description\": \"Checking\",\n      \"fiAttributes\": null,\n      \"error\": null\n  },\n  {\n      \"accountId\": \"3be8a092-af10-9083-e0c4-501c8610d3cb\",\n      \"accountType\": \"INSTALLMENT\",\n      \"displayName\": \"Loan - 6735\",\n      \"status\": \"OPEN\",\n      \"description\": \"Loan\",\n      \"fiAttributes\": null,\n      \"error\": null\n  }\n ]\n}\n```\n",
+        "operationId" : "GetAccountList",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "Authorization Bearer Token",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-FI-ID",
+          "in" : "header",
+          "description" : "Aggregator ID for Indentification",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-Partner-ID",
+          "in" : "header",
+          "description" : "Partner application ID associated with aggregator vendor",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-Request-ID",
+          "in" : "header",
+          "description" : "Request ID from the calling application for Auditing and Tracing",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "A list of accounts",
+            "schema" : {
+              "$ref" : "#/definitions/AccountDescriptorList"
+            }
+          },
+          "400" : {
+            "description" : "The request is missing a required parameter, or is otherwise malformed.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description of why the request is not valid. This is a system message \nand it will not be displayed to the customer.\n",
+                  "maxLength" : 2048
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "The access token is expired, revoked, malformed, or invalid for other reasons. The client can obtain a new access token and try again.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Error information related to Authentication Failure response",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The requested resource is not Found.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description resource not found.\n",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "The requested resocurce does not support on HTTP method requested.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description of  HTTP method is not supported.\n",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Customer-friendly message with the description related to Internal Server error while processing the request",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service is down for maintenance.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Customer-friendly message with the description of the maintenance window",
+                  "maxLength" : 255
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/account" : {
+      "post" : {
+        "tags" : [ "accounts" ],
+        "summary" : "Gets detailed account information for the accountId",
+        "description" : "Gets detailed account information for the current user access token and\naccountId.\n\n*Example request for JSON *\n\n```\nPOST /account HTTP/1.1\n\nHost: api-aplha.usbank.com\nAccept: application/json\nAuthorization: Bearer w0mcJylzCn-AfvuGdqkty2-KP48=\nX-FI-ID: INT\nX-Partner-ID: INT\nX-Request-ID: INT121212\nContent-Type: application/x-www-form-urlencoded\naccountId =12345\n  \n```\n*Example JSON response *\n\n```\nHTTP/1.1 200 OK\nContent-Type: application/json; charset=utf-8\n  {\n   \"depositAccount\": {\n    \"annualPercentageYield\": null,\n    \"availableBalance\": 14500.93,\n    \"balanceAsOf\": \"2018-03-26T14:42:55.8386747-05:00\",\n    \"currentBalance\": 14500.93,\n    \"interestYtd\": 0.19,\n    \"maturityDate\": null,\n    \"openingDayBalance\": null,\n    \"term\": null,\n    \"transactions\": null,\n    \"accountNumber\": \"XXXXXXXX9044\",\n    \"balanceType\": null,\n    \"currency\": {\n        \"currencyRate\": null,\n        \"currencyCode\": \"USD\",\n        \"originalCurrencyCode\": \"USD\"\n    },\n    \"interestRate\": 0.01,\n    \"interestRateAsOf\": null,\n    \"interestRateType\": null,\n    \"lastActivityDate\": null,\n    \"lineOfBusiness\": \"\",\n    \"micrNumber\": \"\",\n    \"nickname\": \"Savings\",\n    \"parentAccountId\": null,\n    \"priorInterestRate\": 0,\n    \"routingTransitNumber\": \"083900363\",\n    \"transactionsIncluded\": false,\n    \"transferIn\": false,\n    \"transferOut\": false,\n    \"accountId\": \"96c27058-8769-3398-1bbc-4133f12f8a75\",\n    \"accountType\": \"CHECKING\",\n    \"displayName\": \"Savings - 9044\",\n    \"status\": \"OPEN\",\n    \"description\": \"Checking\",\n    \"fiAttributes\": null,\n    \"error\": null\n  }\n }\n```\n",
+        "operationId" : "GetAccountDetailsbyID",
+        "consumes" : [ "application/x-www-form-urlencoded" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "accountId",
+          "in" : "formData",
+          "description" : "Account Identifier",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "Authorization Bearer Token",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-FI-ID",
+          "in" : "header",
+          "description" : "Aggregator ID for Indentification",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-Partner-ID",
+          "in" : "header",
+          "description" : "Partner application ID associated with aggregator vendor",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-Request-ID",
+          "in" : "header",
+          "description" : "Request ID from the calling application for Auditing and Tracing",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "A list of accounts",
+            "schema" : {
+              "$ref" : "#/definitions/AccountResponse"
+            }
+          },
+          "400" : {
+            "description" : "The request is missing a required parameter, or is otherwise malformed.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description of why the request is not valid. This is a system message \nand it will not be displayed to the customer.\n",
+                  "maxLength" : 2048
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "The access token is expired, revoked, malformed, or invalid for other reasons. The client can obtain a new access token and try again.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Error information related to Authentication Failure response",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The requested resource is not Found.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description resource not found.\n",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "The requested resocurce does not support on HTTP method requested.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description of  HTTP method is not supported.\n",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Customer-friendly message with the description related to Internal Server error while processing the request",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service is down for maintenance.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Customer-friendly message with the description of the maintenance window",
+                  "maxLength" : 255
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/accountsdetails" : {
+      "get" : {
+        "tags" : [ "accounts" ],
+        "summary" : "Get all detailed account information for the current token.",
+        "description" : "Get all detailed accounts information for the given token. *Example request for JSON *\n```\nGET /accountsdetails HTTP/1.1\nHost: api-alpha.usbank.com\nAccept: application/json\nAuthorization: Bearer w0mcJylzCn-AfvuGdqkty2-KP48=\nX-FI-ID: INT\nX-Partner-ID: INT\nX-Request-ID: INT121212\nContent-Type: application/json\n```\n*Example JSON response *\n```\nHTTP/1.1 200 OK\nContent-Type: application/json; charset=utf-8\n{\n  \"Accounts\" : {\n    {\n     \"AccountId\" : \"1357902468\",\n     \"AccountType\" : \"SAVINGS\",\n     \"DisplayName\" : \"Savings Account\",\n     \"Status\" : \"OPEN\",\n     \"Description\" : \"Savings Account\",\n     \"ParentAccountId\" : \"2468135790\",\n     \"Nickname\" : \"My Savings Account A\",\n     \"AccountNumber\" : \"4561237890\",\n     \"InterestRate\" : 3.0,\n     \"InterestRateType\" : \"FIXED\",\n     \"MicrNumber\" : \"9753108642\",\n     \"BalanceAsOf\" : \"2015-01-01Z\",\n     \"CurrentBalance\" : 1000.00,\n    },\n    {\n     \"AccountId\" : \"3216540987\",\n     \"AccountType\" : \"CHECKIING\",\n     \"DisplayName\" : \"Checking Account\",\n     \"Status\" : \"OPEN\",\n     \"Description\" : \"Checking Account\",\n     \"ParentAccountId\" : \"2468135790\",\n     \"Nickname\" : \"My Checking Account A\",\n     \"AccountNumber\" : \"9871236450\",\n     \"InterestRate\" : 1.0,\n     \"InterestRateType\" : \"FIXED\",\n     \"MicrNumber\" : \"579018642\",\n     \"BalanceAsOf\" : \"2015-01-01Z\",\n     \"CurrentBalance\" : 2000.00,\n    }\n  }\n}\n```\n",
+        "operationId" : "GetAccountsDetails",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "Authorization Bearer Token",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-FI-ID",
+          "in" : "header",
+          "description" : "Aggregator ID for Indentification",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-Partner-ID",
+          "in" : "header",
+          "description" : "Partner application ID associated with aggregator vendor",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-Request-ID",
+          "in" : "header",
+          "description" : "Request ID from the calling application for Auditing and Tracing",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "A list of detailed accounts information",
+            "schema" : {
+              "$ref" : "#/definitions/Accounts"
+            }
+          },
+          "400" : {
+            "description" : "The request is missing a required parameter, or is otherwise malformed.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description of why the request is not valid. This is a system message \nand it will not be displayed to the customer.\n",
+                  "maxLength" : 2048
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "The access token is expired, revoked, malformed, or invalid for other reasons. The client can obtain a new access token and try again.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Error information related to Authentication Failure response",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The requested resource is not Found.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description resource not found.\n",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "The requested resocurce does not support on HTTP method requested.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description of  HTTP method is not supported.\n",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Customer-friendly message with the description related to Internal Server error while processing the request",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service is down for maintenance.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Customer-friendly message with the description of the maintenance window",
+                  "maxLength" : 255
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "accounts" ],
+        "summary" : "Query all information for a set of accounts ids provided in the payload and the access token.",
+        "description" : "Gets all detailed account information matching the requested account ids in the request payload.\n    \n*Example request for JSON *\n```\nPOST /accountsdetails HTTP/1.1\nHost: api-aplha.usbank.com\nAccept: application/json\nAuthorization: Bearer w0mcJylzCn-AfvuGdqkty2-KP48=\nX-FI-ID: INT\nX-Partner-ID: INT\nX-Request-ID: INT121212\nContent-Type: application/json\n\n{\n  \"AccountsDetailsRequest\": {\n    \"singleAccountDetailsRequestList\": {\n      \"singleAccountDetailsRequest\": [{\n        \"accountId\": \"96c27058-8769-3398-1bbc-4133f12f8a75\",\n        \"startTime\": \"2015-04-01T00:00:00.000Z\"\n      }, {\n        \"accountId\": \"96c27058-8769-3398-1bbc-4133f12f8a75\",\n        \"startTime\": \"2015-05-01T00:00:00.000Z\"\n      }]\n    }\n  }\n}\n\n```\n*Example JSON response *\n```\nHTTP/1.1 200 OK\nContent-Type: application/json; charset=utf-8\n{\n  \"total\": 2,\n  \"totalPages\": 1,\n  \"page\": 1,\n \"accounts\": {\n   \"depositAccount\": [\n    {\n        \"annualPercentageYield\": null,\n        \"availableBalance\": 14500.93,\n        \"balanceAsOf\": \"2018-03-26T14:48:07.8114743-05:00\",\n        \"currentBalance\": 14500.93,\n        \"interestYtd\": 0.19,\n        \"maturityDate\": null,\n        \"openingDayBalance\": null,\n        \"term\": null,\n        \"transactions\": null,\n        \"accountNumber\": \"XXXXXXXX9044\",\n        \"balanceType\": null,\n        \"currency\": {\n            \"currencyRate\": null,\n            \"currencyCode\": \"USD\",\n            \"originalCurrencyCode\": \"USD\"\n        },\n        \"interestRate\": 0.01,\n        \"interestRateAsOf\": null,\n        \"interestRateType\": null,\n        \"lastActivityDate\": null,\n        \"lineOfBusiness\": \"\",\n        \"micrNumber\": \"\",\n        \"nickname\": \"Savings\",\n        \"parentAccountId\": null,\n        \"priorInterestRate\": 0,\n        \"routingTransitNumber\": \"083900363\",\n        \"transactionsIncluded\": false,\n        \"transferIn\": false,\n        \"transferOut\": false,\n        \"accountId\": \"96c27058-8769-3398-1bbc-4133f12f8a75\",\n        \"accountType\": \"CHECKING\",\n        \"displayName\": \"Savings - 9044\",\n        \"status\": \"OPEN\",\n        \"description\": \"Checking\",\n        \"fiAttributes\": null,\n        \"error\": null\n    }\n    ],\n   \"loanAccount\": [\n    {\n        \"balanceAsOf\": \"2018-03-26T14:48:00.4949805-05:00\",\n        \"compoundingPeriod\": null,\n        \"escrowBalance\": null,\n        \"lastPaymentAmount\": 1000,\n        \"loanTerm\": null,\n        \"nextPaymentAmount\": 4844.66,\n        \"nextPaymentDate\": \"2018-04-01T00:00:00\",\n        \"originalPrincipal\": 0,\n        \"originatingDate\": \"2012-11-16T00:00:00\",\n        \"paymentFrequency\": null,\n        \"payoffAmount\": 4859.22,\n        \"principalBalance\": 4844.66,\n        \"totalNumberOfPayments\": null,\n        \"accountNumber\": \"XXXXXXXX3005\",\n        \"balanceType\": null,\n        \"currency\": {\n            \"currencyRate\": null,\n            \"currencyCode\": \"USD\",\n            \"originalCurrencyCode\": \"USD\"\n        },\n        \"interestRate\": 21.9,\n        \"interestRateAsOf\": null,\n        \"interestRateType\": null,\n        \"lastActivityDate\": null,\n        \"lineOfBusiness\": \"\",\n        \"micrNumber\": \"\",\n        \"nickname\": \"\",\n        \"parentAccountId\": null,\n        \"priorInterestRate\": 0,\n        \"routingTransitNumber\": null,\n        \"transactionsIncluded\": false,\n        \"transferIn\": false,\n        \"transferOut\": false,\n        \"accountId\": \"066d358f-12c0-2f03-dd38-d9b39237489a\",\n        \"accountType\": \"LOAN\",\n        \"displayName\": \"Reserve Line/Bus ... - 3005\",\n        \"status\": \"OPEN\",\n        \"description\": \"Reserve Line/Bus Res Line\",\n        \"fiAttributes\": null,\n        \"error\": null\n    }\n   ]\n }\n}\n```\n",
+        "operationId" : "GetAccountsDetailsSet",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "AccountsDetailsRequest",
+          "description" : "AccountDetails Request parameters",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/AccountsDetailsRequest"
+          }
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "Authorization Bearer Token",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-FI-ID",
+          "in" : "header",
+          "description" : "Aggregator ID for Indentification",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-Partner-ID",
+          "in" : "header",
+          "description" : "Partner application ID associated with aggregator vendor",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-Request-ID",
+          "in" : "header",
+          "description" : "Request ID from the calling application for Auditing and Tracing",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "A list of detailed accounts information",
+            "schema" : {
+              "$ref" : "#/definitions/Accounts"
+            }
+          },
+          "400" : {
+            "description" : "The request is missing a required parameter, or is otherwise malformed.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description of why the request is not valid. This is a system message \nand it will not be displayed to the customer.\n",
+                  "maxLength" : 2048
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "The access token is expired, revoked, malformed, or invalid for other reasons. The client can obtain a new access token and try again.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Error information related to Authentication Failure response",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The requested resource is not Found.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description resource not found.\n",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "The requested resocurce does not support on HTTP method requested.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description of  HTTP method is not supported.\n",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Customer-friendly message with the description related to Internal Server error while processing the request",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service is down for maintenance.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Customer-friendly message with the description of the maintenance window",
+                  "maxLength" : 255
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/account/transactions" : {
+      "post" : {
+        "tags" : [ "transactions" ],
+        "summary" : "Get Transactions associated with accountId and user access token.",
+        "description" : "Gets a list of transactions for the given account id and date range.\n    \n*Example request for JSON *\n``` POST /account/transactions HTTP/1.1\n\nHost: api-alpha.usbank.com\nAccept: application/json\nAuthorization: Bearer w0mcJylzCn-AfvuGdqkty2-KP48=\nX-FI-ID: INT\nX-Partner-ID: INT\nX-Request-ID: INT121212\nContent-Type: application/x-www-form-urlencoded\n  \naccountId=1357902468&startTime=2017-02-02T00:00:00Z&endTime=2018-03-02T00:00:00Z&page=1\n```\n*Example JSON response *\n```\nHTTP/1.1 200 OK\nContent-Type: application/json; charset=utf-8\n{  \n \"total\":73,\n \"totalPages\":3,\n \"page\":2,\n \"depositTransactions\":[  \n\n    {  \n       \"checkNumber\":\"5470\",\n       \"payee\":null,\n       \"accountId\":\"2a20a444-837b-5dd5-94c7-2f8b396aa662\",\n       \"transactionId\":\"d16ae698-1dc0-3659-0d6c-462e5fa7ed75\",\n       \"referenceTransactionId\":null,\n       \"postedTimestamp\":\"20180122\",\n       \"transactionTimeStamp\":\"20180122\",\n       \"description\":\"Check 01/22 \",\n       \"memo\":null,\n       \"debitCreditMemo\":\"DEBIT\",\n       \"category\":\"Uncategorized\",\n       \"subCategory\":null,\n       \"reference\":\"KB2193 IMG8057959776\",\n       \"status\":\"Posted\",\n       \"amount\":61.81,\n       \"foreignAmount\":0,\n       \"foreignCurrency\":\"USD\",\n       \"transactionType\":\"DEBIT\",\n       \"lineItems\":[  \n          {  \n             \"description\":\"Check\",\n             \"amount\":\"61.81\",\n             \"checkNumber\":\"5470\",\n             \"memo\":null,\n             \"reference\":\"KB2193 IMG8057959776\",\n             \"imageIds\":[  \n                null,\n                null,\n                \"True\"\n             ]\n          }\n       ],\n       \"imageIds\":[  \n          null,\n          null,\n          \"True\"\n       ],\n       \"fiAttributes\":null,\n       \"error\":null\n    },\n    {  \n       \"checkNumber\":\"5466\",\n       \"payee\":null,\n       \"accountId\":\"2a20a444-837b-5dd5-94c7-2f8b396aa662\",\n       \"transactionId\":\"d16ae698-1dc0-3659-0d6c-462e5fa7ed75\",\n       \"referenceTransactionId\":null,\n       \"postedTimestamp\":\"20180122\",\n       \"transactionTimeStamp\":\"20180122\",\n       \"description\":\"Check 01/22 \",\n       \"memo\":null,\n       \"debitCreditMemo\":\"DEBIT\",\n       \"category\":\"Uncategorized\",\n       \"subCategory\":null,\n       \"reference\":\"KB2193 IMG8057959732\",\n       \"status\":\"Posted\",\n       \"amount\":110,\n       \"foreignAmount\":0,\n       \"foreignCurrency\":\"USD\",\n       \"transactionType\":\"DEBIT\",\n       \"lineItems\":[  \n          {  \n             \"description\":\"Check\",\n             \"amount\":\"110.0\",\n             \"checkNumber\":\"5466\",\n             \"memo\":null,\n             \"reference\":\"KB2193 IMG8057959732\",\n             \"imageIds\":[  \n                null,\n                null,\n                \"True\"\n             ]\n          }\n       ],\n       \"imageIds\":[  \n          null,\n          null,\n          \"True\"\n       ],\n       \"fiAttributes\":null,\n       \"error\":null\n    }\n \n  \n \n ],\n \"locTransactions\":null,\n \"loanTransactions\":null,\n \"investmentTransactions\":null\n} ```\n",
+        "operationId" : "GetTransactions",
+        "consumes" : [ "application/x-www-form-urlencoded" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "accountId",
+          "in" : "formData",
+          "description" : "Account identifier",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "startTime",
+          "in" : "formData",
+          "description" : "Start time for use in retrieval; ISO 8601 date including zone indicator or combined date time including zone indicator",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "endTime",
+          "in" : "formData",
+          "description" : "End time for use in retrieval; ISO 8601 date including zone indicator or combined date time including zone indicator",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "page",
+          "in" : "formData",
+          "description" : "Page number (applicable only if the server has indicated that the collection is paginated)",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "Authorization Bearer Token",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-FI-ID",
+          "in" : "header",
+          "description" : "Aggregator ID for Indentification",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-Partner-ID",
+          "in" : "header",
+          "description" : "Partner application ID associated with aggregator vendor",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-Request-ID",
+          "in" : "header",
+          "description" : "Request ID from the calling application for Auditing and Tracing",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "A list of account transactions",
+            "schema" : {
+              "$ref" : "#/definitions/Transactions"
+            }
+          },
+          "400" : {
+            "description" : "The request is missing a required parameter, or is otherwise malformed.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description of why the request is not valid. This is a system message \nand it will not be displayed to the customer.\n",
+                  "maxLength" : 2048
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "The access token is expired, revoked, malformed, or invalid for other reasons. The client can obtain a new access token and try again.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Error information related to Authentication Failure response",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The requested resource is not Found.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description resource not found.\n",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "The requested resocurce does not support on HTTP method requested.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description of  HTTP method is not supported.\n",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Customer-friendly message with the description related to Internal Server error while processing the request",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service is down for maintenance.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Customer-friendly message with the description of the maintenance window",
+                  "maxLength" : 255
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/taxdetails/interestincome" : {
+      "post" : {
+        "tags" : [ "taxData" ],
+        "summary" : "Gets Tax Details for the current user access token,Account Id,Tax Year, and for the Statement Type(INT,DIV,MISC).",
+        "description" : "Gets  Tax Details for the current user access token,Account Id,Tax Year,\nStatement Type.\n    \n*Example request for JSON *\n\n```\nGET /taxdetails/interestincome HTTP/1.1\nHost: api-alpha.usbank.com\nAccept: application/json\nAuthorization: Bearer w0mcJylzCn-AfvuGdqkty2-KP48=\nX-FI-ID: INT\nX-Partner-ID: INT\nX-Request-ID: INT121212\nContent-Type: application/x-www-form-urlencoded\naccountId=123456&taxYear=2017&stmtType=INT\n```\n*Example JSON response *\n\n```\nHTTP/1.1 200 OK\nContent-Type: application/json; charset=utf-8\n```\n",
+        "operationId" : "GetTaxData",
+        "consumes" : [ "application/x-www-form-urlencoded" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "accountId",
+          "in" : "formData",
+          "description" : "Account identifier",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "taxYear",
+          "in" : "formData",
+          "description" : "Tax year to retrieve the Tax data",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "stmtType",
+          "in" : "formData",
+          "description" : "Statement Type(currently we are supporting the statement types 1099 INT, 1099 Div, 1099 Misc only)",
+          "required" : true,
+          "type" : "string",
+          "enum" : [ "INT", "DIV", "MISC" ]
+        }, {
+          "name" : "Authorization",
+          "in" : "header",
+          "description" : "Authorization Bearer Token",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-FI-ID",
+          "in" : "header",
+          "description" : "Aggregator ID for Indentification",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-Partner-ID",
+          "in" : "header",
+          "description" : "Partner application ID associated with aggregator vendor",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-Request-ID",
+          "in" : "header",
+          "description" : "Request ID from the calling application for Auditing and Tracing",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "TaxData Response",
+            "schema" : {
+              "$ref" : "#/definitions/TaxDataResponse"
+            }
+          },
+          "400" : {
+            "description" : "The request is missing a required parameter, or is otherwise malformed.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description of why the request is not valid. This is a system message \nand it will not be displayed to the customer.\n",
+                  "maxLength" : 2048
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "The access token is expired, revoked, malformed, or invalid for other reasons. The client can obtain a new access token and try again.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Error information related to Authentication Failure response",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The requested resource is not Found.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description resource not found.\n",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "The requested resocurce does not support on HTTP method requested.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Detailed description of  HTTP method is not supported.\n",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Customer-friendly message with the description related to Internal Server error while processing the request",
+                  "maxLength" : 255
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "Service is down for maintenance.",
+            "schema" : {
+              "type" : "object",
+              "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+              "properties" : {
+                "ErrorResponseCode" : {
+                  "type" : "string",
+                  "description" : "HTTP staus code related to Error\n"
+                },
+                "ErrorDescription" : {
+                  "type" : "string",
+                  "description" : "Customer-friendly message with the description of the maintenance window",
+                  "maxLength" : 255
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "AccountStatus" : {
+      "type" : "string",
+      "enum" : [ "CLOSED", "DELINQUENT", "NEGATIVECURRENTBALANCE", "OPEN", "PAID", "PENDINGCLOSE", "PENDINGOPEN" ]
+    },
+    "AccountType" : {
+      "type" : "string",
+      "description" : "Account type",
+      "enum" : [ "401A", "401K", "403B", "529", "AUTO LOAN", "CD", "CHARGE", "CHECKING", "COMMERCIALLINEOFCREDIT", "COMMERCIALLOAN", "COVERDELL", "CREDITCARD", "ESCROW", "ESOP", "GUARDIAN", "HOMEEQUITYLOAN", "HOMELINEOFCREDIT", "INSITUTIONALTRUST", "INSTALLMENT", "IRA", "KEOGH", "LINEOFCREDIT", "LOAN", "MILATARYLOAN", "MONEYMARKET", "MORTGAGE", "PERSONALLOAN", "ROLLOVER", "ROTH", "SARSEP", "SAVINGS", "SMBLOAN", "STUDENTLOAN", "TAXABLE", "TDA", "TRUST", "UGMA", "UTMA", "Anuity" ]
+    },
+    "AssetClass" : {
+      "type" : "string",
+      "enum" : [ "DOMESTICBOND", "INTLBOND", "INTLSTOCK", "LARGESTOCK", "MONEYMARKET", "OTHER", "SMALLSTOCK" ]
+    },
+    "BalanceType" : {
+      "type" : "string",
+      "enum" : [ "ASSET", "LIABILITY" ]
+    },
+    "CallType" : {
+      "type" : "string",
+      "enum" : [ "CALL", "MATURITY", "PREFUND", "PUT" ]
+    },
+    "CompoundingPeriod" : {
+      "type" : "string",
+      "enum" : [ "ANNUALLY", "BIWEEKLY", "DAILY", "MONTHLY", "SEMIANNUALLY", "SEMIMONTHLY", "WEEKLY" ]
+    },
+    "CouponMatureFrequency" : {
+      "type" : "string",
+      "enum" : [ "ANNUAL", "MONTHLY", "OTHER", "QUARTERLY", "SEMIANNUAL" ]
+    },
+    "DebitCreditMemo" : {
+      "type" : "string",
+      "enum" : [ "CREDIT", "DEBIT", "MEMO" ]
+    },
+    "DebtClass" : {
+      "type" : "string",
+      "enum" : [ "CORPORATE", "MUNICIPAL", "OTHER", "TREASURY" ]
+    },
+    "DebtType" : {
+      "type" : "string",
+      "enum" : [ "COUPON", "ZERO" ]
+    },
+    "DepositTransactionType" : {
+      "type" : "string",
+      "enum" : [ "ADJUSTMENT", "ATMDEPOSIT", "ATMWITHDRAWAL", "BILLPAYMENT", "CHECK", "DEPOSIT", "DIRECTDEPOSIT", "DIVIDEND", "FEE", "INTEREST", "POSCREDIT", "POSDEBIT", "TRANSFER", "WITHDRAWAL" ]
+    },
+    "HeldInAccount" : {
+      "type" : "string",
+      "enum" : [ "CASH", "MARGIN", "OTHER", "SHORT" ]
+    },
+    "HoldingSubType" : {
+      "type" : "string",
+      "enum" : [ "CASH", "MONEYMARKET" ]
+    },
+    "HoldingType" : {
+      "type" : "string",
+      "enum" : [ "ANNUITY", "BOND", "CD", "MUTUALFUND", "OPTIONS", "STOCK" ]
+    },
+    "Identifier" : {
+      "type" : "string",
+      "maxLength" : 128
+    },
+    "IncomeType" : {
+      "type" : "string",
+      "enum" : [ "CGLONG", "CGSHORT", "MISC" ]
+    },
+    "InterestRateType" : {
+      "type" : "string",
+      "enum" : [ "FIXED", "VARIABLE" ]
+    },
+    "Inv401kSourceType" : {
+      "type" : "string",
+      "enum" : [ "AFTERTAX", "MATCH", "OTHERNONVEST", "OTHERVEST", "PRETAX", "PROFITSHARING", "ROLLOVER" ]
+    },
+    "InvestmentBalanceType" : {
+      "type" : "string",
+      "enum" : [ "AMOUNT", "PERCENTAGE" ]
+    },
+    "InvestmentTransactionType" : {
+      "type" : "string",
+      "enum" : [ "ADJUSTMENT", "ATM", "CASH", "CHECK", "CLOSURE", "CLOSUREOPT", "CONTRIBUTION", "DEP", "DIRECTDEBIT", "DIRECTDEP", "DIV", "DIVIDEND", "DIVIDENDREINVEST", "EXPENSE", "FEE", "INCOME", "INTEREST", "INVEXPENSE", "JRNLFUND", "JRNLSEC", "MARGININTEREST", "OPTIONEXERCISE", "OPTIONEXPIRATION", "OTHER", "PAYMENT", "POS", "PURCHASED", "PURCHASEDTOCOVER", "PURCHASETOCLOSE", "PURCHASETOOPEN", "REINVESTOFINCOME", "REPEATPMT", "RETURNOFCAPITAL", "SOLD", "SOLDTOCLOSE", "SOLDTOOPEN", "SPLIT", "SRVCHG", "TRANSFER", "XFER" ]
+    },
+    "Iso4217Code" : {
+      "type" : "string",
+      "enum" : [ "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BOV", "BRL", "BSD", "BTN", "BWP", "BYR", "BZD", "CAD", "CDF", "CHE", "CHF", "CHW", "CLF", "CLP", "CNY", "COP", "COU", "CRC", "CUC", "CUP", "CVE", "CZK", "DJF", "DKK", "DOP", "DZD", "EGP", "ERN", "ETB", "EUR", "FJD", "FKP", "GBP", "GEL", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD", "HKD", "HNL", "HRK", "HTG", "HUF", "IDR", "ILS", "INR", "IQD", "IRR", "ISK", "JMD", "JOD", "JPY", "KES", "KGS", "KHR", "KMF", "KPW", "KRW", "KWD", "KYD", "KZT", "LAK", "LBP", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL", "MGA", "MKD", "MMK", "MNT", "MOP", "MRO", "MUR", "MVR", "MWK", "MXN", "MXV", "MYR", "MZN", "NAD", "NGN", "NIO", "NOK", "NPR", "NZD", "OMR", "PAB", "PEN", "PGK", "PHP", "PKR", "PLN", "PYG", "QAR", "RON", "RSD", "RUB", "RWF", "SAR", "SBD", "SCR", "SDG", "SEK", "SGD", "SHP", "SLL", "SOS", "SRD", "SSP", "STD", "SVC", "SYP", "SZL", "THB", "TJS", "TMT", "TND", "TOP", "TRY", "TTD", "TWD", "TZS", "UAH", "UGX", "USD", "USN", "UYI", "UYU", "UZS", "VEF", "VND", "VUV", "WST", "XAF", "XAG", "XAU", "XBA", "XBB", "XBC", "XBD", "XCD", "XDR", "XOF", "XPD", "XPF", "XPT", "XSU", "XTS", "XUA", "XXX", "YER", "ZAR", "ZMW", "ZWL" ]
+    },
+    "LoanPaymentFrequency" : {
+      "type" : "string",
+      "enum" : [ "ANNUALLY", "BIMONTHLY", "BIWEEKLY", "FOURWEEKS", "MONTHLY", "OTHER", "QUARTERLY", "SEMIANNUALLY", "TWICEMONTHLY", "WEEKLY" ]
+    },
+    "LoanTransactionType" : {
+      "type" : "string",
+      "enum" : [ "ADJUSTMENT", "FEE", "INTEREST", "PAYMENT" ]
+    },
+    "LocTransactionType" : {
+      "type" : "string",
+      "enum" : [ "ADJUSTMENT", "CHECK", "FEE", "INTEREST", "PAYMENT", "WITHDRAWAL" ]
+    },
+    "MutualFundType" : {
+      "type" : "string",
+      "enum" : [ "CLOSEEND", "OPENEND", "OTHER" ]
+    },
+    "OptionType" : {
+      "type" : "string",
+      "enum" : [ "CALL", "PUT" ]
+    },
+    "OrderDuration" : {
+      "type" : "string",
+      "enum" : [ "DAY", "GOODTILLCANCEL", "IMMEDIATE" ]
+    },
+    "OrderType" : {
+      "type" : "string",
+      "enum" : [ "BUY", "BUYTOCOVER", "BUYTOOPEN", "SELL", "SELLCLOSE", "SELLSHORT", "SELLTOCOVER", "SELLTOOPEN" ]
+    },
+    "PaymentFrequency" : {
+      "type" : "string",
+      "enum" : [ "ANNUALLY", "BIWEEKLY", "DAILY", "MONTHLY", "SEMIANNUALLY", "SEMIMONTHLY", "WEEKLY" ]
+    },
+    "PositionType" : {
+      "type" : "string",
+      "enum" : [ "LONG", "SHORT" ]
+    },
+    "Secured" : {
+      "type" : "string",
+      "enum" : [ "COVERED", "NAKED" ]
+    },
+    "SecurityIdType" : {
+      "type" : "string",
+      "enum" : [ "CUSIP", "ISIN", "SEDOL", "SICC", "VALOR", "WKN" ]
+    },
+    "SecurityType" : {
+      "type" : "string",
+      "enum" : [ "DEBT", "MUTUALFUND", "OPTION", "OTHER", "STOCK", "SWEEP" ]
+    },
+    "StockType" : {
+      "type" : "string",
+      "enum" : [ "COMMON", "CONVERTIBLE", "OTHER", "PREFERRED" ]
+    },
+    "String255" : {
+      "type" : "string",
+      "maxLength" : 255
+    },
+    "String64" : {
+      "type" : "string",
+      "maxLength" : 64
+    },
+    "String9" : {
+      "type" : "string",
+      "maxLength" : 9
+    },
+    "SubAccountType" : {
+      "type" : "string",
+      "enum" : [ "CASH", "MARGIN", "OTHERS", "SHORT" ]
+    },
+    "Timestamp" : {
+      "type" : "string",
+      "pattern" : "\\d{4}\\-\\d\\d\\-\\d\\dT\\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\dZ",
+      "description" : "ISO 8601 date time with milliseconds in UTC time zone."
+    },
+    "TransactionReason" : {
+      "type" : "string",
+      "enum" : [ "CALL", "MATURITY", "SELL" ]
+    },
+    "TransactionStatus" : {
+      "type" : "string",
+      "enum" : [ "AUTHORIZATION", "MEMO", "PENDING", "POSTED" ]
+    },
+    "UnitType" : {
+      "type" : "string",
+      "enum" : [ "CURRENCY", "SHARES" ]
+    },
+    "Account" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/AccountDescriptor"
+      }, {
+        "type" : "object",
+        "required" : [ "AccountNumber", "AccountObjectType", "Currency", "InterestRate" ],
+        "properties" : {
+          "AccountObjectType" : {
+            "type" : "string",
+            "description" : "for Polymorphism"
+          },
+          "ParentAccountId" : {
+            "description" : "Long-term persistent identity of the parent account. This is used to group accounts.",
+            "$ref" : "#/definitions/Identifier"
+          },
+          "Nickname" : {
+            "type" : "string",
+            "description" : "The user's moniker for the account"
+          },
+          "Currency" : {
+            "description" : "Currency Aggregate",
+            "$ref" : "#/definitions/Currency"
+          },
+          "LineOfBusiness" : {
+            "type" : "string",
+            "description" : "The line of business, such as consumer, consumer joint, small business, corporate, etc."
+          },
+          "AccountNumber" : {
+            "type" : "string",
+            "description" : "End user's handle for account at owning institution"
+          },
+          "RoutingTransitNumber" : {
+            "type" : "string",
+            "description" : "RTN associated with account number at owning institution."
+          },
+          "BalanceType" : {
+            "description" : "ASSET (positive transaction amount increases balance), LIABILITY (positive transaction amount decreases balance)",
+            "$ref" : "#/definitions/BalanceType"
+          },
+          "InterestRate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Interest Rate of Account"
+          },
+          "InterestRateType" : {
+            "description" : "FIXED or VARIABLE",
+            "$ref" : "#/definitions/InterestRateType"
+          },
+          "InterestRateAsOf" : {
+            "description" : "Date of account's interest rate",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "PriorInterestRate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Previous Interest Rate of Account"
+          },
+          "TransferIn" : {
+            "type" : "boolean",
+            "description" : "Account is eligible for incoming transfers"
+          },
+          "TransferOut" : {
+            "type" : "boolean",
+            "description" : "Account is eligible for outgoing transfers"
+          },
+          "MicrNumber" : {
+            "description" : "MICR Number",
+            "$ref" : "#/definitions/String64"
+          },
+          "LastActivityDate" : {
+            "description" : "Date that last transaction occurred on account",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "TransactionsIncluded" : {
+            "type" : "boolean",
+            "description" : "Default is false. If present and true, a call to retrieve transactions will not return any further details about this account. This is an optimization that allows a Durable Data API server to return transactions and account details in a single call."
+          }
+        }
+      } ],
+      "description" : "An abstract account entity that concrete account entities extend. Extends and inherits all fields from [AccountDescriptor]('#/definitions/AccountDescriptor')."
+    },
+    "AccountDescriptor" : {
+      "type" : "object",
+      "required" : [ "AccountDescriptorObjectType", "AccountId", "DisplayName", "Status" ],
+      "discriminator" : "AccountDescriptorObjectType",
+      "properties" : {
+        "AccountDescriptorObjectType" : {
+          "type" : "string",
+          "description" : "for Polymorphism"
+        },
+        "AccountId" : {
+          "description" : "Long-term persistent identity of the account. Not an account number. This identity must be unique to the owning institution.",
+          "$ref" : "#/definitions/Identifier"
+        },
+        "AccountType" : {
+          "description" : "Account type",
+          "$ref" : "#/definitions/AccountType"
+        },
+        "DisplayName" : {
+          "type" : "string",
+          "description" : "Account identity to display to customer. This may be a masked account number or product name followed by masked number."
+        },
+        "Status" : {
+          "description" : "Account status",
+          "$ref" : "#/definitions/AccountStatus"
+        },
+        "Description" : {
+          "type" : "string",
+          "description" : "Description of account"
+        },
+        "Error" : {
+          "description" : "Present if an error was encountered while retrieving this account",
+          "$ref" : "#/definitions/Error"
+        },
+        "FiAttributes" : {
+          "type" : "array",
+          "description" : "Array of FI-specific attributes",
+          "items" : {
+            "$ref" : "#/definitions/FiAttribute"
+          }
+        }
+      },
+      "description" : "Minimal information about the account for use in lightweight arrays."
+    },
+    "AccountDescriptorList" : {
+      "type" : "array",
+      "description" : "A lightweight array of accounts.",
+      "items" : {
+        "$ref" : "#/definitions/AccountDescriptor"
+      }
+    },
+    "Accounts" : {
+      "type" : "object",
+      "properties" : {
+        "Total" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Total number of results in this collection across all pages"
+        },
+        "TotalPages" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Total number of pages"
+        },
+        "Page" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Current page number"
+        },
+        "Accounts" : {
+          "type" : "array",
+          "description" : "An array of accounts with entity types dependent on the account type (deposit, investment, loan, or line of credit)",
+          "items" : {
+            "$ref" : "#/definitions/Account"
+          }
+        }
+      },
+      "description" : "An optionally paginated array of accounts."
+    },
+    "AccountsDetailsRequest" : {
+      "type" : "object",
+      "required" : [ "SingleAccountDetailsRequestList" ],
+      "properties" : {
+        "SingleAccountDetailsRequestList" : {
+          "$ref" : "#/definitions/SingleAccountDetailsRequestList"
+        }
+      }
+    },
+    "Address" : {
+      "type" : "object",
+      "required" : [ "City", "Country", "Line1", "PostalCode", "Subdivision" ],
+      "properties" : {
+        "Line1" : {
+          "description" : "The location's first line",
+          "$ref" : "#/definitions/String64"
+        },
+        "Line2" : {
+          "description" : "The location's second line",
+          "$ref" : "#/definitions/String64"
+        },
+        "Line3" : {
+          "description" : "The location's third line",
+          "$ref" : "#/definitions/String64"
+        },
+        "City" : {
+          "description" : "The location's city",
+          "$ref" : "#/definitions/String64"
+        },
+        "Subdivision" : {
+          "description" : "The location's country subdivision",
+          "$ref" : "#/definitions/CountrySubdivision"
+        },
+        "PostalCode" : {
+          "description" : "The delivery location's postal code",
+          "$ref" : "#/definitions/String9"
+        },
+        "Country" : {
+          "description" : "Country",
+          "$ref" : "#/definitions/Country"
+        }
+      }
+    },
+    "Contribution" : {
+      "type" : "object",
+      "properties" : {
+        "SecurityId" : {
+          "type" : "string",
+          "description" : "Unique identifier of security"
+        },
+        "SecurityIdType" : {
+          "description" : "Security identifier type",
+          "$ref" : "#/definitions/SecurityIdType"
+        },
+        "EmployerMatchPercentage" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Employer contribution match percentage"
+        },
+        "EmployerMatchAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Employer contribution match amount"
+        },
+        "EmployeePreTaxAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Employee pre-tax contribution amount"
+        },
+        "EmployeePreTaxPercentage" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Employee pre-tax contribution percentage"
+        },
+        "EmployeeAfterTaxAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Employee after tax contribution amount"
+        },
+        "EmployeeAfterTaxPercentage" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Employee after tax contribution percentage"
+        },
+        "EmployeeDeferPreTaxAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Employee defer pre-tax contribution match amount"
+        },
+        "EmployeeDeferPreTaxPercentage" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Employee defer pre-tax contribution match percentage"
+        },
+        "EmployeeYearToDate" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Employee total year to date contribution"
+        },
+        "EmployerYearToDate" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Employer total year to date contribution"
+        },
+        "RolloverContributionPercentage" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Rollover contribution percentage"
+        },
+        "RolloverContributionAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Rollover contribution Amount"
+        }
+      }
+    },
+    "Country" : {
+      "type" : "object",
+      "properties" : {
+        "Name" : {
+          "type" : "string",
+          "description" : "Name of the Country"
+        },
+        "Code" : {
+          "type" : "string",
+          "description" : "3 letter ISO 3166-1 Country code",
+          "minLength" : 3,
+          "maxLength" : 3
+        },
+        "GeoCoding" : {
+          "type" : "boolean",
+          "description" : "Indicates whether the country is geocoded"
+        }
+      },
+      "description" : "Country and it's ISO code"
+    },
+    "CountrySubdivision" : {
+      "type" : "object",
+      "properties" : {
+        "Name" : {
+          "type" : "string",
+          "description" : "Name of the state or province"
+        },
+        "Code" : {
+          "type" : "string",
+          "description" : "Abbreviated code for the state/province/subdivision",
+          "minLength" : 3,
+          "maxLength" : 3
+        }
+      },
+      "description" : "A country state/province/subdivision"
+    },
+    "Currency" : {
+      "type" : "object",
+      "properties" : {
+        "CurrencyRate" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Currency rate between original and converted currency"
+        },
+        "CurrencyCode" : {
+          "description" : "ISO 4217 currency code",
+          "$ref" : "#/definitions/Iso4217Code"
+        },
+        "OriginalCurrencyCode" : {
+          "description" : "Original ISO 4217 currency code",
+          "$ref" : "#/definitions/Iso4217Code"
+        }
+      }
+    },
+    "DebtSecurity" : {
+      "type" : "object",
+      "properties" : {
+        "ParValue" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Par value amount"
+        },
+        "DebtType" : {
+          "description" : "Debt type (COUPON, ZERO)",
+          "$ref" : "#/definitions/DebtType"
+        },
+        "DebtClass" : {
+          "description" : "Classification of debt (TREASURY, MUNICIPAL, CORPORATE,OTHER)",
+          "$ref" : "#/definitions/DebtClass"
+        },
+        "CouponRate" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Bond coupon rate for next closest call date"
+        },
+        "CouponDate" : {
+          "description" : "Maturity date for next coupon",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "CouponMatureFrequency" : {
+          "description" : "When coupons mature. One of the following values: MONTHLY, QUARTERLY, SEMIANNUAL, ANNUAL, or OTHER",
+          "$ref" : "#/definitions/CouponMatureFrequency"
+        },
+        "CallPrice" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Bond call price"
+        },
+        "YieldToCall" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Yield to next call"
+        },
+        "CallDate" : {
+          "description" : "Next call date",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "CallType" : {
+          "description" : "Type of next call. CALL, PUT, PREFUND, MATURITY",
+          "$ref" : "#/definitions/CallType"
+        },
+        "YieldToMaturity" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Yield to maturity"
+        }
+      }
+    },
+    "DepositAccount" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/Account"
+      }, {
+        "type" : "object",
+        "required" : [ "BalanceAsOf", "CurrentBalance" ],
+        "properties" : {
+          "BalanceAsOf" : {
+            "description" : "As-of date of balances",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "CurrentBalance" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Balance of funds in account"
+          },
+          "OpeningDayBalance" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Day's opening fund balance"
+          },
+          "AvailableBalance" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Balance of funds available for use"
+          },
+          "AnnualPercentageYield" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Annual Percentage Yield"
+          },
+          "InterestYtd" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "YTD Interest"
+          },
+          "Term" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Term of CD in months"
+          },
+          "MaturityDate" : {
+            "description" : "Maturity date for CDs",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "Transactions" : {
+            "type" : "array",
+            "description" : "Array of DepositTransaction",
+            "items" : {
+              "$ref" : "#/definitions/DepositTransaction"
+            }
+          }
+        }
+      } ],
+      "description" : "Extends and inherits all fields from Account."
+    },
+    "DepositTransaction" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/Transaction"
+      }, {
+        "type" : "object",
+        "required" : [ "TransactionType" ],
+        "properties" : {
+          "TransactionType" : {
+            "description" : "CHECK, WITHDRAWAL, TRANSFER, POSDEBIT, ATMWITHDRAWAL, BILLPAYMENT, FEE, DEPOSIT, ADJUSTMENT,INTEREST, DIVIDEND, DIRECTDEPOSIT, ATMDEPOSIT, POSCREDIT",
+            "$ref" : "#/definitions/DepositTransactionType"
+          },
+          "Payee" : {
+            "description" : "Payee name",
+            "$ref" : "#/definitions/String255"
+          },
+          "CheckNumber" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Check number"
+          }
+        }
+      } ],
+      "description" : "Extends and inherits all fields from Transaction."
+    },
+    "Error" : {
+      "type" : "object",
+      "required" : [ "Code" ],
+      "properties" : {
+        "Code" : {
+          "type" : "string",
+          "description" : "Long term persistent identifier which can be used to trace error condition back to log information"
+        },
+        "Message" : {
+          "type" : "string",
+          "description" : "End user displayable information which might help the customer diagnose an error"
+        }
+      },
+      "description" : "An error entity which can be used at the API level for error responses or at the account level to indicate a problem specific to a particular account."
+    },
+    "FiAttribute" : {
+      "type" : "object",
+      "required" : [ "Name", "Value" ],
+      "properties" : {
+        "Name" : {
+          "type" : "string"
+        },
+        "Value" : {
+          "type" : "string"
+        }
+      },
+      "description" : "FI-specific attribute."
+    },
+    "FiPortion" : {
+      "type" : "object",
+      "properties" : {
+        "AssetClass" : {
+          "type" : "string",
+          "description" : "FI-specific asset class"
+        },
+        "Percent" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Percentage of asset class that falls under this asset"
+        }
+      }
+    },
+    "Holding" : {
+      "type" : "object",
+      "required" : [ "Units" ],
+      "properties" : {
+        "HoldingId" : {
+          "description" : "Long term persistent identity of the holding",
+          "$ref" : "#/definitions/Identifier"
+        },
+        "SecurityId" : {
+          "type" : "string",
+          "description" : "Unique identifier of security"
+        },
+        "SecurityIdType" : {
+          "description" : "Security identifier type",
+          "$ref" : "#/definitions/SecurityIdType"
+        },
+        "HoldingName" : {
+          "type" : "string",
+          "description" : "Holding name or security name"
+        },
+        "HoldingType" : {
+          "description" : "STOCK, BOND, MUTUALFUND, CD, ANNUITY, OPTIONS",
+          "$ref" : "#/definitions/HoldingType"
+        },
+        "HoldingSubType" : {
+          "description" : "MONEYMARKET, CASH",
+          "$ref" : "#/definitions/HoldingSubType"
+        },
+        "PositionType" : {
+          "description" : "LONG, SHORT",
+          "$ref" : "#/definitions/PositionType"
+        },
+        "HeldInAccount" : {
+          "description" : "Sub-account CASH, MARGIN, SHORT, OTHER",
+          "$ref" : "#/definitions/HeldInAccount"
+        },
+        "Description" : {
+          "type" : "string",
+          "description" : "The description of the holding"
+        },
+        "Symbol" : {
+          "type" : "string",
+          "description" : "Ticker / Market symbol"
+        },
+        "OriginalPurchaseDate" : {
+          "description" : "Date of original purchase",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "PurchasedPrice" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Price of holding at the time of purchase"
+        },
+        "CurrentUnitPrice" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Current unit price"
+        },
+        "ChangeInPrice" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Change in current price compared to previous day's close"
+        },
+        "CurrentUnitPriceDate" : {
+          "description" : "Current unit price as of date",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "Units" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Required for stock, mutual funds. Number of shares (with decimals)."
+        },
+        "MarketValue" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Market value at the time of data retrieved"
+        },
+        "FaceValue" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Required for bonds. Face value at the time of data retrieved."
+        },
+        "AverageCost" : {
+          "type" : "boolean",
+          "description" : "Cost is average of all purchases for holding"
+        },
+        "CashAccount" : {
+          "type" : "boolean",
+          "description" : "If true, indicates that this holding is used to maintain proceeds from sales, dividends, and other cash postings to the investment account"
+        },
+        "Rate" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "For CDs, bonds, and other rate based holdings"
+        },
+        "ExpirationDate" : {
+          "description" : "For CDs, bonds, and other time-based holdings",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "Inv401kSource" : {
+          "description" : "Source for money for this security. PRETAX, AFTERTAX, MATCH, PROFITSHARING, ROLLOVER, OTHERVEST, OTHERNONVEST",
+          "$ref" : "#/definitions/Inv401kSourceType"
+        },
+        "Currency" : {
+          "description" : "Currency information if it is different from Account entity",
+          "$ref" : "#/definitions/Currency"
+        },
+        "AssetClasses" : {
+          "type" : "array",
+          "description" : "Percent breakdown by asset class",
+          "items" : {
+            "$ref" : "#/definitions/Portion"
+          }
+        },
+        "FiAssetClasses" : {
+          "type" : "array",
+          "description" : "Percent breakdown by FI-specific asset class percentage breakdown",
+          "items" : {
+            "$ref" : "#/definitions/FiPortion"
+          }
+        },
+        "FiAttributes" : {
+          "type" : "array",
+          "description" : "Array of FI-specific attributes",
+          "items" : {
+            "$ref" : "#/definitions/FiAttribute"
+          }
+        },
+        "TaxLots" : {
+          "type" : "array",
+          "description" : "Breakdown by tax lot",
+          "items" : {
+            "$ref" : "#/definitions/TaxLot"
+          }
+        },
+        "MutualFundSecurity" : {
+          "description" : "Information about the MutualFundSecurity (Only one of the fields will be available: MutualFundSecurity, OptionSecurity, OtherSecurity, StockSecurity, SweepSecurity, or DebtSecurity)",
+          "$ref" : "#/definitions/MutualFundSecurity"
+        },
+        "OptionSecurity" : {
+          "description" : "Information about the OptionSecurity (Only one of the fields will be available: MutualFundSecurity, OptionSecurity, OtherSecurity, StockSecurity, SweepSecurity, or DebtSecurity)",
+          "$ref" : "#/definitions/OptionSecurity"
+        },
+        "OtherSecurity" : {
+          "description" : "Information about the OtherSecurity (Only one of the fields will be available: MutualFundSecurity, OptionSecurity, OtherSecurity, StockSecurity, SweepSecurity, or DebtSecurity)",
+          "$ref" : "#/definitions/OtherSecurity"
+        },
+        "StockSecurity" : {
+          "description" : "Information about the StockSecurity (Only one of the fields will be available: MutualFundSecurity, OptionSecurity, OtherSecurity, StockSecurity, SweepSecurity, or DebtSecurity)",
+          "$ref" : "#/definitions/StockSecurity"
+        },
+        "SweepSecurity" : {
+          "description" : "Information about the SweepSecurity (Only one of the fields will be available: MutualFundSecurity, OptionSecurity, OtherSecurity, StockSecurity, SweepSecurity, or DebtSecurity)",
+          "$ref" : "#/definitions/SweepSecurity"
+        },
+        "DebtSecurity" : {
+          "description" : "Information about the DebtSecurity (Only one of the fields will be available: MutualFundSecurity, OptionSecurity, OtherSecurity, StockSecurity, SweepSecurity, or DebtSecurity)",
+          "$ref" : "#/definitions/DebtSecurity"
+        }
+      }
+    },
+    "InvestmentAccount" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/Account"
+      }, {
+        "type" : "object",
+        "required" : [ "BalanceAsOf", "CurrentValue" ],
+        "properties" : {
+          "BalanceAsOf" : {
+            "description" : "As-of date for balances",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "AllowedCheckWriting" : {
+            "type" : "boolean",
+            "description" : "Check writing privileges"
+          },
+          "AllowedOptionTrade" : {
+            "type" : "boolean",
+            "description" : "Allowed to trade options"
+          },
+          "CurrentValue" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Total current value of all investments"
+          },
+          "Holdings" : {
+            "type" : "array",
+            "description" : "Array of holdings",
+            "items" : {
+              "$ref" : "#/definitions/Holding"
+            }
+          },
+          "OpenOrders" : {
+            "type" : "array",
+            "description" : "Array of open orders",
+            "items" : {
+              "$ref" : "#/definitions/OpenOrder"
+            }
+          },
+          "Contribution" : {
+            "type" : "array",
+            "description" : "Describes how new contributions are distributed among the available securities",
+            "items" : {
+              "$ref" : "#/definitions/Contribution"
+            }
+          },
+          "Vesting" : {
+            "type" : "array",
+            "description" : "Provides the past, present, and future vesting schedule and percentages",
+            "items" : {
+              "$ref" : "#/definitions/Vesting"
+            }
+          },
+          "InvestmentLoans" : {
+            "type" : "array",
+            "description" : "Array of investment loans",
+            "items" : {
+              "$ref" : "#/definitions/InvestmentLoan"
+            }
+          },
+          "AvailableCashBalance" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Cash balance across all sub-accounts. Should include sweep funds."
+          },
+          "Margin" : {
+            "type" : "boolean",
+            "description" : "Margin trading is allowed"
+          },
+          "MarginBalance" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Margin balance"
+          },
+          "ShortBalance" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Short Balance"
+          },
+          "RolloverAmount" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Rollover Amount"
+          },
+          "EmployerName" : {
+            "type" : "string",
+            "description" : "Name of the employer in investment 401k Plan"
+          },
+          "BrokerId" : {
+            "type" : "string",
+            "description" : "Unique identifier FI"
+          },
+          "PlanId" : {
+            "type" : "string",
+            "description" : "Plan number for Investment 401k plan"
+          },
+          "CalendarYearFor401k" : {
+            "description" : "Date for this calendar year for 401K account",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "BalanceList" : {
+            "type" : "array",
+            "description" : "Balance List. Name value pair aggregate.",
+            "items" : {
+              "$ref" : "#/definitions/InvestmentBalance"
+            }
+          },
+          "DailyChange" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Daily change"
+          },
+          "PercentageChange" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Percentage change"
+          },
+          "Transactions" : {
+            "type" : "array",
+            "description" : "Array of InvestmentTransaction",
+            "items" : {
+              "$ref" : "#/definitions/InvestmentTransaction"
+            }
+          }
+        }
+      } ],
+      "description" : "Extends and inherits all fields from Account."
+    },
+    "InvestmentBalance" : {
+      "type" : "object",
+      "properties" : {
+        "BalanceName" : {
+          "type" : "string",
+          "description" : "Name of the balance"
+        },
+        "BalanceDescription" : {
+          "type" : "string",
+          "description" : "Description of balance"
+        },
+        "BalanceType" : {
+          "description" : "AMOUNT, PERCENTAGE",
+          "$ref" : "#/definitions/InvestmentBalanceType"
+        },
+        "BalanceValue" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Value of balance name"
+        },
+        "BalanceDate" : {
+          "description" : "Date as of this balance",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "Currency" : {
+          "description" : "Currency if different from that of account",
+          "$ref" : "#/definitions/Currency"
+        }
+      }
+    },
+    "InvestmentLoan" : {
+      "type" : "object",
+      "required" : [ "CurrentLoanBalance", "DateAsOf", "LoanId" ],
+      "properties" : {
+        "LoanId" : {
+          "type" : "string",
+          "description" : "Unique identifier for this loan"
+        },
+        "LoanDescription" : {
+          "type" : "string",
+          "description" : "Description"
+        },
+        "InitialLoanBalance" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Initial loan balance amount"
+        },
+        "LoanStartDate" : {
+          "description" : "Start date of the loan",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "CurrentLoanBalance" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Current loan principal balance amount"
+        },
+        "DateAsOf" : {
+          "description" : "Date and time of current loan balance",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "LoanRate" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Loan annual interest rate for the loan"
+        },
+        "LoanPaymentAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Loan payment amount"
+        },
+        "LoanPaymentFrequency" : {
+          "description" : "WEEKLY, BIWEEKLY, TWICEMONTHLY, MONTHLY,FOURWEEKS, BIMONTHLY, QUARTERLY, SEMIANNUALLY, ANNUALLY, OTHER",
+          "$ref" : "#/definitions/LoanPaymentFrequency"
+        },
+        "LoanPaymentInitial" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Initial number of loan payments"
+        },
+        "LoanPaymentsRemaining" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Remaining number of loan payments"
+        },
+        "LoanMaturityDate" : {
+          "description" : "Expected loan end date",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "LoanInterestToDate" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Total interest paid to date on this loan"
+        },
+        "LoanTotalProjectedInterest" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Total projected interest to be paid on this loan"
+        },
+        "LoanNextPaymentDate" : {
+          "description" : "The next payment date for the loan",
+          "$ref" : "#/definitions/Timestamp"
+        }
+      }
+    },
+    "InvestmentTransaction" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/Transaction"
+      }, {
+        "type" : "object",
+        "required" : [ "TransactionType" ],
+        "properties" : {
+          "TransactionType" : {
+            "description" : "PURCHASED, SOLD, PURCHASEDTOCOVERADJUSTMENT, PURCHASETOOPEN, PURCHASETOCLOSE, SOLDTOOPEN, SOLDTOCLOSE, INTEREST, MARGININTEREST, REINVESTOFINCOME, RETURNOFCAPITAL, TRANSFER, CONTRIBUTION, FEE, OPTIONEXERCISE, OPTIONEXPIRATION, DIVIDEND, DIVIDENDREINVEST, SPLIT, CLOSURE, INCOME, EXPENSE, CLOSUREOPT, INVEXPENSE, JRNLSEC, JRNLFUND, OTHER, DIV, SRVCHG, DEP, ATM, POS, XFER, CHECK, PAYMENT, CASH, DIRECTDEP, DIRECTDEBIT, REPEATPMT",
+            "$ref" : "#/definitions/InvestmentTransactionType"
+          },
+          "Shares" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Required for stock, mutual funds. Number of shares (with decimals). Negative numbers indicate securities are being removed from the account."
+          },
+          "FaceValue" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Cash value for bonds"
+          },
+          "Price" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Unit purchase price"
+          },
+          "SecurityId" : {
+            "type" : "string",
+            "description" : "Unique identifier of security"
+          },
+          "SecurityIdType" : {
+            "description" : "Security identifier type",
+            "$ref" : "#/definitions/SecurityIdType"
+          },
+          "SecurityType" : {
+            "description" : "STOCK, MUTUALFUND, DEBT, OPTION, SWEEP, OTHER",
+            "$ref" : "#/definitions/SecurityType"
+          },
+          "Symbol" : {
+            "type" : "string",
+            "description" : "Ticker symbol"
+          },
+          "Markup" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Portion of unit price that is attributed to the dealer markup"
+          },
+          "Commission" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Transaction commission"
+          },
+          "Taxes" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Taxes on the trade"
+          },
+          "Fees" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Fees applied to the trade"
+          },
+          "Load" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Load on the transaction"
+          },
+          "Inv401kSource" : {
+            "description" : "Source of money. PRETAX, AFTERTAX, MATCH,PROFITSHARING,ROLLOVER, OTHERVEST, OTHERNONVEST",
+            "$ref" : "#/definitions/Inv401kSourceType"
+          },
+          "ConfirmationNumber" : {
+            "type" : "string",
+            "description" : "Confirmation number of the transaction"
+          },
+          "FractionalCash" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Cash for fractional units (used for stock splits)"
+          },
+          "IncomeType" : {
+            "description" : "Type of investment income: CGLONG (capital gains-long term), CGSHORT (capital gains-short term), MISC",
+            "$ref" : "#/definitions/IncomeType"
+          },
+          "OldUnits" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Number of shares before split"
+          },
+          "SplitRatioNumerator" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Split ratio numerator"
+          },
+          "SplitRatioDenominator" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Split ratio denominator"
+          },
+          "NewUnits" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Number of shares after split"
+          },
+          "SubAccountSec" : {
+            "description" : "Sub-account security Type: CASH, MARGIN, SHORT and OTHERS",
+            "$ref" : "#/definitions/SubAccountType"
+          },
+          "SubAccountFund" : {
+            "description" : "From which account money came in: CASH, MARGIN, SHORT and OTHERS",
+            "$ref" : "#/definitions/SubAccountType"
+          },
+          "LoanId" : {
+            "type" : "string",
+            "description" : "For 401k accounts only. This indicates the transaction was due to a loan or a loan repayment."
+          },
+          "LoanPrincipal" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "How much loan pre-payment is principal"
+          },
+          "LoanInterest" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "How much loan pre-payment is interest"
+          },
+          "PayrollDate" : {
+            "description" : "The date for the 401k transaction was obtained in payroll",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "PriorYearContrib" : {
+            "type" : "boolean",
+            "description" : "Indicates this buy was made using prior years contribution. TRUE or FALSE"
+          },
+          "Withholding" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Federal tax withholding"
+          },
+          "TaxExempt" : {
+            "type" : "boolean",
+            "description" : "Tax-exempt transaction TRUE or FALSE"
+          },
+          "Gain" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "For sales"
+          },
+          "StateWithholding" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "State tax withholding"
+          },
+          "Penalty" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Indicates amount withheld due to a penalty"
+          },
+          "RunningBalance" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Running balance of the position"
+          },
+          "UnitPrice" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Price per commonly-quoted unit. Does not include markup/markdown, unitprice. Share price for stocks, mutual funds, and others. Percentage of par for bonds. Per share (not contract) for options."
+          },
+          "Units" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "For security-based actions other than stock splits, quantity. Shares for stocks, mutual funds, and others. Face value for bonds. Contracts for options."
+          },
+          "UnitType" : {
+            "description" : "SHARES, CURRENCY",
+            "$ref" : "#/definitions/UnitType"
+          },
+          "TransactionReason" : {
+            "description" : "TransactionReason",
+            "$ref" : "#/definitions/TransactionReason"
+          },
+          "AccruedInterest" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Accured Interest"
+          },
+          "TransferAction" : {
+            "type" : "string",
+            "description" : "Tranfer Action"
+          },
+          "PositionType" : {
+            "description" : "LONG, SHORT",
+            "$ref" : "#/definitions/PositionType"
+          }
+        }
+      } ],
+      "description" : "Extends and inherits all fields from Transaction."
+    },
+    "LineItem" : {
+      "type" : "object",
+      "required" : [ "Amount", "Description" ],
+      "properties" : {
+        "Description" : {
+          "type" : "string",
+          "description" : "The description of the line item"
+        },
+        "Amount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "The amount of money attributable to this line item"
+        },
+        "CheckNumber" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Check number"
+        },
+        "Memo" : {
+          "description" : "Secondary item description",
+          "$ref" : "#/definitions/String255"
+        },
+        "Reference" : {
+          "type" : "string",
+          "description" : "A reference number"
+        },
+        "ImageIds" : {
+          "type" : "array",
+          "description" : "Array of image identifiers (unique to transaction) used to retrieve images of check or transaction receipt",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      },
+      "description" : "LineItem"
+    },
+    "LoanAccount" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/Account"
+      }, {
+        "type" : "object",
+        "required" : [ "BalanceAsOf", "LoanTerm", "OriginalPrincipal", "PaymentFrequency", "PrincipalBalance", "TotalNumberOfPayments" ],
+        "properties" : {
+          "BalanceAsOf" : {
+            "description" : "As-of date for balances",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "PrincipalBalance" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Principal balance of loan"
+          },
+          "EscrowBalance" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Escrow balance of loan"
+          },
+          "OriginalPrincipal" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Original principal of loan"
+          },
+          "OriginatingDate" : {
+            "description" : "Loan origination date",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "LoanTerm" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Term of loan in months"
+          },
+          "TotalNumberOfPayments" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Total number of payments"
+          },
+          "NextPaymentAmount" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Amount of next payment"
+          },
+          "NextPaymentDate" : {
+            "description" : "Date of next payment",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "PaymentFrequency" : {
+            "description" : "DAILY, WEEKLY, BIWEEKLY, SEMIMONTHLY, MONTHLY, SEMIANNUALLY, ANNUALLY",
+            "$ref" : "#/definitions/PaymentFrequency"
+          },
+          "CompoundingPeriod" : {
+            "description" : "DAILY, WEEKLY, BIWEEKLY, SEMIMONTHLY, MONTHLY, SEMIANNUALLY, ANNUALLY",
+            "$ref" : "#/definitions/CompoundingPeriod"
+          },
+          "PayoffAmount" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Payoff amount"
+          },
+          "LastPaymentAmount" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Last payment amount"
+          },
+          "LastPaymentDate" : {
+            "description" : "Last payment date",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "MaturityDate" : {
+            "description" : "Maturity date",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "InterestPaidYearToDate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Interest paid year to date"
+          },
+          "Transactions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/LoanTransaction"
+            }
+          }
+        }
+      } ],
+      "description" : "Extends and inherits all fields from Account."
+    },
+    "LoanTransaction" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/Transaction"
+      }, {
+        "type" : "object",
+        "required" : [ "TransactionType" ],
+        "properties" : {
+          "TransactionType" : {
+            "description" : "PAYMENT, FEE, ADJUSTMENT, INTEREST",
+            "$ref" : "#/definitions/LoanTransactionType"
+          },
+          "PaymentDetails" : {
+            "description" : "Breakdown of payment details",
+            "$ref" : "#/definitions/PaymentDetails"
+          }
+        }
+      } ],
+      "description" : "Extends and inherits all fields from Transaction."
+    },
+    "LocAccount" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/Account"
+      }, {
+        "type" : "object",
+        "required" : [ "AvailableCredit", "BalanceAsOf", "CreditLine", "CurrentBalance", "NextPaymentAmount", "NextPaymentDate", "PrincipalBalance" ],
+        "properties" : {
+          "BalanceAsOf" : {
+            "description" : "As-of date of balances",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "CreditLine" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Credit limit"
+          },
+          "AvailableCredit" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Available credit"
+          },
+          "NextPaymentAmount" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Amount of next payment"
+          },
+          "NextPaymentDate" : {
+            "description" : "Due date of next payment",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "PrincipalBalance" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Principal balance"
+          },
+          "CurrentBalance" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Current balance LOC"
+          },
+          "MinimumPaymentAmount" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Minimum payment amount"
+          },
+          "LastPaymentAmount" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Last payment amount"
+          },
+          "LastPaymentDate" : {
+            "description" : "Last payment date",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "pastDueAmount" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Past due Amount"
+          },
+          "lastStmtBalance" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Last statement balance"
+          },
+          "lastStmtDate" : {
+            "description" : "Last statement date",
+            "$ref" : "#/definitions/Timestamp"
+          },
+          "PointsAccrued" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Points accrued"
+          },
+          "CurrentRewardsBalance" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Current rewards balance"
+          },
+          "PointsRedeemed" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Points redeemed"
+          },
+          "PurchasesApr" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Purchases APR"
+          },
+          "AdvancesApr" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Advances APR"
+          },
+          "CashAdvanceLimit" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Cash advance limit"
+          },
+          "AvailableCash" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Available cash"
+          },
+          "FinanceCharges" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Finance charges"
+          },
+          "Transactions" : {
+            "type" : "array",
+            "description" : "list of LocTrasaction",
+            "items" : {
+              "$ref" : "#/definitions/LocTransaction"
+            }
+          }
+        }
+      } ],
+      "description" : "Line of Credit Account. Extends and inherits all fields from Account."
+    },
+    "LocTransaction" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/Transaction"
+      }, {
+        "type" : "object",
+        "required" : [ "TransactionType" ],
+        "properties" : {
+          "TransactionType" : {
+            "description" : "CHECK, WITHDRAWAL, PAYMENT, FEE, ADJUSTMENT, INTEREST",
+            "$ref" : "#/definitions/LocTransactionType"
+          },
+          "CheckNumber" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Check number"
+          },
+          "PaymentDetails" : {
+            "description" : "Breakdown of payment details",
+            "$ref" : "#/definitions/PaymentDetails"
+          }
+        }
+      } ],
+      "description" : "A line of credit transaction. Extends and inherits all fields from Transaction."
+    },
+    "MutualFundSecurity" : {
+      "type" : "object",
+      "properties" : {
+        "MutualFundType" : {
+          "description" : "Mutual fund type. OPENEND, CLOSEEND, OTHER",
+          "$ref" : "#/definitions/MutualFundType"
+        },
+        "UnitsStreet" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Units in the FI's street name, positive quantity"
+        },
+        "UnitsUser" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Units in user's name directly, positive quantity"
+        },
+        "ReinvestDividends" : {
+          "type" : "boolean",
+          "description" : "Reinvest dividends"
+        },
+        "ReinvestCapitalGains" : {
+          "type" : "boolean",
+          "description" : "Reinvest capital gains"
+        },
+        "Yield" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Current yield reported as portion of the fund's assets"
+        },
+        "YieldAsOfDate" : {
+          "description" : "As-of date for yield value",
+          "$ref" : "#/definitions/Timestamp"
+        }
+      }
+    },
+    "OpenOrder" : {
+      "type" : "object",
+      "required" : [ "OrderDate", "OrderId", "OrderType", "Symbol", "Units" ],
+      "properties" : {
+        "OrderId" : {
+          "description" : "Long term persistent identity of the order. Id for this order transaction.",
+          "$ref" : "#/definitions/Identifier"
+        },
+        "SecurityId" : {
+          "type" : "string",
+          "description" : "Unique identifier of security"
+        },
+        "SecurityIdType" : {
+          "description" : "Security identifier type",
+          "$ref" : "#/definitions/SecurityIdType"
+        },
+        "Symbol" : {
+          "type" : "string",
+          "description" : "Market symbol"
+        },
+        "Description" : {
+          "type" : "string",
+          "description" : "Description"
+        },
+        "Units" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Number of units (shares or bonds etc)."
+        },
+        "OrderType" : {
+          "description" : "Type of order BUY, SELL, BUYTOCOVER, BUYTOOPEN, SELLTOCOVER, SELLTOOPEN, SELLSHORT, SELLCLOSE",
+          "$ref" : "#/definitions/OrderType"
+        },
+        "OrderDate" : {
+          "description" : "Order date",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "UnitPrice" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Unit price"
+        },
+        "UnitType" : {
+          "description" : "Type of unit SHARES, CURRENCY",
+          "$ref" : "#/definitions/UnitType"
+        },
+        "OrderDuration" : {
+          "description" : "This order is good for DAY, GOODTILLCANCEL, IMMEDIATE",
+          "$ref" : "#/definitions/OrderDuration"
+        },
+        "SubAccount" : {
+          "description" : "CASH, MARGIN, SHORT, OTHER",
+          "$ref" : "#/definitions/SubAccountType"
+        },
+        "LimitPrice" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Limit price"
+        },
+        "StopPrice" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "StopPrice"
+        },
+        "inv401kSource" : {
+          "description" : "Source for money for this ORDER. PRETAX, AFTERTAX, MATCH, PROFITSHARING, ROLLOVER, OTHERVEST, OTHERNONVEST.Default if not present is OTHERNONVEST",
+          "$ref" : "#/definitions/Inv401kSourceType"
+        }
+      }
+    },
+    "OptionSecurity" : {
+      "type" : "object",
+      "properties" : {
+        "Secured" : {
+          "description" : "How the option is secured. NAKED, COVERED.",
+          "$ref" : "#/definitions/Secured"
+        },
+        "OptionType" : {
+          "description" : "Option type: PUT = put, CALL = call",
+          "$ref" : "#/definitions/OptionType"
+        },
+        "StrikePrice" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Strike price / Unit price"
+        },
+        "ExpireDate" : {
+          "description" : "Expiration date of option",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "SharesPerContract" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Shares per contract"
+        }
+      }
+    },
+    "OtherSecurity" : {
+      "type" : "object",
+      "properties" : {
+        "TypeDescription" : {
+          "type" : "string",
+          "description" : "Description of Other Security"
+        }
+      }
+    },
+    "PaymentDetails" : {
+      "type" : "object",
+      "properties" : {
+        "PrincipalAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "The amount of payment applied to principal"
+        },
+        "InterestAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "The amount of payment applied to interest"
+        },
+        "InsuranceAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "The amount of payment applied to life/ health/accident insuranceon the loan"
+        },
+        "EscrowAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "The amount of payment applied to escrow"
+        },
+        "PmiAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "The amount of payment applied to PMI"
+        },
+        "FeesAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "The amount of payment applied to fees"
+        }
+      }
+    },
+    "Portion" : {
+      "type" : "object",
+      "properties" : {
+        "AssetClass" : {
+          "description" : "DOMESTICBOND, INTLBOND, LARGESTOCK, SMALLSTOCK, INTLSTOCK, MONEYMARKET, OTHER",
+          "$ref" : "#/definitions/AssetClass"
+        },
+        "Percent" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Percentage of asset class that falls under this asset"
+        }
+      }
+    },
+    "SingleAccountDetailsRequest" : {
+      "type" : "object",
+      "required" : [ "AccountId" ],
+      "properties" : {
+        "AccountId" : {
+          "type" : "string",
+          "description" : "Account identifier"
+        },
+        "StartTime" : {
+          "description" : "Start time for use in retrieval; ISO 8601 date including zone indicator or combined date time including zone indicator",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "EndTime" : {
+          "description" : "End time for use in retrieval; ISO 8601 date including zone indicator or combined date time including zone indicator",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "Page" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Page number (applicable only if the server has indicated that the collection is paginated)"
+        }
+      },
+      "description" : "Single Account Details Request"
+    },
+    "SingleAccountDetailsRequestList" : {
+      "type" : "array",
+      "description" : "array of SingleAccountDetailsRequest",
+      "items" : {
+        "$ref" : "#/definitions/SingleAccountDetailsRequest"
+      }
+    },
+    "StockSecurity" : {
+      "type" : "object",
+      "properties" : {
+        "UnitsStreet" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Units in the FI's street name, positive quantity"
+        },
+        "UnitsUser" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Units in user's name directly, positive quantity"
+        },
+        "ReinvestDividends" : {
+          "type" : "boolean",
+          "description" : "Reinvest dividends"
+        },
+        "StockType" : {
+          "description" : "COMMON, PREFERRED, CONVERTIBLE, OTHER",
+          "$ref" : "#/definitions/StockType"
+        },
+        "Yield" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Current yield"
+        },
+        "YieldAsOfDate" : {
+          "description" : "Yield as-of date",
+          "$ref" : "#/definitions/Timestamp"
+        }
+      }
+    },
+    "SweepSecurity" : {
+      "type" : "object",
+      "required" : [ "BalanceAsOf", "CurrentBalance" ],
+      "properties" : {
+        "CurrentBalance" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Balance of funds in account"
+        },
+        "AvailableBalance" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Balance of funds available for use"
+        },
+        "BalanceAsOf" : {
+          "description" : "As-of date of balances",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "Checks" : {
+          "type" : "boolean",
+          "description" : "Whether or not checks can be written on the account"
+        }
+      }
+    },
+    "TaxLot" : {
+      "type" : "object",
+      "properties" : {
+        "OriginalPurchaseDate" : {
+          "description" : "Lot acquired date",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "Quantity" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Lot quantity"
+        },
+        "PurchasedPrice" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Original purchase price"
+        },
+        "CostBasis" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Total amount of money spent acquiring this lot including any fees or commission expenses incurred"
+        },
+        "CurrentValue" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Lot market value"
+        },
+        "PositionType" : {
+          "description" : "LONG, SHORT",
+          "$ref" : "#/definitions/PositionType"
+        }
+      }
+    },
+    "Transaction" : {
+      "type" : "object",
+      "required" : [ "AccountId", "Amount", "Description", "TransactionId", "TransactionObjectType", "TransactionTimestamp" ],
+      "discriminator" : "TransactionObjectType",
+      "properties" : {
+        "TransactionObjectType" : {
+          "type" : "string",
+          "description" : "for Polymorphism"
+        },
+        "AccountId" : {
+          "description" : "Corresponds to AccountId in Account",
+          "$ref" : "#/definitions/Identifier"
+        },
+        "TransactionId" : {
+          "description" : "Long term persistent identity of the transaction (unique to account)",
+          "$ref" : "#/definitions/Identifier"
+        },
+        "ReferenceTransactionId" : {
+          "description" : "For reverse postings, the identity of the transaction being reversed. For the correction transaction, the identity of the reversing post. For credit card posting transactions, the identity of the authorization transaction.",
+          "$ref" : "#/definitions/Identifier"
+        },
+        "PostedTimestamp" : {
+          "description" : "The date and time that the transaction was posted to the account. If not provided then TransactionTimestamp can be used as PostedTimeStamp.",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "TransactionTimestamp" : {
+          "description" : "The date and time that the transaction was added to the server backend systems",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "Description" : {
+          "type" : "string",
+          "description" : "The description of the transaction"
+        },
+        "Memo" : {
+          "description" : "Secondary transaction description",
+          "$ref" : "#/definitions/String255"
+        },
+        "DebitCreditMemo" : {
+          "description" : "DEBIT, CREDIT, MEMO",
+          "$ref" : "#/definitions/DebitCreditMemo"
+        },
+        "Category" : {
+          "type" : "string",
+          "description" : "Transaction category, preferably MCC or SIC."
+        },
+        "SubCategory" : {
+          "type" : "string",
+          "description" : "Transaction category detail"
+        },
+        "Reference" : {
+          "type" : "string",
+          "description" : "A tracking reference identifier"
+        },
+        "Status" : {
+          "description" : "PENDING, MEMO, POSTED, AUTHORIZATION",
+          "$ref" : "#/definitions/TransactionStatus"
+        },
+        "Amount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "The amount of money in the account currency"
+        },
+        "ForeignAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "The amount of money in the foreign currency"
+        },
+        "ForeignCurrency" : {
+          "description" : "The ISO 4217 code of the foreign currency",
+          "$ref" : "#/definitions/Iso4217Code"
+        },
+        "ImageIds" : {
+          "type" : "array",
+          "description" : "Array of Image Identifiers (unique to Transaction) used to retrieve Images of check or transaction receipt",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "LineItem" : {
+          "type" : "array",
+          "description" : "Breakdown of the transaction details",
+          "items" : {
+            "$ref" : "#/definitions/LineItem"
+          }
+        },
+        "FiAttributes" : {
+          "type" : "array",
+          "description" : "Array of FI-specific attributes",
+          "items" : {
+            "$ref" : "#/definitions/FiAttribute"
+          }
+        }
+      }
+    },
+    "Transactions" : {
+      "type" : "object",
+      "properties" : {
+        "Total" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Total number of results in this collection across all pages"
+        },
+        "TotalPages" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Total number of pages"
+        },
+        "Page" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Current page number"
+        },
+        "DepositTransaction" : {
+          "type" : "array",
+          "description" : "An array of DepositTransaction",
+          "items" : {
+            "$ref" : "#/definitions/DepositTransaction"
+          }
+        },
+        "InvestmentTransaction" : {
+          "type" : "array",
+          "description" : "An array of InvestmentTransaction",
+          "items" : {
+            "$ref" : "#/definitions/InvestmentTransaction"
+          }
+        },
+        "LoanTransaction" : {
+          "type" : "array",
+          "description" : "An array of LoanTransaction",
+          "items" : {
+            "$ref" : "#/definitions/LoanTransaction"
+          }
+        },
+        "LocTransaction" : {
+          "type" : "array",
+          "description" : "An array of LocTransaction",
+          "items" : {
+            "$ref" : "#/definitions/LocTransaction"
+          }
+        }
+      }
+    },
+    "Vesting" : {
+      "type" : "object",
+      "properties" : {
+        "VestingDate" : {
+          "description" : "Vesting date",
+          "$ref" : "#/definitions/Timestamp"
+        },
+        "Symbol" : {
+          "type" : "string",
+          "description" : "Security symbol"
+        },
+        "StrikePrice" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Strike price"
+        },
+        "VestingPercentage" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Vesting Percentage"
+        },
+        "OtherVestAmount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Other Vest Amount"
+        },
+        "OtherVestPercentage" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Other Vest Percentage"
+        },
+        "VestedBalance" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Vested Balance"
+        },
+        "UnVestedBalance" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "UnVested Balance"
+        },
+        "vestedQuantity" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Vested Quantity"
+        },
+        "unVestedQuantity" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Unvested Quantity"
+        }
+      }
+    },
+    "Tax1099DIV" : {
+      "type" : "object",
+      "properties" : {
+        "TaxYear" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Tax Year"
+        },
+        "Corrected" : {
+          "type" : "boolean",
+          "description" : "Corrected or Original"
+        },
+        "OrdinaryDividends" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "ordinary dividends"
+        },
+        "QualifiedDividends" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Qualifying dividends"
+        },
+        "TotalCapitalGain" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Early withDrawal penalty"
+        },
+        "CollectibleGain" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "collectible gain"
+        },
+        "UnRecapSectionGain" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Un recap section gain"
+        },
+        "SectionGain" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "section gain"
+        },
+        "NonTaxableDistribution" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Non taxable distriution"
+        },
+        "FederalTaxWithheld" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Federal Tax withheld"
+        },
+        "ForeignTaxPaid" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Foreign tax paid"
+        },
+        "CashLiquidation" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Cash Liquidation"
+        },
+        "NonCashLiquidation" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Non cash liquidation"
+        },
+        "TaxExemptInterestDivident" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Tax exempt interest divident"
+        },
+        "SpecifiedPABInterestDivident" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "specified PAB Interest divident"
+        },
+        "StateCode" : {
+          "type" : "string",
+          "description" : "state code"
+        },
+        "StateIdentificationNumber" : {
+          "type" : "string",
+          "description" : "state tax intentification number"
+        },
+        "StateTaxWithheld" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "state tax withheld"
+        },
+        "AdditionalStateTaxWithHeld" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Additional Tax withheld"
+        },
+        "PayerAddress" : {
+          "description" : "Payer Address",
+          "$ref" : "#/definitions/Address"
+        },
+        "PayerIdentificationNumber" : {
+          "type" : "string",
+          "description" : "Payer Indentification number"
+        },
+        "RecipientAddress" : {
+          "description" : "Payer Address",
+          "$ref" : "#/definitions/Address"
+        },
+        "RecipientIdentificationNumber" : {
+          "type" : "string",
+          "description" : "Tax recipient identitification number"
+        },
+        "RecipientAccountNumber" : {
+          "type" : "string",
+          "description" : "Tax recipient account number"
+        },
+        "ForeignAccountTaxCompliance" : {
+          "type" : "boolean",
+          "description" : "foreign tax compliant or not"
+        },
+        "Tinnotification" : {
+          "type" : "boolean",
+          "description" : "Tin notified or not"
+        }
+      }
+    },
+    "Tax1099MISC" : {
+      "type" : "object",
+      "properties" : {
+        "TaxYear" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Tax Year"
+        },
+        "Corrected" : {
+          "type" : "boolean",
+          "description" : "Corrected or Original"
+        },
+        "Rents" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Rents"
+        },
+        "Royalities" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Royalities"
+        },
+        "OtherIncome" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Other Income"
+        },
+        "FederalTaxWithheld" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Federal Tax withheld"
+        },
+        "FishingBoatProceeds" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Fishing boat proceeds"
+        },
+        "MedicalHealthPayment" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Medical health payment"
+        },
+        "NonEmployeeCompensation" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Non employee compensation"
+        },
+        "SubstitutePayments" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "substitute payments"
+        },
+        "Payer5KSales" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "payer 5k sales"
+        },
+        "CropInsurance" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "corporate insurance"
+        },
+        "StateTaxWithheld" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "state tax withheld"
+        },
+        "State" : {
+          "type" : "string",
+          "description" : "state name"
+        },
+        "PayerStateId" : {
+          "type" : "string",
+          "description" : "Payer State ID"
+        },
+        "StateIncome" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "State Income"
+        },
+        "AdditionalStateTaxWithHeldAggregate" : {
+          "type" : "number",
+          "description" : "additionalStateTaxWithHeldAggregate"
+        },
+        "GrossAttorney" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "gross attorney"
+        },
+        "ExcessGolden" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Excess Golden"
+        },
+        "Section409ADeferrals" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "section409ADeferrals"
+        },
+        "Section409AIncome" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "section 409A income"
+        },
+        "PayerAddress" : {
+          "description" : "Payer Address",
+          "$ref" : "#/definitions/Address"
+        },
+        "PayerIdentificationNumber" : {
+          "type" : "string",
+          "description" : "Payer Indentification number"
+        },
+        "RecipeintAddress" : {
+          "description" : "Tax Reciever Address",
+          "$ref" : "#/definitions/Address"
+        },
+        "RecipientIdentificationNumber" : {
+          "type" : "string",
+          "description" : "Tax recipient identitification number"
+        },
+        "RecipientAccountNumber" : {
+          "type" : "string",
+          "description" : "Tax recipient account number"
+        },
+        "ForeignAccountTaxCompliance" : {
+          "type" : "boolean",
+          "description" : "foreign tax compliant or not"
+        },
+        "Tinnotification" : {
+          "type" : "boolean",
+          "description" : "Tin notified or not"
+        }
+      }
+    },
+    "Tax1099INT" : {
+      "type" : "object",
+      "properties" : {
+        "TaxYear" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Tax Year"
+        },
+        "Corrected" : {
+          "type" : "boolean",
+          "description" : "Corrected or Original"
+        },
+        "PayersRoutingNumber" : {
+          "type" : "string",
+          "description" : "Payers Routing number"
+        },
+        "InterestIncome" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Interest Income"
+        },
+        "EarlyWithDrawalPenalty" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Early withDrawal penalty"
+        },
+        "InvestmentExpenses" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Investment Expenses"
+        },
+        "ForeignTaxPaid" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Foreign Tax paid"
+        },
+        "ForeignCountry" : {
+          "type" : "string",
+          "description" : "Foreign country code"
+        },
+        "TaxExemptInterest" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Tax exempt Interest"
+        },
+        "SpecifiedPABInterest" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Special PAB Interest"
+        },
+        "MarketDiscount" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Market discount"
+        },
+        "BondPremium" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "bond premium"
+        },
+        "TaxExemptBondPremium" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Tax exempt bond premium"
+        },
+        "StateCode" : {
+          "type" : "string",
+          "description" : "state code"
+        },
+        "StateIdentificationNumber" : {
+          "type" : "string",
+          "description" : "state tax intentification number"
+        },
+        "StateTaxWithheld" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "state tax withheld"
+        },
+        "AdditionalStateTaxWithHeld" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Additional Tax withheld"
+        },
+        "PayerAddress" : {
+          "description" : "Payer Address",
+          "$ref" : "#/definitions/Address"
+        },
+        "PayerIdentificationNumber" : {
+          "type" : "string",
+          "description" : "Payer Indentification number"
+        },
+        "RecipientAddress" : {
+          "description" : "Tax recipient address",
+          "$ref" : "#/definitions/Address"
+        },
+        "RecipientIdentificationNumber" : {
+          "type" : "string",
+          "description" : "Tax recipient identitification number"
+        },
+        "RecipientAccountNumber" : {
+          "type" : "string",
+          "description" : "Tax recipient account number"
+        },
+        "ForeignAccountTaxCompliance" : {
+          "type" : "boolean",
+          "description" : "foreign tax compliant or not"
+        },
+        "Tinnotification" : {
+          "type" : "boolean",
+          "description" : "Tin notified or not"
+        },
+        "Cusipnumber" : {
+          "type" : "number",
+          "description" : "cusip number"
+        }
+      }
+    },
+    "AccountResponse" : {
+      "type" : "object",
+      "properties" : {
+        "DepositAccount" : {
+          "description" : "Deposit Account",
+          "$ref" : "#/definitions/DepositAccount"
+        },
+        "LoanAccount" : {
+          "description" : "Loan Account",
+          "$ref" : "#/definitions/LoanAccount"
+        },
+        "Locccount" : {
+          "description" : "Line of Credit Account",
+          "$ref" : "#/definitions/LocAccount"
+        },
+        "InvestmentAccount" : {
+          "description" : "Investment Account",
+          "$ref" : "#/definitions/InvestmentAccount"
+        }
+      },
+      "description" : "Response for an account. Only one of the properties will be returned."
+    },
+    "TaxDataResponse" : {
+      "type" : "object",
+      "properties" : {
+        "Tax1099DIV" : {
+          "description" : "Tax 1099 DIV",
+          "$ref" : "#/definitions/Tax1099DIV"
+        },
+        "Tax1099MISC" : {
+          "description" : "Tax 1099 MISC",
+          "$ref" : "#/definitions/Tax1099MISC"
+        },
+        "Tax1099INT" : {
+          "description" : "Tax 1099 INT",
+          "$ref" : "#/definitions/Tax1099INT"
+        }
+      },
+      "description" : "Response for TaxData API. Only one of the Tax Data object will be returned."
+    },
+    "ErrorResponse" : {
+      "type" : "object",
+      "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+      "properties" : {
+        "ErrorResponseCode" : {
+          "type" : "number",
+          "description" : "Error Staus code which would be as per HTTP status codes"
+        },
+        "ErrorDescription" : {
+          "type" : "string",
+          "description" : "Additional information related to Error Response code",
+          "maxLength" : 2048
+        }
+      },
+      "description" : "Error response object"
+    },
+    "inline_response_400" : {
+      "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+      "properties" : {
+        "ErrorResponseCode" : {
+          "type" : "string",
+          "description" : "HTTP staus code related to Error\n"
+        },
+        "ErrorDescription" : {
+          "type" : "string",
+          "description" : "Detailed description of why the request is not valid. This is a system message \nand it will not be displayed to the customer.\n",
+          "maxLength" : 2048
+        }
+      }
+    },
+    "inline_response_401" : {
+      "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+      "properties" : {
+        "ErrorResponseCode" : {
+          "type" : "string",
+          "description" : "HTTP staus code related to Error\n"
+        },
+        "ErrorDescription" : {
+          "type" : "string",
+          "description" : "Error information related to Authentication Failure response",
+          "maxLength" : 255
+        }
+      }
+    },
+    "inline_response_404" : {
+      "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+      "properties" : {
+        "ErrorResponseCode" : {
+          "type" : "string",
+          "description" : "HTTP staus code related to Error\n"
+        },
+        "ErrorDescription" : {
+          "type" : "string",
+          "description" : "Detailed description resource not found.\n",
+          "maxLength" : 255
+        }
+      }
+    },
+    "inline_response_405" : {
+      "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+      "properties" : {
+        "ErrorResponseCode" : {
+          "type" : "string",
+          "description" : "HTTP staus code related to Error\n"
+        },
+        "ErrorDescription" : {
+          "type" : "string",
+          "description" : "Detailed description of  HTTP method is not supported.\n",
+          "maxLength" : 255
+        }
+      }
+    },
+    "inline_response_500" : {
+      "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+      "properties" : {
+        "ErrorResponseCode" : {
+          "type" : "string",
+          "description" : "HTTP staus code related to Error\n"
+        },
+        "ErrorDescription" : {
+          "type" : "string",
+          "description" : "Customer-friendly message with the description related to Internal Server error while processing the request",
+          "maxLength" : 255
+        }
+      }
+    },
+    "inline_response_503" : {
+      "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+      "properties" : {
+        "ErrorResponseCode" : {
+          "type" : "string",
+          "description" : "HTTP staus code related to Error\n"
+        },
+        "ErrorDescription" : {
+          "type" : "string",
+          "description" : "Customer-friendly message with the description of the maintenance window",
+          "maxLength" : 255
+        }
+      }
+    }
+  },
+  "responses" : {
+    "AuthenticationFailure" : {
+      "description" : "The access token is expired, revoked, malformed, or invalid for other reasons. The client can obtain a new access token and try again.",
+      "schema" : {
+        "type" : "object",
+        "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+        "properties" : {
+          "ErrorResponseCode" : {
+            "type" : "string",
+            "description" : "HTTP staus code related to Error\n"
+          },
+          "ErrorDescription" : {
+            "type" : "string",
+            "description" : "Error information related to Authentication Failure response",
+            "maxLength" : 255
+          }
+        }
+      }
+    },
+    "ServiceTemporarilyUnavailable" : {
+      "description" : "Service is down for maintenance.",
+      "schema" : {
+        "type" : "object",
+        "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+        "properties" : {
+          "ErrorResponseCode" : {
+            "type" : "string",
+            "description" : "HTTP staus code related to Error\n"
+          },
+          "ErrorDescription" : {
+            "type" : "string",
+            "description" : "Customer-friendly message with the description of the maintenance window",
+            "maxLength" : 255
+          }
+        }
+      }
+    },
+    "InternalServerError" : {
+      "description" : "Internal Server Error.",
+      "schema" : {
+        "type" : "object",
+        "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+        "properties" : {
+          "ErrorResponseCode" : {
+            "type" : "string",
+            "description" : "HTTP staus code related to Error\n"
+          },
+          "ErrorDescription" : {
+            "type" : "string",
+            "description" : "Customer-friendly message with the description related to Internal Server error while processing the request",
+            "maxLength" : 255
+          }
+        }
+      }
+    },
+    "MethodNotSupported" : {
+      "description" : "The requested resocurce does not support on HTTP method requested.",
+      "schema" : {
+        "type" : "object",
+        "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+        "properties" : {
+          "ErrorResponseCode" : {
+            "type" : "string",
+            "description" : "HTTP staus code related to Error\n"
+          },
+          "ErrorDescription" : {
+            "type" : "string",
+            "description" : "Detailed description of  HTTP method is not supported.\n",
+            "maxLength" : 255
+          }
+        }
+      }
+    },
+    "ResourceNotFound" : {
+      "description" : "The requested resource is not Found.",
+      "schema" : {
+        "type" : "object",
+        "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+        "properties" : {
+          "ErrorResponseCode" : {
+            "type" : "string",
+            "description" : "HTTP staus code related to Error\n"
+          },
+          "ErrorDescription" : {
+            "type" : "string",
+            "description" : "Detailed description resource not found.\n",
+            "maxLength" : 255
+          }
+        }
+      }
+    },
+    "InvalidRequest" : {
+      "description" : "The request is missing a required parameter, or is otherwise malformed.",
+      "schema" : {
+        "type" : "object",
+        "required" : [ "ErrorDescription", "ErrorResponseCode" ],
+        "properties" : {
+          "ErrorResponseCode" : {
+            "type" : "string",
+            "description" : "HTTP staus code related to Error\n"
+          },
+          "ErrorDescription" : {
+            "type" : "string",
+            "description" : "Detailed description of why the request is not valid. This is a system message \nand it will not be displayed to the customer.\n",
+            "maxLength" : 2048
+          }
+        }
+      }
+    }
+  }
+}
