@@ -1,0 +1,305 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Bag XAPI Services",
+    "description" : "Bag XAPI Services",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://m.mcom-015.tbe.zeus.fds.com/xapi",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://virtserver.swaggerhub.com/macys/bag-xapi-services/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  } ],
+  "paths" : {
+    "/bag/v1/add" : {
+      "post" : {
+        "operationId" : "addItem",
+        "parameters" : [ {
+          "name" : "currencyCode",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/item"
+        },
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bag/v1/healthcheck" : {
+      "get" : {
+        "operationId" : "hello",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bag/v1/view" : {
+      "get" : {
+        "operationId" : "getBagView",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bag/v1/{bagGuid}" : {
+      "get" : {
+        "operationId" : "getBag",
+        "parameters" : [ {
+          "name" : "bagGuid",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "currencyCode",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "continueShopping",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bag/v1/{bagGuid}/continuecheckout" : {
+      "post" : {
+        "operationId" : "continueCheckout",
+        "parameters" : [ {
+          "name" : "bagGuid",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "currencyCode",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "continueShopping",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bag/v1/{bagGuid}/items/{sequencenumber}" : {
+      "post" : {
+        "operationId" : "updateItem",
+        "parameters" : [ {
+          "name" : "bagGuid",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "sequencenumber",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "currencyCode",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "storeLocNumber",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/item"
+        },
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      },
+      "delete" : {
+        "operationId" : "removeItem",
+        "parameters" : [ {
+          "name" : "bagGuid",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "sequencenumber",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "currencyCode",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/item"
+        },
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "item" : {
+        "type" : "object",
+        "properties" : {
+          "upcId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "quantity" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "giftCardAmount" : {
+            "type" : "string"
+          },
+          "giftCardEmail" : {
+            "type" : "string"
+          },
+          "toMessage" : {
+            "type" : "string"
+          },
+          "fromMessage" : {
+            "type" : "string"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "registryId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "registry" : {
+            "$ref" : "#/components/schemas/registry"
+          }
+        }
+      },
+      "registry" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }
+      }
+    },
+    "requestBodies" : {
+      "item" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/item"
+            }
+          }
+        }
+      }
+    }
+  }
+}
