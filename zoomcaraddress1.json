@@ -1,0 +1,189 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "This api gives the list of user's stored addresses",
+    "version" : "1.0.0",
+    "title" : "Fetch User Addresses API",
+    "contact" : {
+      "email" : "chirag.hota@zoomcar.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/ZoomcarAPI/Addresses/1.0.0",
+  "tags" : [ {
+    "name" : "app",
+    "description" : "Frontend API Calls"
+  }, {
+    "name" : "developers",
+    "description" : "Available to all front end systems"
+  } ],
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/addresses" : {
+      "get" : {
+        "tags" : [ "developers" ],
+        "summary" : "Gives a list of all user addresses",
+        "description" : "Provides a list of all user addresses\n",
+        "operationId" : "getAdrresses",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "auth_token",
+          "in" : "header",
+          "description" : "auth Token of the user",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "version",
+          "in" : "query",
+          "description" : "version of app",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "platform",
+          "in" : "query",
+          "description" : "platform of app",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "device_id",
+          "in" : "query",
+          "description" : "device id of device",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "sucessful response",
+            "schema" : {
+              "$ref" : "#/definitions/Success"
+            }
+          },
+          "400" : {
+            "description" : "invalid input, object invalid",
+            "schema" : {
+              "properties" : {
+                "status" : {
+                  "type" : "integer",
+                  "example" : 0
+                },
+                "msg" : {
+                  "type" : "string",
+                  "example" : "Invalid parameter"
+                },
+                "error_code" : {
+                  "type" : "integer",
+                  "example" : 1001
+                },
+                "error_title" : {
+                  "type" : "string",
+                  "example" : "Oops"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server side code threw exception",
+            "schema" : {
+              "properties" : {
+                "status" : {
+                  "type" : "integer",
+                  "example" : 0
+                },
+                "msg" : {
+                  "type" : "string",
+                  "example" : "Invalid parameter"
+                },
+                "error_code" : {
+                  "type" : "integer",
+                  "example" : 1001
+                },
+                "error_title" : {
+                  "type" : "string",
+                  "example" : "Oops"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Success" : {
+      "type" : "object",
+      "properties" : {
+        "status" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "msg" : {
+          "type" : "string",
+          "example" : "success"
+        },
+        "addresses" : {
+          "type" : "array",
+          "description" : "List of addresses .",
+          "items" : {
+            "$ref" : "#/definitions/Address"
+          }
+        }
+      }
+    },
+    "Address" : {
+      "type" : "object",
+      "required" : [ "address", "city", "id", "landmark", "lat", "lng", "locality", "tag", "zipcode" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "format" : "uuid",
+          "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851",
+          "description" : "id of the Address"
+        },
+        "address" : {
+          "type" : "string",
+          "example" : "Zoomcar India Pvt. Ltd , 7th Floor Diamond District",
+          "description" : "Building name , Floor and Flat Number Details"
+        },
+        "locality" : {
+          "type" : "string",
+          "example" : "Domlur",
+          "description" : "name"
+        },
+        "city" : {
+          "type" : "string",
+          "example" : "Bengaluru",
+          "description" : "City's name"
+        },
+        "zipcode" : {
+          "type" : "integer",
+          "example" : 560008,
+          "description" : "Pincode for the address"
+        },
+        "lat" : {
+          "type" : "string",
+          "example" : "23.4568923",
+          "description" : "latitude of the address"
+        },
+        "lng" : {
+          "type" : "string",
+          "example" : "76.4568923",
+          "description" : "longitude of the address"
+        },
+        "tag" : {
+          "type" : "integer",
+          "example" : 0,
+          "description" : "0-Home, 1-Office , 2-Others"
+        },
+        "landmark" : {
+          "type" : "string",
+          "example" : "Besides Domlur Flyover",
+          "description" : "Landmark for the address"
+        }
+      }
+    }
+  }
+}
