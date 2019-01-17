@@ -1,0 +1,1352 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "ISB progressive API",
+    "description" : "ISB progressive.",
+    "contact" : {
+      "email" : "joao.cordeiro@isoftbet.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/jlcordeiro/progressive/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  } ],
+  "tags" : [ {
+    "name" : "isb",
+    "description" : "API implemented in the isb progressive back end."
+  }, {
+    "name" : "partner",
+    "description" : "API implemented by the partner."
+  } ],
+  "paths" : {
+    "/settings_rtp" : {
+      "get" : {
+        "tags" : [ "isb" ],
+        "summary" : "Get RTP settings.",
+        "description" : "Get RTP settings per {provider, game_type}.\n",
+        "operationId" : "getRTPSettings",
+        "parameters" : [ {
+          "name" : "licensee_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "operator_name",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SettingsRTP"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "isb" ],
+        "summary" : "Set RTP settings",
+        "operationId" : "setRTPSettings",
+        "parameters" : [ {
+          "name" : "licensee_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "operator_name",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "RTP settings to set.",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SettingsRTP"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "success"
+          },
+          "400" : {
+            "description" : "invalid input"
+          }
+        }
+      }
+    },
+    "/settings_creation" : {
+      "get" : {
+        "tags" : [ "isb" ],
+        "summary" : "Get Jackpot group creation settings.",
+        "description" : "Get jackpot group creation settings.\n",
+        "operationId" : "getCreationSettings",
+        "parameters" : [ {
+          "name" : "licensee_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "operator_name",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SettingsCreation"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "isb" ],
+        "summary" : "sets jp creation settings",
+        "operationId" : "setCreationSettings",
+        "parameters" : [ {
+          "name" : "licensee_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "operator_name",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "RTP settings to set.",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SettingsCreation"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "success"
+          },
+          "400" : {
+            "description" : "invalid input"
+          }
+        }
+      }
+    },
+    "/currencies" : {
+      "get" : {
+        "tags" : [ "isb", "partner" ],
+        "summary" : "Get existing currencies.",
+        "description" : "Get currencies.\n",
+        "operationId" : "getCcy",
+        "parameters" : [ {
+          "name" : "licensee_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "operator_name",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/currencies/{code}" : {
+      "get" : {
+        "tags" : [ "isb", "partner" ],
+        "summary" : "Get currency and its rate.",
+        "description" : "Get currency and its rate.",
+        "operationId" : "getOneCcy",
+        "parameters" : [ {
+          "name" : "code",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_currencies"
+                },
+                "example" : {
+                  "code" : "EUR",
+                  "rate" : 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/operators" : {
+      "get" : {
+        "tags" : [ "isb", "partner" ],
+        "summary" : "Get operators.",
+        "description" : "Get list of operators the user has permission to control.\n",
+        "operationId" : "getOperators",
+        "parameters" : [ {
+          "name" : "licensee_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/games" : {
+      "get" : {
+        "tags" : [ "isb", "partner" ],
+        "summary" : "Get games.",
+        "description" : "Get list of games and its settings.\n",
+        "operationId" : "getGames",
+        "parameters" : [ {
+          "name" : "licensee_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "operator_name",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "providers",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "example" : "isb"
+            }
+          }
+        }, {
+          "name" : "search_string",
+          "in" : "query",
+          "description" : "pass an optional search string for looking up inventory",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "game_type",
+          "in" : "query",
+          "description" : "pass an optional game type to filter the results by",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "skip",
+          "in" : "query",
+          "description" : "number of records to skip for pagination",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "maximum number of records to return",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "maximum" : 50,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/games/{skin_id}" : {
+      "get" : {
+        "tags" : [ "isb", "partner" ],
+        "summary" : "Get game.",
+        "description" : "Get game settings.\n",
+        "operationId" : "getGame",
+        "parameters" : [ {
+          "name" : "licensee_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "operator_name",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "skin_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_3"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/progressive_groups" : {
+      "get" : {
+        "tags" : [ "isb" ],
+        "summary" : "Get progressive groups.",
+        "description" : "Get list of progressive groups.",
+        "operationId" : "getGroups",
+        "parameters" : [ {
+          "name" : "licensee_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "operator_name",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "group_type",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "draft", "template", "group" ]
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "active", "suspended", "stopped" ]
+          }
+        }, {
+          "name" : "search_string",
+          "in" : "query",
+          "description" : "pass an optional search string for looking up inventory",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "block_until_funded",
+          "in" : "query",
+          "description" : "Optional filter.",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "auto_restart",
+          "in" : "query",
+          "description" : "Optional filter.",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "skip",
+          "in" : "query",
+          "description" : "number of records to skip for pagination",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "player_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "skin_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "maximum number of records to return",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "maximum" : 50,
+            "minimum" : 0,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_4"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "isb" ],
+        "summary" : "Create progressive groups.",
+        "description" : "Create a progressive group.",
+        "operationId" : "createGroups",
+        "requestBody" : {
+          "description" : "The progressive group to create.",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ProgressiveGroup"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "success"
+          }
+        }
+      }
+    },
+    "/progressive_groups/{id}" : {
+      "get" : {
+        "tags" : [ "isb" ],
+        "summary" : "Get progressive group, template or draft.",
+        "description" : "Get progressive group, draft or template..\n",
+        "operationId" : "getProgressiveGroup",
+        "parameters" : [ {
+          "name" : "licensee_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "operator_name",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_5"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "isb" ],
+        "summary" : "Get progressive group, template or draft.",
+        "description" : "Get progressive group, draft or template..\n",
+        "operationId" : "putProgressiveGroup",
+        "parameters" : [ {
+          "name" : "licensee_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "operator_name",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "isb" ],
+        "summary" : "Delete progressive group, template or draft.",
+        "description" : "Delete progressive group, draft or template..\n",
+        "operationId" : "deleteProgressiveGroup",
+        "parameters" : [ {
+          "name" : "licensee_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "operator_name",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "success"
+          }
+        }
+      }
+    },
+    "/bet" : {
+      "post" : {
+        "tags" : [ "isb" ],
+        "summary" : "Place a bet.",
+        "description" : "Place a bet.",
+        "operationId" : "betJackpot",
+        "parameters" : [ {
+          "name" : "licensee_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "operator_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "player_id",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "currency",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "skin_id",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "session_id",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "round_id",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "transaction_id",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "dryrun",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "total_cash_bet",
+          "in" : "query",
+          "description" : "Total amount of bet taken from cash balance - in player_currency-cents",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "total_bonus_bet",
+          "in" : "query",
+          "description" : "Total amount of bet taken from bonus balance - in player_currency-cents",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "freespins_flag",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "freerounds_flag",
+          "in" : "query",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "boolean"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_6"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "SettingsRTP" : {
+        "required" : [ "game_type", "max_rtp", "provider" ],
+        "type" : "object",
+        "properties" : {
+          "provider" : {
+            "type" : "string",
+            "example" : "isb"
+          },
+          "game_type" : {
+            "type" : "string",
+            "example" : "slot"
+          },
+          "max_rtp" : {
+            "type" : "number",
+            "format" : "double",
+            "example" : 96.2
+          }
+        }
+      },
+      "SettingsCreation" : {
+        "required" : [ "allow_network", "approve_sections_individually", "use_deploy_page" ],
+        "type" : "object",
+        "properties" : {
+          "use_deploy_page" : {
+            "type" : "boolean"
+          },
+          "approve_sections_individually" : {
+            "type" : "boolean"
+          },
+          "allow_network" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "BaseGame" : {
+        "required" : [ "base_rtp", "game_type", "name", "provider", "skin_id" ],
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "Booster"
+          },
+          "skin_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 4092
+          },
+          "provider" : {
+            "type" : "string",
+            "example" : "isb"
+          },
+          "game_type" : {
+            "type" : "string",
+            "example" : "slot"
+          },
+          "base_rtp" : {
+            "type" : "number",
+            "example" : 96.24
+          }
+        }
+      },
+      "Game" : {
+        "required" : [ "max_contribution", "total_contribution" ],
+        "type" : "object",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/BaseGame"
+        }, {
+          "properties" : {
+            "total_contribution" : {
+              "type" : "number",
+              "example" : 1.11
+            },
+            "max_contribution" : {
+              "type" : "number",
+              "example" : 97.35
+            }
+          }
+        } ]
+      },
+      "ProgressiveGroupSchedule" : {
+        "type" : "object",
+        "properties" : {
+          "start_time" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "end_time" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "start_early" : {
+            "type" : "integer",
+            "description" : "How many minutes before the start should it start being displayed.",
+            "format" : "int32",
+            "example" : 0
+          },
+          "end_late" : {
+            "type" : "integer",
+            "description" : "How many minutes after the end, should it stop being displayed.",
+            "format" : "int32",
+            "example" : 0
+          }
+        }
+      },
+      "TriggerOdds" : {
+        "type" : "object",
+        "properties" : {
+          "odd" : {
+            "type" : "integer",
+            "description" : "E.g. 10 would mean that one out of every 10 spins would win the progressive.",
+            "format" : "int64",
+            "example" : 50000
+          }
+        }
+      },
+      "ProgressiveGroupLevel" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "mini"
+          },
+          "contribution_split" : {
+            "type" : "number",
+            "example" : 30
+          },
+          "network_type" : {
+            "type" : "string",
+            "enum" : [ "multi", "single" ]
+          },
+          "risk_profile" : {
+            "type" : "string",
+            "enum" : [ "low", "medium", "high" ]
+          },
+          "seeds_in_reserve" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1,
+            "default" : 1
+          },
+          "start_value" : {
+            "type" : "number",
+            "description" : "Start value (in cents) of the level",
+            "example" : 100
+          },
+          "end_value" : {
+            "type" : "number",
+            "description" : "End value (in cents) of the level",
+            "example" : 250.5
+          },
+          "auto_restart" : {
+            "type" : "boolean"
+          },
+          "block_until_funded" : {
+            "type" : "boolean"
+          },
+          "trigger" : {
+            "$ref" : "#/components/schemas/TriggerOdds"
+          },
+          "min_spins" : {
+            "type" : "integer",
+            "description" : "Minimum number of spins to apply to win the progressive.",
+            "format" : "int32",
+            "example" : 0,
+            "default" : 0
+          },
+          "min_wager_per_spin" : {
+            "type" : "integer",
+            "description" : "Minimum cost (in cents) for one spin for it to aplly to the progressive.",
+            "format" : "int32",
+            "example" : 25,
+            "default" : 0
+          },
+          "min_wager_total" : {
+            "type" : "integer",
+            "description" : "Minimum cost (in cents) a player must bet to be eligible.",
+            "format" : "int32",
+            "example" : 250,
+            "default" : 0
+          },
+          "min_elapsed_minutes" : {
+            "type" : "integer",
+            "description" : "Minimum time (in minutes) someone must play to be eligible.",
+            "format" : "int32",
+            "example" : 6,
+            "default" : 0
+          },
+          "schedule" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProgressiveGroupSchedule"
+            }
+          },
+          "total_seed_contributions" : {
+            "type" : "number",
+            "description" : "Total amount collected into the level's seed.",
+            "example" : 0
+          },
+          "total_progressive_contributions" : {
+            "type" : "number",
+            "description" : "Total amount collected into the level's (visible) progressive.",
+            "example" : 0
+          }
+        }
+      },
+      "ProgressiveGroup" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 123
+          },
+          "licensee_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 77
+          },
+          "operator_names" : {
+            "type" : "array",
+            "example" : [ "op1", "op2" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "Progressive T1"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "Description goes here."
+          },
+          "currency" : {
+            "type" : "string",
+            "example" : "EUR"
+          },
+          "group_type" : {
+            "type" : "string",
+            "enum" : [ "draft", "template", "group" ]
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "active", "suspended", "stopped" ]
+          },
+          "levels" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProgressiveGroupLevel"
+            }
+          },
+          "game_contributions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProgressiveGroup_game_contributions"
+            }
+          }
+        }
+      },
+      "ProgressiveGroupLevelContribution" : {
+        "required" : [ "progressive_contribution", "seed_contribution", "win_from_progressive", "win_from_seed" ],
+        "type" : "object",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/ProgressiveGroupLevel"
+        }, {
+          "properties" : {
+            "seed_contribution" : {
+              "type" : "number",
+              "description" : "Total amount collected into the level's seed. In player currency.",
+              "example" : 0.001
+            },
+            "progressive_contribution" : {
+              "type" : "number",
+              "description" : "Total amount collected into the level's (visible) progressive. In player currency.",
+              "example" : 0.035
+            },
+            "win_from_seed" : {
+              "type" : "number",
+              "description" : "Total amount won from the level's seed. In player currency.",
+              "example" : 1000
+            },
+            "win_from_progressive" : {
+              "type" : "number",
+              "description" : "Total amount won from the level's (visible) progressive. In player currency.",
+              "example" : 500.35
+            }
+          }
+        } ]
+      },
+      "ProgressiveGroupContribution" : {
+        "required" : [ "contribution", "currency", "id", "level_contributions", "licensee_id", "name" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 1
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "JP"
+          },
+          "currency" : {
+            "type" : "string",
+            "description" : "Player currency.",
+            "example" : "EUR"
+          },
+          "contribution" : {
+            "type" : "number",
+            "description" : "Total contribution from this bet. In player currency."
+          },
+          "win" : {
+            "type" : "number",
+            "description" : "Total wins (from all jackpots contributed to with this bet). In player currency."
+          },
+          "level_contributions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProgressiveGroupLevelContribution"
+            }
+          }
+        }
+      },
+      "inline_response_200_currencies" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string"
+          },
+          "rate" : {
+            "type" : "number"
+          }
+        }
+      },
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "primary" : {
+            "type" : "string",
+            "example" : "GBP"
+          },
+          "currencies" : {
+            "type" : "array",
+            "example" : [ {
+              "code" : "EUR",
+              "rate" : 1
+            }, {
+              "code" : "GBP",
+              "rate" : 1
+            } ],
+            "items" : {
+              "$ref" : "#/components/schemas/inline_response_200_currencies"
+            }
+          }
+        }
+      },
+      "inline_response_200_1" : {
+        "type" : "object",
+        "properties" : {
+          "operators" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "example" : "op"
+            }
+          }
+        }
+      },
+      "inline_response_200_2" : {
+        "type" : "object",
+        "properties" : {
+          "games" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Game"
+            }
+          }
+        }
+      },
+      "inline_response_200_3" : {
+        "type" : "object",
+        "properties" : {
+          "game" : {
+            "$ref" : "#/components/schemas/Game"
+          }
+        }
+      },
+      "inline_response_200_4" : {
+        "type" : "object",
+        "properties" : {
+          "groups" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProgressiveGroup"
+            }
+          }
+        }
+      },
+      "inline_response_200_5" : {
+        "type" : "object",
+        "properties" : {
+          "game" : {
+            "$ref" : "#/components/schemas/ProgressiveGroup"
+          }
+        }
+      },
+      "inline_response_200_6" : {
+        "type" : "object",
+        "properties" : {
+          "licensee_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 237
+          },
+          "operat_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "player_id" : {
+            "type" : "string",
+            "example" : "Bob"
+          },
+          "currency" : {
+            "type" : "string",
+            "description" : "Player currency.",
+            "example" : "RON"
+          },
+          "skin_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 4192
+          },
+          "dryrun" : {
+            "type" : "boolean"
+          },
+          "contributions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProgressiveGroupContribution"
+            }
+          }
+        }
+      },
+      "ProgressiveGroup_game_contributions" : {
+        "type" : "object",
+        "properties" : {
+          "skin_id" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 4192
+          },
+          "contribution" : {
+            "type" : "number",
+            "example" : 0.5
+          }
+        }
+      }
+    }
+  }
+}
