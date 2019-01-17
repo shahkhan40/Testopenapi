@@ -1,0 +1,556 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "1.0",
+    "title" : "https://test1.dev.amadeus.net"
+  },
+  "basePath" : "",
+  "paths" : {
+    "/lean/dac/smartTripGetBookingConfiguration" : {
+      "post" : {
+        "operationId" : "SmartTripGetBookingConfiguration",
+        "parameters" : [ {
+          "name" : "SITE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "LANGUAGE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "e",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Origin",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "CSRF-TOKEN",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Charset",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "User-Agent",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Referer",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Encoding",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Language",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "SITE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "LANGUAGE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "e",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Origin",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "CSRF-TOKEN",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Charset",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "User-Agent",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Referer",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Encoding",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Language",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Request body",
+          "required" : true
+        } ]
+      }
+    },
+    "/lean/dac/smartTripGetCytricInfo" : {
+      "post" : {
+        "operationId" : "SmartTripGetCytricInfo",
+        "parameters" : [ {
+          "name" : "LANGUAGE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "SITE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "e",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Origin",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "CSRF-TOKEN",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Charset",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "User-Agent",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Referer",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Encoding",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Language",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Content-Length",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "LANGUAGE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "SITE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "e",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Origin",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "CSRF-TOKEN",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Charset",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "User-Agent",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Referer",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Encoding",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Language",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Content-Length",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Request body",
+          "required" : true
+        } ]
+      }
+    },
+    "/lean/dac/smartTripInitialize" : {
+      "get" : {
+        "operationId" : "SmartTripInitialize",
+        "parameters" : [ {
+          "name" : "LANGUAGE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "SITE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "e",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        } ]
+      }
+    },
+    "/lean/dac/smartTripLogout" : {
+      "post" : {
+        "operationId" : "SmartTripLogout",
+        "parameters" : [ {
+          "name" : "SITE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "LANGUAGE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "e",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Origin",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "CSRF-TOKEN",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Charset",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "User-Agent",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Referer",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Encoding",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Language",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "SITE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "LANGUAGE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "e",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Origin",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "CSRF-TOKEN",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Charset",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "User-Agent",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Referer",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Encoding",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Language",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Request body",
+          "required" : true
+        } ]
+      }
+    },
+    "/lean/dac/smartTripSignIn" : {
+      "post" : {
+        "operationId" : "SmartTripSignIn",
+        "parameters" : [ {
+          "name" : "LANGUAGE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "SITE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "e",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Origin",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "CSRF-TOKEN",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Charset",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "User-Agent",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Referer",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Encoding",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Language",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "LANGUAGE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "SITE",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "e",
+          "in" : "query",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Origin",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "CSRF-TOKEN",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Charset",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "User-Agent",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Referer",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Encoding",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Accept-Language",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Request body",
+          "required" : true
+        } ]
+      }
+    }
+  },
+  "definitions" : { }
+}
