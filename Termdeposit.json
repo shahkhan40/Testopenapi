@@ -1,0 +1,2939 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Management of Term Deposit (opening, closing), Customer and Interest Rate management",
+    "version" : "1.0",
+    "title" : "Term Deposits"
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/api",
+  "schemes" : [ "http" ],
+  "produces" : [ "application/json" ],
+  "paths" : {
+    "/check" : {
+      "get" : {
+        "description" : "Healthcheck request to verify the TD server is alive",
+        "operationId" : "getHealthcheck",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "The server is alive and well",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "status" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "The server has a problem",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/batch" : {
+      "get" : {
+        "tags" : [ "Desk", "Customer", "Managed Services" ],
+        "description" : "Get a list of TD batches. The request must specify either a customer, or a date, or both. If only a customer is specified, the request will return all batches for that customer. If only a date is specified, the request will return the batches submitted by all customers on that date.",
+        "operationId" : "getBatches",
+        "parameters" : [ {
+          "name" : "customer",
+          "in" : "query",
+          "description" : "The id of the customer whose batches are queried",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "date",
+          "in" : "query",
+          "description" : "The date for which batches are queried",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a list of batches",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Batch"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/batch/details" : {
+      "get" : {
+        "tags" : [ "Desk", "Customer", "Managed Services" ],
+        "description" : "Get the list TD forming a batch",
+        "operationId" : "getBatchDetails",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "The id of the batch",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned the batch details",
+            "schema" : {
+              "$ref" : "#/definitions/BatchDetails"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "Batch not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/login" : {
+      "post" : {
+        "tags" : [ "Desk", "Managed Services", "Customer" ],
+        "description" : "Log in to the TD Server",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "credentials",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/credentials"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "User logged in successfully",
+            "schema" : {
+              "$ref" : "#/definitions/Token"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/logout" : {
+      "post" : {
+        "tags" : [ "Desk", "Managed Services", "Customer" ],
+        "description" : "Log out to the TD Server",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "User logged out successfully"
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "customer", "managedServices" ]
+      }
+    },
+    "/permission" : {
+      "get" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Returns a list of permissions",
+        "operationId" : "getPermissions",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfully returned a list of permissions",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Permission"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/rateTable" : {
+      "get" : {
+        "tags" : [ "Desk" ],
+        "description" : "returns a list of rate tables for chosen date or for current date if the date parameter is not specified.",
+        "operationId" : "getRateTablesByDateAndTypeOrId",
+        "parameters" : [ {
+          "name" : "date",
+          "in" : "query",
+          "description" : "the date for which rates should be queried. The date format is as defined by RFC 3339, section 5.6. If not specified then current date will be used. If rates have been changed several times over the date, then all the rates will be returned with effective date and time specified.",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "the rate table type for which rates should be queried. If not specified then all rate tables will be  returned. Possible values for this parameter are 'base', 'category' or 'custom'. If 'type' is specified, the 'id' parameter must be left blank",
+          "required" : false,
+          "type" : "string",
+          "enum" : [ "base", "category", "custom" ]
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "description" : "the identifier of the table which rates should be queried. If 'id' is specified, the 'type' parameter must be left blank",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a list of rate tables",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/RateTableResponse"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk" ]
+      },
+      "post" : {
+        "tags" : [ "Desk" ],
+        "description" : "create new rate table of the custom type. Base and category rate tables are created on system level and only available for update through API.",
+        "operationId" : "createRateTable",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "rateTable",
+          "description" : "new rate table og the custom type.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/CreateRateTableRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully created a rate table",
+            "schema" : {
+              "$ref" : "#/definitions/RateTableResponse"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk" ]
+      },
+      "put" : {
+        "tags" : [ "Desk" ],
+        "description" : "update a set of rate tables",
+        "operationId" : "updateRateTable",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "rateTable",
+          "description" : "the list of rate tables to update.",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/UpdateRateTableRequest"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfully updated all rate tables",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/RateTableResponse"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "At least one of the rate tables was not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk" ]
+      },
+      "delete" : {
+        "tags" : [ "Desk" ],
+        "description" : "delete a rate table. Only rate tables for type \"custom\" may be deleted. A custom rate table can only be deleted if it doesn't have any customer linked to it.",
+        "operationId" : "deleteRateTable",
+        "parameters" : [ {
+          "name" : "rateTableId",
+          "in" : "query",
+          "description" : "id of the rate table to delete",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfully deleted a rate table",
+            "schema" : {
+              "$ref" : "#/definitions/RateTableResponse"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "RateTable with this ID not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk" ]
+      }
+    },
+    "/rateTable/suspend" : {
+      "post" : {
+        "tags" : [ "Desk", "Managed Services" ],
+        "description" : "Suspends the rate table of the base type. Can be used to prevent usage of the rate table for example if error in the rate numbers was recognised or quick market movement. Only Active rate can be suspended.",
+        "operationId" : "suspendRateTable",
+        "parameters" : [ {
+          "name" : "baseRateTableName",
+          "in" : "query",
+          "description" : "the base rate table name that will be suspended.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a list of effected rate tables",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/RateTableResponse"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "The rate table was not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "managedServices" ]
+      }
+    },
+    "/rateTable/activate" : {
+      "post" : {
+        "tags" : [ "Desk", "Managed Services" ],
+        "description" : "Activates the rate table of the base type that been suspended before. The rate that been closed by the end of day or week cannot be activated.",
+        "operationId" : "activateRateTable",
+        "parameters" : [ {
+          "name" : "baseRateTableName",
+          "in" : "query",
+          "description" : "the base rate table name that will be activated.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a list of effected rate tables",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/RateTableResponse"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "The rate table was not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "managedServices" ]
+      }
+    },
+    "/role" : {
+      "get" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Returns a list of roles",
+        "operationId" : "getRoles",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfully returned a list of roles",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/RoleResponse"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      },
+      "post" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Create a role",
+        "operationId" : "createRole",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "role",
+          "description" : "The new role details",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/CreateRoleRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully created new role.",
+            "schema" : {
+              "$ref" : "#/definitions/RoleResponse"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedService" ]
+      },
+      "put" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Update a role",
+        "operationId" : "updateRole",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "role",
+          "description" : "The updated role data.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/UpdateRoleRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully updated a role",
+            "schema" : {
+              "$ref" : "#/definitions/RoleResponse"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "Role with this ID not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      },
+      "delete" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "delete a role.",
+        "operationId" : "deleteRole",
+        "parameters" : [ {
+          "name" : "roleId",
+          "in" : "query",
+          "description" : "id of the role to delete",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfully deleted a role",
+            "schema" : {
+              "$ref" : "#/definitions/RoleResponse"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "Role with this ID not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/earlyTerminationPenalty" : {
+      "get" : {
+        "tags" : [ "Desk", "Customer" ],
+        "description" : "Returns the list of early termination penalties",
+        "operationId" : "getEarlyTerminationPenaltyByDate",
+        "parameters" : [ {
+          "name" : "date",
+          "in" : "query",
+          "description" : "The date for which early termination penalties should be queried. The date format is as defined by RFC 3339, section 5.6. If not specified, the curreny early termination penalties will be returned.",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a list of early termination penalties",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/EarlyTerminationPenaltyResponse"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "customer" ]
+      },
+      "put" : {
+        "tags" : [ "Desk" ],
+        "description" : "Update early termination penalties",
+        "operationId" : "updateEarlyTerminationPenalty",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "rateTable",
+          "description" : "The list of early termination penalties to update",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/EarlyTerminationPenaltyRequest"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully updated a list of early termination penalties",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/EarlyTerminationPenaltyResponse"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "customer" ]
+      }
+    },
+    "/customerRateTable" : {
+      "get" : {
+        "tags" : [ "Desk", "Customer" ],
+        "description" : "Get the composite rate tables that apply to a customer",
+        "operationId" : "getCustomerRateTablesByCustomer",
+        "parameters" : [ {
+          "name" : "date",
+          "in" : "query",
+          "description" : "the date for which rates should be queried. The date format is as defined by RFC 3339, section 5.6. If not specified then current date will be used. If rates have been changed several times over the date, then all the rates will be returned with effective date and time specified.",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "customerId",
+          "in" : "query",
+          "description" : "The identifier of the customer whose rate tables are queried",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a list of rate tables",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/CustomerRateTable"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "Customer with this ID not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "customer" ]
+      }
+    },
+    "/customer" : {
+      "get" : {
+        "tags" : [ "Desk", "Managed Services" ],
+        "description" : "Returns a list of registred customers",
+        "operationId" : "getCustomers",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfully returned a list of customers",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/CustomerResponse"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "managedServices" ]
+      },
+      "post" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Create a customer",
+        "operationId" : "createCustomer",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "customer",
+          "description" : "The new customer details",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/CreateCustomerRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully created new customer.",
+            "schema" : {
+              "$ref" : "#/definitions/CustomerResponse"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "Customer with this ID not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedService" ]
+      },
+      "put" : {
+        "tags" : [ "Desk", "Managed Services" ],
+        "description" : "Update a customer",
+        "operationId" : "updateCustomer",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "customer",
+          "description" : "The updated customer data.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/UpdateCustomerRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully updated a customer",
+            "schema" : {
+              "$ref" : "#/definitions/CustomerResponse"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "Customer with this ID not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "managedServices" ]
+      }
+    },
+    "/system/status" : {
+      "get" : {
+        "tags" : [ "Desk", "Customer", "Managed Services" ],
+        "description" : "Gets the overall system and emergency switch status",
+        "operationId" : "getSystemStatus",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned system status response.",
+            "schema" : {
+              "$ref" : "#/definitions/SystemStatusResponse"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "customer", "managedServices" ]
+      },
+      "post" : {
+        "tags" : [ "Desk", "Managed Services" ],
+        "description" : "Sets the status of emergency switch.",
+        "operationId" : "updateSystemStatus",
+        "parameters" : [ {
+          "name" : "emergencySwitchOn",
+          "in" : "query",
+          "description" : "Set true to switch ON or false to switch OFF.",
+          "required" : true,
+          "type" : "boolean"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Updated system ststus response.",
+            "schema" : {
+              "$ref" : "#/definitions/SystemStatusResponse"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "managedServices" ]
+      }
+    },
+    "/td/details" : {
+      "get" : {
+        "tags" : [ "Desk", "Customer", "Managed Services" ],
+        "description" : "Get the Term Deposit details including transactions",
+        "operationId" : "getTermDepositDetailsById",
+        "parameters" : [ {
+          "name" : "tdId",
+          "in" : "query",
+          "description" : "The identifier of the specific TD.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a TD details",
+            "schema" : {
+              "$ref" : "#/definitions/TdDetailsResponse"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "Not found the customer or TD by provided identificators.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "customer", "managedServices" ]
+      }
+    },
+    "/td/closure" : {
+      "get" : {
+        "tags" : [ "Desk", "Customer" ],
+        "description" : "Get the Term Deposit Closure details that created over early termination notice processing. Contains information about penalty and final payments.",
+        "operationId" : "getTermDepositClosureById",
+        "parameters" : [ {
+          "name" : "tdId",
+          "in" : "query",
+          "description" : "The identifier of the specific TD.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a TD details",
+            "schema" : {
+              "$ref" : "#/definitions/TdClosureResponse"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "Not found the TD or TD closure by provided identificators.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "customer" ]
+      }
+    },
+    "/td/maturity" : {
+      "get" : {
+        "tags" : [ "Desk" ],
+        "description" : "Get the list of Term Deposits that will mature between now and a given date",
+        "operationId" : "getTermDepositMaturity",
+        "parameters" : [ {
+          "name" : "date",
+          "in" : "query",
+          "description" : "the date for which Term Deposits should be queried. The date format is as defined by RFC 3339, section 5.6.",
+          "required" : true,
+          "type" : "string",
+          "format" : "date"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a list of TDs",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/TdResponse"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk" ]
+      }
+    },
+    "/td" : {
+      "get" : {
+        "tags" : [ "Desk", "Customer", "Managed Services" ],
+        "description" : "Get the list of a customer's TDs, or a specific TD. Either the customerId or id parameter must be set. The status parameter is only used if searching by customer id.",
+        "operationId" : "getTermDepositsByCustomer",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "query",
+          "description" : "The identifier of the customer whose TDs are queried",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "id",
+          "in" : "query",
+          "description" : "The identifier of a TD to query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "Pending", "Active", "Matured", "Failed", "PendingClose", "FailedClose", "Closed" ]
+          },
+          "collectionFormat" : "multi"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a list of TDs",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/TdResponse"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "Not found the customer or TD by provided identificators.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "customer", "managedServices" ]
+      },
+      "post" : {
+        "tags" : [ "Desk", "Customer" ],
+        "description" : "Create a list of TDs",
+        "operationId" : "createTermDeposits",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "createTdRequests",
+          "description" : "The list of TDs to create",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/CreateTdBatchRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully created a list of TDs",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/TdResponse"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "customer" ]
+      },
+      "delete" : {
+        "tags" : [ "Desk", "Customer" ],
+        "description" : "request to close TD with the reason",
+        "operationId" : "closeTermDeposit",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "closeTdRequest",
+          "description" : "The request to close TD",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/CloseTdRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully deleted TD",
+            "schema" : {
+              "$ref" : "#/definitions/TdResponse"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "The TD not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "customer" ]
+      }
+    },
+    "/td/validate" : {
+      "post" : {
+        "tags" : [ "Desk", "Customer" ],
+        "description" : "Submits a list of TDs for validation. The server will validate and enrich the term deposits and send them back with their rates and term properly calculated, or will send back an error if the term deposit is invalid. The server won't store the term deposits nor process them further; this operation can be used as a dry-run, or to let the client know what the final term deposit rate will be.",
+        "operationId" : "validateTermDeposits",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "validateTdRequests",
+          "description" : "The list of TDs to validate",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/CreateTdBatchRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully validated a list of TDs",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/TdResponse"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "desk", "customer" ]
+      }
+    },
+    "/td/mature" : {
+      "post" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Forces a TD status to ForcedMature, once all maturity errors are fixed",
+        "operationId" : "forceMatureTermDeposit",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "matureTdRequest",
+          "description" : "The identifier of the TD to mature",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/MatureTdRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully updated the term deposit.",
+            "schema" : {
+              "$ref" : "#/definitions/TdResponse"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "Term deposit with this ID not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedService" ]
+      }
+    },
+    "/cacheReport/files" : {
+      "get" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Returns a list of Cache Report Files that have been created to deliver accrual and liquidation messages.",
+        "operationId" : "getCacheReportFiles",
+        "parameters" : [ {
+          "name" : "createDate",
+          "in" : "query",
+          "description" : "The Cache Report Files creation date. The date format is as defined by RFC 3339, section 5.6. If not specified then current date will be used.",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfully returned a list of matched Cache Report Files.",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/CacheReportFile"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/cacheReport/file/details" : {
+      "get" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Returns the Cache Report File for the specified ID.",
+        "operationId" : "getCacheReportFileById",
+        "parameters" : [ {
+          "name" : "fileId",
+          "in" : "query",
+          "description" : "The identifier of the CacheReportFile.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfully returned the Cache Report File.",
+            "schema" : {
+              "$ref" : "#/definitions/CacheReportFile"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "The Cache Report File with the id is not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/cacheReport/messages" : {
+      "get" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Returns a list of Cache Report Messages that have been generated for accrual and liquidation notifications according to request parameters. At least the valueDate or cacheReportFileId parameter must be specified.",
+        "operationId" : "getCacheReportMessages",
+        "parameters" : [ {
+          "name" : "valueDate",
+          "in" : "query",
+          "description" : "The date on which the message is relevant to the data. The date format is as defined by RFC 3339, section 5.6. If not specified then the parameter will not be used in the query.",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "fileId",
+          "in" : "query",
+          "description" : "The identifier of the CacheReportFile that holds information about the file used to send or receive the messages. If not specified then the parameter will not be used in the query.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "The statuses for CacheReport Message to query. If not specified then the parameter will not be used in the query.",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "Pending", "Sent", "Success", "Error", "Timeout", "Resent", "ValidationFailed", "Ignored" ]
+          },
+          "collectionFormat" : "multi"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfully returned a list of Cache Report Messages",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/CacheReportMessage"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/cacheReport/message/details" : {
+      "get" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Returns the Cache Report Message for the specified ID.",
+        "operationId" : "getCacheReportMessageById",
+        "parameters" : [ {
+          "name" : "messageId",
+          "in" : "query",
+          "description" : "The identifier of the CacheReportMessage.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfully returned the Cache Report Message.",
+            "schema" : {
+              "$ref" : "#/definitions/CacheReportMessage"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "The Cache Report Message with the ID is not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/cacheReport/messages/files" : {
+      "get" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Returns a list of Cache Report Files that contain a specific message. Each message may be mentioned in several files (request, response, resend).",
+        "operationId" : "getCacheReportFilesByMessageId",
+        "parameters" : [ {
+          "name" : "messageId",
+          "in" : "query",
+          "description" : "Unique identifier for the Cache Report Message.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfully returned a list of matched Cache Report Files that contain the specified message.",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/CacheReportFile"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/cacheReport/tdItems" : {
+      "get" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Returns a list of Cache Report TdItems that have been generated for accrual and liquidation notifications per Term Deposit. At least one parameter must be specified.",
+        "operationId" : "getCacheReportTdItems",
+        "parameters" : [ {
+          "name" : "valueDate",
+          "in" : "query",
+          "description" : "The date on which the CacheReportTdItem is relevant to the data. The date format is as defined by RFC 3339, section 5.6. If not specified then the parameter will not be used in the query.",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        }, {
+          "name" : "messageId",
+          "in" : "query",
+          "description" : "The identifier of the CacheReportMessage used to accumulate the TdItem to message. If not specified then the parameter will not be used in the query.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "The statuses for CacheReportTdItem to query. If not specified then the parameter will not be used in the query.",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string",
+            "enum" : [ "Pending", "Processed", "Ignored" ]
+          },
+          "collectionFormat" : "multi"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfully returned a list of Cache Report Td Items",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/CacheReportTdItem"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/cacheReport/td/tdItems" : {
+      "get" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Returns a list of Cache Report TdItems that have been generated for accrual and liquidation notifications for the Term Deposit with the specified ID.",
+        "operationId" : "getCacheReportMessagesByTdId",
+        "parameters" : [ {
+          "name" : "tdId",
+          "in" : "query",
+          "description" : "The identifier of the Term Deposit that been used to generate cache report TdItems.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfully returned a list of Cache Report TdItems for the Term Deposit.",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/CacheReportTdItem"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "The Term Deposit for the specified ID is not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/cacheReport/resend" : {
+      "post" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Resends the selected Cache Report Messages in a new file.",
+        "operationId" : "resendCacheReportMessages",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "resendRequest",
+          "description" : "The request with CachReportMessages to be resend in a new file.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/CacheReportResendMessagesRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfully returned a list of Cache Report Messages that been resend",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/CacheReportMessage"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/scheduledJob" : {
+      "get" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Returns a list of scheduled jobs ran on a given day",
+        "operationId" : "getScheduledJobs",
+        "parameters" : [ {
+          "name" : "date",
+          "in" : "query",
+          "description" : "The scheduled job run date. The date format is as defined by RFC 3339, section 5.6. If not specified then current date will be used.",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Succesfully returned a list of scheduled jobs.",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ScheduledJob"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/userAudit" : {
+      "get" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Get a list of user audit records",
+        "operationId" : "getUserAudit",
+        "parameters" : [ {
+          "name" : "userName",
+          "in" : "query",
+          "description" : "The user name whose audit is queried",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "date",
+          "in" : "query",
+          "description" : "The date for which audit is queried. If not specified, the current date is used",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a list of audit records",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/UserAudit"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/userAudit/details" : {
+      "get" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Get the entity modified by the action represented by a user audit record",
+        "operationId" : "getUserAuditDetails",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "The id of the user audit",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned the user session details",
+            "schema" : {
+              "$ref" : "#/definitions/UserAuditDetails"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "User audit record not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/userSession" : {
+      "get" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Get a list of user sessions",
+        "operationId" : "getUserSessions",
+        "parameters" : [ {
+          "name" : "userName",
+          "in" : "query",
+          "description" : "The user name whose sessions are queried",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "date",
+          "in" : "query",
+          "description" : "The date for which sessions are queried. If not specified, the current date is used",
+          "required" : false,
+          "type" : "string",
+          "format" : "date"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a list of sessions",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/UserSession"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    },
+    "/userSession/details" : {
+      "get" : {
+        "tags" : [ "Managed Services" ],
+        "description" : "Get details of a user session, including audit records",
+        "operationId" : "getUserSessionDetails",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "The id of the user session",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned the user session details",
+            "schema" : {
+              "$ref" : "#/definitions/UserSessionDetails"
+            }
+          },
+          "400" : {
+            "description" : "Invalid request",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          },
+          "404" : {
+            "description" : "Batch not found.",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "x-security-scopes" : [ "managedServices" ]
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "Bearer" : {
+      "description" : "For accessing the API a valid JWT token must be passed in all the queries in\nthe 'Authorization' header.\n\nA valid JWT token is generated by the API and retourned as answer of a call\nto the route /login giving a valid user & password.\n\nThe following syntax must be used in the 'Authorization' header :\n\n    Bearer xxxxxx.yyyyyyy.zzzzzz\n    \n",
+      "type" : "apiKey",
+      "name" : "Authorization",
+      "in" : "header"
+    }
+  },
+  "definitions" : {
+    "Batch" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "Unique batch identifier"
+        },
+        "customerId" : {
+          "type" : "string",
+          "description" : "Identifier of the customer who submitted the batch"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "Name ofthe file containing the batch"
+        },
+        "dateTimeStamp" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Timestamp of the batch"
+        },
+        "status" : {
+          "$ref" : "#/definitions/BatchStatus"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "Error message if the batch failed"
+        }
+      }
+    },
+    "BatchDetails" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/Batch"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "termDeposits" : {
+            "type" : "array",
+            "description" : "The list of TDs forming the batch",
+            "items" : {
+              "$ref" : "#/definitions/TdResponse"
+            }
+          }
+        }
+      } ]
+    },
+    "BatchStatus" : {
+      "type" : "string",
+      "description" : "The status of a TD batch",
+      "enum" : [ "Success", "Failed" ]
+    },
+    "RateTableBase" : {
+      "type" : "object",
+      "required" : [ "name" ],
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "description" : "unique name for the RateTable."
+        }
+      }
+    },
+    "CreateRateTableRequest" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/RateTableBase"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "rates" : {
+            "type" : "array",
+            "description" : "The list of rates for the various supported terms",
+            "items" : {
+              "$ref" : "#/definitions/TermRateUpdate"
+            }
+          }
+        }
+      } ]
+    },
+    "UpdateRateTableRequest" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/RateTableBase"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "the Rate Table id."
+          },
+          "rates" : {
+            "type" : "array",
+            "description" : "The list of rates for the various supported terms",
+            "items" : {
+              "$ref" : "#/definitions/TermRateUpdate"
+            }
+          }
+        }
+      } ]
+    },
+    "RateTableResponse" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/RateTableBase"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "the Rate Table id. Generated by server."
+          },
+          "rateTableType" : {
+            "$ref" : "#/definitions/RateTableType"
+          },
+          "status" : {
+            "$ref" : "#/definitions/RateTableStatus"
+          },
+          "minAmount" : {
+            "type" : "number",
+            "description" : "The minimum principal amount (inclusive) to which this rate table applies."
+          },
+          "maxAmount" : {
+            "type" : "number",
+            "description" : "The maximum principal amount (exclusive) to which this rate table applies."
+          },
+          "frequencyType" : {
+            "$ref" : "#/definitions/InterestFrequency"
+          },
+          "scheduleType" : {
+            "$ref" : "#/definitions/RateTableScheduleType"
+          },
+          "effectiveDateTime" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "Date at which the rate table was created or updated. The date format is as defined by RFC 3339, section 5.6."
+          },
+          "endDateTime" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "For historical records, this field indicates till what time that version of a rate table was effective. The date format is as defined by RFC 3339, section 5.6."
+          },
+          "rates" : {
+            "type" : "array",
+            "description" : "The list of rates for the various supported terms.",
+            "items" : {
+              "$ref" : "#/definitions/TermRateResponse"
+            }
+          }
+        }
+      } ]
+    },
+    "RateTableType" : {
+      "type" : "string",
+      "description" : "Defines type for RateTable entries. Base is a rate for base banks interest. Category is an additional adjustment for a group of customers in the category. Custom is the adjustment assigned at a customer or customer group level.",
+      "enum" : [ "base", "category", "custom" ]
+    },
+    "RateTableStatus" : {
+      "type" : "string",
+      "description" : "The status for rate table. Status defines whether the rates might be used (Active), removed (Closed) or temporary inactive (Suspended).",
+      "enum" : [ "active", "suspended", "closed" ]
+    },
+    "EarlyTerminationPenaltyRequest" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "elapsedTerm" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Maximum percentage of elapsed term to which this penalty applies",
+          "minimum" : 0,
+          "maximum" : 100,
+          "exclusiveMaximum" : true
+        },
+        "interestReduction" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Percentage interest penalty",
+          "minimum" : 0,
+          "maximum" : 100,
+          "exclusiveMaximum" : true
+        }
+      }
+    },
+    "EarlyTerminationPenaltyResponse" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/EarlyTerminationPenaltyRequest"
+      }, { } ]
+    },
+    "CustomerRateTable" : {
+      "type" : "object",
+      "properties" : {
+        "minAmount" : {
+          "type" : "number",
+          "description" : "The minimum principal amount (inclusive) to which this rate table applies"
+        },
+        "maxAmount" : {
+          "type" : "number",
+          "description" : "The maximum principal amount (exclusive) to which this rate table applies"
+        },
+        "frequencyType" : {
+          "$ref" : "#/definitions/InterestFrequency"
+        },
+        "rates" : {
+          "type" : "array",
+          "description" : "The list of rates for the various supported terms",
+          "items" : {
+            "$ref" : "#/definitions/TermRateResponse"
+          }
+        },
+        "effectiveDateTime" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Date at which the rate table was created or updated. The date format is as defined by RFC 3339, section 5.6."
+        },
+        "endDateTime" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "For historical records, this field indicates till what time that version of a rate table was effective. The date format is as defined by RFC 3339, section 5.6."
+        }
+      },
+      "description" : "Reflects composite rates for indivial customer."
+    },
+    "TermRateUpdate" : {
+      "type" : "object",
+      "required" : [ "rate", "tenor" ],
+      "properties" : {
+        "tenor" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "the term in months to which this rate applies"
+        },
+        "rate" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "the rate in basis points"
+        }
+      }
+    },
+    "TermRateResponse" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/TermRateUpdate"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "effectiveDateTime" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "The date and time from which this rate is effective."
+          }
+        }
+      } ]
+    },
+    "InterestFrequency" : {
+      "type" : "string",
+      "description" : "Interest payment frequency",
+      "enum" : [ "atMaturity", "monthly", "quarterly", "halfyearly" ]
+    },
+    "RateTableScheduleType" : {
+      "type" : "string",
+      "description" : "The schedule types for Rate Tables to define when the rate will expire.",
+      "enum" : [ "unlimited", "daily", "weekly" ]
+    },
+    "CacheReportFile" : {
+      "type" : "object",
+      "required" : [ "filename", "id", "type" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "Unique identifier for the Cache Report File."
+        },
+        "filename" : {
+          "type" : "string",
+          "description" : "The name of file"
+        },
+        "location" : {
+          "type" : "string",
+          "description" : "The absolute path to the file"
+        },
+        "createDateTime" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The date and time of the registration of the file in DB"
+        },
+        "updateDateTime" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The date and time of last update"
+        },
+        "type" : {
+          "$ref" : "#/definitions/CacheReportFileType"
+        },
+        "status" : {
+          "$ref" : "#/definitions/CacheReportFileStatus"
+        },
+        "comment" : {
+          "type" : "string",
+          "description" : "The text comment about an error or special condition."
+        }
+      }
+    },
+    "CacheReportFileType" : {
+      "type" : "string",
+      "description" : "The types of files for CacheReport notification with Accrual and Liquidation messages.",
+      "enum" : [ "Request", "Acknowledgement", "Response", "ResendRequest" ]
+    },
+    "CacheReportFileStatus" : {
+      "type" : "string",
+      "description" : "The statues for CacheReport File with Accrual and Liquidation messages.",
+      "enum" : [ "Pending", "Sent", "Acknowledged", "Processed", "Error" ]
+    },
+    "CacheReportMessage" : {
+      "type" : "object",
+      "required" : [ "amount", "customerId", "id", "type", "valueDate" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "Unique identifier for the Cache Report Message."
+        },
+        "customerId" : {
+          "type" : "string",
+          "description" : "Identifier of the customer that owns the account for the Cache Report Message."
+        },
+        "customerName" : {
+          "type" : "string",
+          "description" : "Name of the customer that owns the account for the Cache Report Message."
+        },
+        "valueDate" : {
+          "type" : "string",
+          "format" : "date",
+          "description" : "The date on which the message is relevant to the data."
+        },
+        "amount" : {
+          "type" : "number",
+          "description" : "The accrual or liquidation amount in the currency of TD."
+        },
+        "createDateTime" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The date and time of the registration of the Message in DB"
+        },
+        "updateDateTime" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The date and time of last update"
+        },
+        "type" : {
+          "$ref" : "#/definitions/CacheReportMessageType"
+        },
+        "status" : {
+          "$ref" : "#/definitions/CacheReportMessageStatus"
+        },
+        "comment" : {
+          "type" : "string",
+          "description" : "The text comment about an error or special condition."
+        },
+        "timeoutCounter" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The number of times the message been timed out after it been sent. The field plan to be used by support for collecting statistic information and investigation of support cases."
+        }
+      }
+    },
+    "CacheReportMessageType" : {
+      "type" : "string",
+      "description" : "The types of messages for Cache Report notification about Accrual and Liquidation.",
+      "enum" : [ "Accrual", "Liquidation" ]
+    },
+    "CacheReportMessageStatus" : {
+      "type" : "string",
+      "description" : "The statues that can be assigned to the Cache Report Message.",
+      "enum" : [ "Pending", "Sent", "Success", "Error", "Timeout", "Resent", "ValidationFailed", "Ignored" ]
+    },
+    "CacheReportResendMessagesRequest" : {
+      "type" : "object",
+      "required" : [ "messageIds" ],
+      "properties" : {
+        "messageIds" : {
+          "type" : "array",
+          "description" : "The identifiers of CacheReportMessage records that need to be resent.",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "CacheReportTdItem" : {
+      "type" : "object",
+      "required" : [ "amount", "id", "termDepositId", "type", "valueDate" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "Unique identifier for the Cache Report TdItem."
+        },
+        "termDepositId" : {
+          "type" : "string",
+          "description" : "Identifier of the Term Deposit used to create the Cache Report TdItem"
+        },
+        "termDepositClientAccountHolderReference" : {
+          "type" : "string",
+          "description" : "Account information of the Term Deposit used to create the Cache Report TdItem"
+        },
+        "termDepositMaturityDate" : {
+          "type" : "string",
+          "format" : "date",
+          "description" : "The maturity date for teh linked term deposit."
+        },
+        "messageId" : {
+          "type" : "string",
+          "description" : "Unique identifier for the Cache Report Message that accumulates the data from the TdItem. The field is null if has not been collected by any message."
+        },
+        "valueDate" : {
+          "type" : "string",
+          "format" : "date",
+          "description" : "The date on which the TdItem is relevant to the data."
+        },
+        "amount" : {
+          "type" : "number",
+          "description" : "The accrual or liquidation amount in the currency of TD."
+        },
+        "createDateTime" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The date and time of the registration of the TdItem in DB."
+        },
+        "updateDateTime" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The date and time of last update"
+        },
+        "type" : {
+          "$ref" : "#/definitions/CacheReportTdItemType"
+        },
+        "status" : {
+          "$ref" : "#/definitions/CacheReportTdItemStatus"
+        },
+        "comment" : {
+          "type" : "string",
+          "description" : "The text comment about an error or special condition."
+        }
+      }
+    },
+    "CacheReportTdItemType" : {
+      "type" : "string",
+      "description" : "The types are for Cache Report TdItems to keep track of accrual and liquidation notifications per TD. > *  'Accrual' - The accrual to notify about ongoing interest that not necessary to be paid on the day. *  'AccrualForLiquidation' - The accrual to notify about interest that scheduled to be paid on the day. As a rule the Liquidation message will be generated for the same amount on the day. *  'Liquidation' - The interest amount that scheduled to be paid on the day.",
+      "enum" : [ "Accrual", "AccrualForLiquidation", "Liquidation" ]
+    },
+    "CacheReportTdItemStatus" : {
+      "type" : "string",
+      "description" : "The status that reflects processing stages of the Cache Report TdItem. > * 'Pending' - The TdItem has been created but not collected to be accumulated by any message. * 'Processed' - The TdItem has been collected by CacheReportMessage * 'Ignored' - The TdItem has been created but not need to be collected by messages. For example if the item's value date is non business day.",
+      "enum" : [ "Pending", "Processed", "Ignored" ]
+    },
+    "CustomerBase" : {
+      "type" : "object",
+      "required" : [ "VBTAPIUser", "active", "baseRateTableName", "cacheTDAccountNumber", "fileactiveId", "marginRate", "name" ],
+      "properties" : {
+        "fileactiveId" : {
+          "type" : "string",
+          "description" : "Fileactive Id of the customer."
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "Full customer name"
+        },
+        "marginRate" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Customer margin in basis points as agreed with the bank"
+        },
+        "address1" : {
+          "type" : "string",
+          "description" : "Address field 1"
+        },
+        "address2" : {
+          "type" : "string",
+          "description" : "Address field 2"
+        },
+        "address3" : {
+          "type" : "string",
+          "description" : "Address field 3"
+        },
+        "address4" : {
+          "type" : "string",
+          "description" : "Address field 4"
+        },
+        "address5" : {
+          "type" : "string",
+          "description" : "Address field 5"
+        },
+        "sendRateEmail" : {
+          "type" : "boolean",
+          "description" : "Flag to indicate whether the customer should receive an email when base rates are loaded"
+        },
+        "email" : {
+          "type" : "string",
+          "format" : "email",
+          "description" : "Customer email address for notifications"
+        },
+        "baseRateTableName" : {
+          "type" : "string",
+          "description" : "The name of the base rate table the customer belongs to."
+        },
+        "categoryRateTable" : {
+          "type" : "string",
+          "description" : "Identifier of the rate category the customer belongs to. Use empty string if the customer doesn't belong to any rate category. Default value is null."
+        },
+        "customRateTable" : {
+          "type" : "string",
+          "description" : "Identifier of the custom rate the customer belongs to. Use empty string if the customer doesn't have a custom rate. Default value is null."
+        },
+        "cacheTDAccountNumber" : {
+          "type" : "string",
+          "description" : "Account number of the Customer's CACHE TD account"
+        },
+        "VBTAPIUser" : {
+          "type" : "string",
+          "description" : "Customer's VBT API user name"
+        },
+        "active" : {
+          "type" : "boolean",
+          "description" : "Flag to indicate whether the Customer is active. Must be active to create TDs.",
+          "default" : true
+        },
+        "fileactiveUpload" : {
+          "type" : "boolean",
+          "description" : "Flag to indicate whether the Customer is allowed to create TDs using Fileactive.",
+          "default" : false
+        }
+      }
+    },
+    "CreateCustomerRequest" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/CustomerBase"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "VBTAPIPassword" : {
+            "type" : "string",
+            "description" : "Customer's VBT API password. If not null then the value will override previous value otherwise the previous value will stay unchanged."
+          }
+        }
+      } ]
+    },
+    "UpdateCustomerRequest" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/CustomerBase"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "VBTAPIPassword" : {
+            "type" : "string",
+            "description" : "Customer's VBT API password. If not null then the value will override previous value otherwise the previous value will stay unchanged."
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "unique identifier of the customer"
+          }
+        }
+      } ]
+    },
+    "CustomerResponse" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/CustomerBase"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "unique identifier of the customer"
+          }
+        }
+      } ]
+    },
+    "CreateTdBatchRequest" : {
+      "type" : "object",
+      "required" : [ "termDeposits" ],
+      "properties" : {
+        "termDeposits" : {
+          "type" : "array",
+          "description" : "The list of Term Deposits to create",
+          "items" : {
+            "$ref" : "#/definitions/CreateTdRequest"
+          }
+        },
+        "batchName" : {
+          "type" : "string",
+          "description" : "the name of the batch. If the batch name is not empty, the server will check that the customer hasn't sent the same batch before. This can be used to prevent accidental sending of the same file/request twice"
+        },
+        "customerId" : {
+          "type" : "string",
+          "description" : "Identifier of the customer to whom the batch belongs"
+        }
+      }
+    },
+    "CreateTdRequest" : {
+      "type" : "object",
+      "required" : [ "customerId", "principal", "startDate" ],
+      "properties" : {
+        "customerId" : {
+          "type" : "string",
+          "description" : "Identifier of the customer to whom the TD belongs"
+        },
+        "customerInternalReference" : {
+          "type" : "string",
+          "description" : "A free text field that can be used by the API client to store for instance their internal reference."
+        },
+        "principal" : {
+          "type" : "number",
+          "description" : "Principal amount"
+        },
+        "currency" : {
+          "type" : "string",
+          "description" : "3-character currency ISO code",
+          "minLength" : 3,
+          "maxLength" : 3
+        },
+        "term" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "TD term in month or days, depending on 'termType' chosen. If the 'maturityDate' is specified then the 'term' property is ignored."
+        },
+        "termType" : {
+          "$ref" : "#/definitions/TermType"
+        },
+        "clientAccountHolderReference" : {
+          "type" : "string",
+          "description" : "Originating Client Account Holder Reference"
+        },
+        "frequencyType" : {
+          "$ref" : "#/definitions/InterestFrequency"
+        },
+        "startDate" : {
+          "type" : "string",
+          "format" : "date",
+          "description" : "Date at which the Term Deposit should take effect. This option is only available to Bank users. For Customer users, the field should not be set. The date format is as defined by RFC 3339, section 5.6."
+        },
+        "intendedDate" : {
+          "type" : "string",
+          "format" : "date",
+          "description" : "Date at which the Term Deposit intended to be created in the system. The  property used for verification and mostly to avoid inception of term deposits by bulk from wrong file. The date format is as defined by RFC 3339, section 5.6."
+        },
+        "maturityDate" : {
+          "type" : "string",
+          "format" : "date",
+          "description" : "TD maturity date. If 'maturityDate' is specified then the 'term' field is ignored. The date format is as defined by RFC 3339, section 5.6.  If 'maturityDate' occurs on a non-business day, it will be automatically adjusted to occur on the next business day."
+        },
+        "rate" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The term deposit rate in basis points. This field is only available to Bank Users. For Customer users, the field will be ignored"
+        },
+        "allowDuplicates" : {
+          "type" : "boolean",
+          "description" : "If set to true, the server will accept the Term Deposit even if another Term Deposit was sent on the same day with the same Account, Principal, Tenor, Frequency Type",
+          "default" : false
+        }
+      }
+    },
+    "CloseTdRequest" : {
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "Unique TD identifier."
+        },
+        "reasonForClosure" : {
+          "$ref" : "#/definitions/ReasonForClosure"
+        }
+      }
+    },
+    "MatureTdRequest" : {
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "Unique TD identifier."
+        }
+      },
+      "description" : "the request to force a TD be marked as Matured. This is used by Managed Services when a TD initially failed to mature, but the issue was fixed outside of TD Server, and the TD can be manually marked as Matured."
+    },
+    "TdResponse" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/CreateTdRequest"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "Unique TD identifier."
+          },
+          "entryDateTime" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "Date at which the TD was submitted. The date format is as defined by RFC 3339, section 5.6."
+          },
+          "closeNoticeDateTime" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "Date at which the TD close request was submitted. The date format is as defined by RFC 3339, section 5.6."
+          },
+          "reasonForClosure" : {
+            "$ref" : "#/definitions/ReasonForClosure"
+          },
+          "settlementDate" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "TD settlement date. This is the same as the maturity date unless the maturity date is a non-business day, in which case the settlement date will be the next business day The date format is as defined by RFC 3339, section 5.6."
+          },
+          "rate" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "The term deposit rate in basis points"
+          },
+          "rateOverride" : {
+            "type" : "boolean",
+            "description" : "true if the rate has been overridden by the bank or false if the rate has been generated by system"
+          },
+          "marginRate" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "The term deposit customer margin rate in basis points"
+          },
+          "whtRate" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "The term deposit withholding tax rate in basis points"
+          },
+          "dailyInterestAmount" : {
+            "type" : "number",
+            "description" : "daily interest amount calculated by the server after the TD is created."
+          },
+          "termDepositStatus" : {
+            "$ref" : "#/definitions/TermDepositStatus"
+          },
+          "calculatedTerm" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "the actual term in days calculated by the server based on the TD request term, termType and maturityDate fields"
+          },
+          "termDepositTechnicalStatus" : {
+            "$ref" : "#/definitions/TermDepositTechnicalStatus"
+          },
+          "statusMessage" : {
+            "type" : "string",
+            "description" : "describe errors or important messages during processing the Term Deposit. For example validation, transaction, etc."
+          },
+          "totalInterest" : {
+            "type" : "number",
+            "description" : "total interest that will be earned by the client over the life of the Term Deposit"
+          },
+          "totalWht" : {
+            "type" : "number",
+            "description" : "total withholding tax that will be paid over the life of the Term Deposit"
+          },
+          "totalMargin" : {
+            "type" : "number",
+            "description" : "total margin that will be earned by the customer over the life of the Term Deposit"
+          },
+          "batchId" : {
+            "type" : "string",
+            "description" : "the identifier of the batch object to which this term deposit belongs"
+          },
+          "requestedMaturityDate" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "The maturity date specified in the TD creation request. If requestedMaturityDate occurs on a non-business day, the TD maturity date will be adjusted to occur on the next business day."
+          }
+        }
+      } ]
+    },
+    "TdDetailsResponse" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/TdResponse"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "transactions" : {
+            "type" : "array",
+            "description" : "The list of transactions issued for the TD",
+            "items" : {
+              "$ref" : "#/definitions/Transaction"
+            }
+          }
+        }
+      } ]
+    },
+    "TdClosureResponse" : {
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "Unique identifier of the Term Deposit Closure."
+        },
+        "termDepositId" : {
+          "type" : "string",
+          "description" : "Unique identifier of the Term Deposit that been requested to terminate earlier."
+        },
+        "closeDate" : {
+          "type" : "string",
+          "format" : "date",
+          "description" : "The date of closure of the Term Deposit. Calculated on the day of notice to terminate according to the reason for closure."
+        },
+        "interestReduction" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The interest reduction value valid on the time of notice of termination. The value extracted from EarlyTerminationPenalty table and chosen according to calculated TermElapsed property."
+        },
+        "interestAfterReduction" : {
+          "type" : "number",
+          "description" : "The Client Interest after reduction for period form start to closure. The amount of money that should be paid to Client taking into account the interestReduction value and total interest for the Term Deposit."
+        },
+        "marginAfterReduction" : {
+          "type" : "number",
+          "description" : "The margin after reduction that bank is liable to pay by close date."
+        },
+        "whtAfterReduction" : {
+          "type" : "number",
+          "description" : "The withholding tax that bank should pay on behalf of client for the interest earned by client after reduction."
+        },
+        "totalAfterReduction" : {
+          "type" : "number",
+          "description" : "The total amount that bank is liable to pay for the deposit after reduction because of the early termination. That includes client interest, WHT and margin."
+        },
+        "interestByClosure" : {
+          "type" : "number",
+          "description" : "The the accumulated amount of client interest that will have been paid by bank according to original transaction schedule up to the close date. It includes client interest transactions that are in Executed or Accepted status prior the close date."
+        },
+        "whtByClosure" : {
+          "type" : "number",
+          "description" : "The amount of accumulated withholding tax that will have been be paid by bank according to original transaction schedule up to the close date. It includes WHT transactions that are in Executed or Accepted status prior the close date."
+        },
+        "marginByClosure" : {
+          "type" : "number",
+          "description" : "The amount of accumulated customer margin that will have been be paid by bank according to original transaction schedule up to the close date. It includes margin transactions that are in Executed or Accepted status prior the close date."
+        },
+        "totalByClosure" : {
+          "type" : "number",
+          "description" : "Total accumulated amount that will have been paid for the deposit according to original transaction schedule up to the close date. It includes client interest, WHT and margin transactions transactions that are in Executed or Accepted status prior the close date."
+        },
+        "finalClientInterest" : {
+          "type" : "number",
+          "description" : "The final client interest to be paid by bank on the close date. If the value is negative then bank did overpay the interest and the amount will be withhold from principle return value. The transaction will be created only if the value is positive."
+        },
+        "finalWht" : {
+          "type" : "number",
+          "description" : "The final withholding tax to be paid by bank on the close date. If the value is negative then bank did overpay the tax and the amount will be withhold from principle return value. The transaction will be created only if the value is positive."
+        },
+        "finalMargin" : {
+          "type" : "number",
+          "description" : "The final margin to be paid by bank on the close date. If the value is negative then bank did overpay the margin and the amount will be withhold from principle return value. The transaction will be created only if the value is positive."
+        },
+        "bankOverpay" : {
+          "type" : "number",
+          "description" : "The amount that bank did overpay for all transactions including client interest, WHT and margin up to the close date and reduction according to EarlyTerminationPenalty rates. If the value is negative then bank is underpay and the amount is the accumulative amount to be paid by bank on the close date. If the amount if positive then it will be withhold from the principal return value."
+        },
+        "principalReturn" : {
+          "type" : "number",
+          "description" : "The principal that will be returned to client. That might be reduced from original principal amount if bank did overpay for the date of closure."
+        }
+      },
+      "description" : "Contains values calculated over Term Deposit early termination (closure) request."
+    },
+    "ReasonForClosure" : {
+      "type" : "string",
+      "description" : "If the request is made to close a TD, this is the reason for closure",
+      "enum" : [ "NoticePeriod", "Hardship", "System" ]
+    },
+    "Permission" : {
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "Unique permission identifier."
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "description of the permission"
+        }
+      },
+      "description" : "a permission assigned to a role"
+    },
+    "RoleStatus" : {
+      "type" : "string",
+      "description" : "the status of a user role",
+      "enum" : [ "Active", "Inactive" ]
+    },
+    "RoleBase" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "Unique role identifier."
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "the name of this role"
+        },
+        "status" : {
+          "$ref" : "#/definitions/RoleStatus"
+        },
+        "permissions" : {
+          "type" : "array",
+          "description" : "The list of permission identifiers assigned to this role",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      },
+      "description" : "a user role"
+    },
+    "CreateRoleRequest" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/RoleBase"
+      }, { } ]
+    },
+    "UpdateRoleRequest" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/RoleBase"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "unique identifier of the role"
+          }
+        }
+      } ]
+    },
+    "RoleResponse" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/RoleBase"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "unique identifier of the role"
+          }
+        }
+      } ]
+    },
+    "ScheduledJob" : {
+      "type" : "object",
+      "required" : [ "comment", "endDateTime", "id", "startDateTime", "status", "type" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "Id of the cronjob"
+        },
+        "status" : {
+          "$ref" : "#/definitions/ScheduledJobStatus"
+        },
+        "startDateTime" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Date time at which the job started"
+        },
+        "endDateTime" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Date time at which the job finished"
+        },
+        "type" : {
+          "$ref" : "#/definitions/ScheduledJobType"
+        },
+        "comment" : {
+          "type" : "string",
+          "description" : "The optional text comment associated with the job or the error message"
+        }
+      }
+    },
+    "ScheduledJobStatus" : {
+      "type" : "string",
+      "description" : "the completion status of a scheduled job",
+      "enum" : [ "InProgress", "Complete", "Error" ]
+    },
+    "ScheduledJobType" : {
+      "type" : "string",
+      "description" : "The type of scheduled job run on the server. > * 'CloseDailyBaseRates' - This job closes all daily rate tables. The job is normally scheduled at the end of business day and at the end of calendar day. * 'CloseWeeklyBaseRates' -  This job closes all weekly rate tables. The job is normally scheduled at the end of business week and at the end of calendar week. * 'CleanupUserSessions' - This job cleans expired user sessions. * 'UpdateTransactionAndTermDepositStatus' - This job updates the status of all transactions to match with VBT and updates the TD status according to transactions and current date. * 'LoadCalendarFile' - This job loads new calendar files to update the holiday list. * 'GenerateCacheReportRequestFile' - This job generates new Cache report request files with accruals and liquidation messages. * 'ScanCacheReportResponseFiles' - This job loads Cache report response files. * 'ScanFileactiveUploadFolders' - This job scan a Fileactive folder for new files to create new term deposits.",
+      "enum" : [ "CloseDailyBaseRates", "CloseWeeklyBaseRates", "CleanupUserSessions", "UpdateTransactionAndTermDepositStatus", "LoadCalendarFile", "GenerateCacheReportRequestFile", "ScanCacheReportResponseFiles", "ScanFileactiveUploadFolders" ]
+    },
+    "SessionStatus" : {
+      "type" : "string",
+      "description" : "The status of a user session",
+      "enum" : [ "Active", "LogoutUser", "LogoutConcurrent", "LogoutExpired", "LogoutIdle" ]
+    },
+    "SystemStatusResponse" : {
+      "type" : "object",
+      "properties" : {
+        "systemStatus" : {
+          "$ref" : "#/definitions/SystemStatus"
+        },
+        "emergencySwitchOn" : {
+          "type" : "boolean",
+          "description" : "The status of emergency switch. True if switched ON or false if the switch is OFF."
+        }
+      },
+      "description" : "Response to reflect system level and emergency switch status."
+    },
+    "SystemStatus" : {
+      "type" : "string",
+      "description" : "The status of the overall system",
+      "enum" : [ "Active", "Suspended", "Closed" ]
+    },
+    "TermType" : {
+      "type" : "string",
+      "description" : "Unit of the term",
+      "enum" : [ "days", "months" ]
+    },
+    "TermDepositStatus" : {
+      "type" : "string",
+      "description" : "The term deposit current status",
+      "enum" : [ "Pending", "Active", "Matured", "Failed", "PendingClose", "FailedClose", "Closed", "PendingMature", "FailedMature", "ForcedMature" ]
+    },
+    "TermDepositTechnicalStatus" : {
+      "type" : "string",
+      "description" : "The term deposit technical status reflecting detailed information during processing",
+      "enum" : [ "AcknowledgeSuccess", "AcknowledgeFail", "SysCheckSuccess", "SysCheckFail", "ValidateSuccess", "ValidateFail", "EnrichSuccess", "EnrichFail", "StartProcessingSuccess", "StartProcessingFail", "CheckAccountBalanceSuccess", "CheckAccountBalanceFail", "CreateAccountSuccess", "CreateAccountFail", "TransferPrincipalSuccess", "TransferPrincipalFail", "CreateTransactionsSuccess", "CreateTransactionsFail", "SubmitTransactionsSuccess", "SubmitTransactionsFail", "EndProcessingSuccess", "EndProcessingFail", "StartRecoverySuccess", "StartRecoveryFail", "RevertPrincipalSuccess", "RevertPrincipalFail", "RevertTransactionsSuccess", "RevertTransactionsFail", "EndRecoverySuccess", "EndRecoveryFail", "CloseTdEnrichSuccess", "CloseTdEnrichFail", "CloseTdValidateSuccess", "CloseTdValidateFail", "CloseTdStartProcessingSuccess", "CloseTdStartProcessingFail", "CloseTdCancelTransactionsSuccess", "CloseTdCancelTransactionsFail", "CloseTdCalculatePenaltySuccess", "CloseTdCalculatePenaltyFail", "CloseTdCreateTransactionsSuccess", "CloseTdCreateTransactionsFail", "CloseTdSubmitTransactionsSuccess", "CloseTdSubmitTransactionsFail", "CloseTdEndProcessingSuccess", "CloseTdEndProcessingFail" ]
+    },
+    "Token" : {
+      "type" : "object",
+      "properties" : {
+        "token" : {
+          "type" : "string"
+        }
+      },
+      "example" : {
+        "token" : "token"
+      }
+    },
+    "Transaction" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "Unique transaction identifier"
+        },
+        "termDepositId" : {
+          "type" : "string",
+          "description" : "The Term Deposit Id that initiated the transation"
+        },
+        "vbtTransactionId" : {
+          "type" : "string",
+          "description" : "The reference of the transaction in VBT"
+        },
+        "vbtTransactionType" : {
+          "type" : "string",
+          "description" : "VBT Transaction Type",
+          "minLength" : 3,
+          "maxLength" : 3
+        },
+        "amount" : {
+          "type" : "number",
+          "description" : "Transaction amount"
+        },
+        "entryDateTime" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "The date and time of entry of the transaction"
+        },
+        "valueDate" : {
+          "type" : "string",
+          "format" : "date",
+          "description" : "The value date for the transaction"
+        },
+        "status" : {
+          "$ref" : "#/definitions/TransactionStatus"
+        },
+        "transactionIndex" : {
+          "type" : "number",
+          "description" : "the order in which transactions will be processed for the term deposit"
+        },
+        "transactionType" : {
+          "$ref" : "#/definitions/TransactionType"
+        }
+      }
+    },
+    "TransactionStatus" : {
+      "type" : "string",
+      "description" : "The status of a term deposit transaction",
+      "enum" : [ "Pending", "Accepted", "Released", "Settled", "Failed", "CancelledExternal", "CancelledInternal", "CancelFailed", "FailedRelease", "FailedSettle" ]
+    },
+    "TransactionType" : {
+      "type" : "string",
+      "description" : "The purpose of the transaction in the term deposit",
+      "enum" : [ "PrincipalTransfer", "GrossInterestPayment", "CustomerMarginFunding", "ClientInterestPayment", "WithholdingTax", "CustomerMargin", "PrincipalReturn" ]
+    },
+    "UserAudit" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "Unique audit record identifier"
+        },
+        "link" : {
+          "type" : "string",
+          "description" : "Identifier of the object this audit record refers to"
+        },
+        "action" : {
+          "$ref" : "#/definitions/UserAuditAction"
+        },
+        "dateTimeStamp" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Timestamp of the action"
+        },
+        "sessionId" : {
+          "type" : "string",
+          "description" : "Identifier of the session to which this audit record belongs"
+        }
+      }
+    },
+    "UserAuditDetails" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/UserAudit"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "rateTable" : {
+            "$ref" : "#/definitions/RateTableResponse"
+          },
+          "customer" : {
+            "$ref" : "#/definitions/CustomerResponse"
+          },
+          "termDeposit" : {
+            "$ref" : "#/definitions/TdResponse"
+          }
+        }
+      } ]
+    },
+    "UserAuditAction" : {
+      "type" : "string",
+      "description" : "The user action represented by an audit record",
+      "enum" : [ "CreateRateTable", "UpdateRateTable", "DeleteRateTable", "CloseRateTable", "SuspendRateTable", "ActivateRateTable", "CreateCustomer", "UpdateCustomer", "CreateTd", "CloseTdEarlyTermination", "CloseTdHardship", "CloseTdSystem", "UpdateTd", "MatureTd" ]
+    },
+    "UserSession" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "Unique session identifier"
+        },
+        "userName" : {
+          "type" : "string",
+          "description" : "User name"
+        },
+        "fullUserName" : {
+          "type" : "string",
+          "description" : "User full name"
+        },
+        "originatingIp" : {
+          "type" : "string",
+          "description" : "IP address from which the session originates"
+        },
+        "createDateTimeStamp" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Session start time"
+        },
+        "endDateTimeStamp" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Session end time"
+        },
+        "lastActionTimeStamp" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Time stamp of the last user action"
+        },
+        "status" : {
+          "$ref" : "#/definitions/SessionStatus"
+        },
+        "userType" : {
+          "$ref" : "#/definitions/UserType"
+        }
+      }
+    },
+    "UserSessionDetails" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/UserSession"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "userAudits" : {
+            "type" : "array",
+            "description" : "The list of TDs forming the batch",
+            "items" : {
+              "$ref" : "#/definitions/UserAudit"
+            }
+          }
+        }
+      } ]
+    },
+    "UserType" : {
+      "type" : "string",
+      "description" : "Type of user account",
+      "enum" : [ "customer", "desk", "managedServices", "system" ]
+    },
+    "ErrorResponse" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "string",
+          "description" : "Internal error code"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "Error message to describe the problem."
+        }
+      }
+    },
+    "credentials" : {
+      "type" : "object",
+      "properties" : {
+        "username" : {
+          "type" : "string",
+          "description" : "the user name"
+        },
+        "password" : {
+          "type" : "string",
+          "description" : "the user's password"
+        }
+      }
+    },
+    "inline_response_200" : {
+      "properties" : {
+        "status" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+}
