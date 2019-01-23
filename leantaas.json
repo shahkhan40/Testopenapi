@@ -1,0 +1,2081 @@
+{
+"swagger": "2.0",
+"info": {
+"version": "1.0",
+"title": "",
+"contact": {
+"name": ""
+},
+"license": {
+"name": "",
+"url": "http://licenseUrl"
+}
+},
+"host": "~^(?<branch>.+)\\-infusion\\-test\\.iqueue\\.com$",
+"basePath": "/",
+"tags": [
+{
+"name": "Volume And Utilization operations"
+},
+{
+"name": "Unit"
+},
+{
+"name": "Daily Report"
+},
+{
+"name": "List the files"
+}
+],
+"paths": {
+"/api/volume-utilization/volume-patient-hours": {
+"post": {
+"tags": [
+"Volume And Utilization operations"
+],
+"summary": "Get Volume And Patient Hours",
+"description": "Gets Volume And Patient Hours",
+"operationId": "getVolumeAndPatientHours",
+"schemes": [
+"http",
+"https"
+],
+"consumes": [
+"application/json"
+],
+"produces": [
+"application/json"
+],
+"parameters": [
+{
+"in": "body",
+"name": "body",
+"description": "Filters for metrics",
+"required": true,
+"schema": {
+"$ref": "#/definitions/VolumeAndUtilizationRequestBuilder"
+}
+}
+],
+"responses": {
+"200": {
+"description": "SUCCESS"
+},
+"400": {
+"description": "Not found"
+}
+}
+}
+},
+"/api/volume-utilization/maximum-peaks": {
+"post": {
+"tags": [
+"Volume And Utilization operations"
+],
+"summary": "Get Maximum Peaks",
+"description": "Gets Maximum Peaks",
+"operationId": "getMaximumPeaks",
+"schemes": [
+"http",
+"https"
+],
+"consumes": [
+"application/json"
+],
+"produces": [
+"application/json"
+],
+"parameters": [
+{
+"in": "body",
+"name": "body",
+"description": "Filters for metrics",
+"required": true,
+"schema": {
+"$ref": "#/definitions/VolumeAndUtilizationRequestBuilder"
+}
+}
+],
+"responses": {
+"200": {
+"description": "SUCCESS"
+},
+"400": {
+"description": "Not found"
+}
+}
+}
+},
+"/api/volume-utilization/median-chair-utilization": {
+"post": {
+"tags": [
+"Volume And Utilization operations"
+],
+"summary": "Get Median Chair Utilization",
+"description": "Gets Median Chair Utilization",
+"operationId": "getMedianChairUtilization",
+"schemes": [
+"http",
+"https"
+],
+"consumes": [
+"application/json"
+],
+"produces": [
+"application/json"
+],
+"parameters": [
+{
+"in": "body",
+"name": "body",
+"description": "Filters for metrics",
+"required": true,
+"schema": {
+"$ref": "#/definitions/VolumeAndUtilizationRequestBuilder"
+}
+}
+],
+"responses": {
+"200": {
+"description": "SUCCESS"
+},
+"400": {
+"description": "Not found"
+}
+}
+}
+},
+"/api/unit/{unitId}/live-date": {
+"get": {
+"tags": [
+"Unit"
+],
+"summary": "Get unit's live date",
+"description": "get the live date of a unit",
+"operationId": "getLiveDateOfUnit",
+"schemes": [
+"http",
+"https"
+],
+"produces": [
+"date"
+],
+"parameters": [
+{
+"name": "unitId",
+"in": "path",
+"required": true,
+"type": "string"
+}
+],
+"responses": {
+"200": {
+"description": "SUCCESS"
+},
+"400": {
+"description": "Not found"
+},
+"500": {
+"description": "Internal Server Error"
+}
+}
+}
+},
+"/api/daily-report-params": {
+"post": {
+"tags": [
+"Daily Report"
+],
+"summary": "Get parameters for Daily Huddle/History",
+"description": "return pre-fetched parameters used by daily huddle and daily history apis",
+"operationId": "getDailyReportParams",
+"schemes": [
+"http",
+"https"
+],
+"consumes": [
+"application/json"
+],
+"produces": [
+"application/json"
+],
+"parameters": [
+{
+"in": "body",
+"name": "body",
+"description": "Reporting Request",
+"required": true,
+"schema": {
+"$ref": "#/definitions/ReportingRequestObj"
+}
+}
+],
+"responses": {
+"200": {
+"description": "SUCCESS"
+},
+"400": {
+"description": "Not found"
+},
+"500": {
+"description": "Internal Server Error"
+}
+}
+}
+},
+"/api/daily-report": {
+"post": {
+"tags": [
+"Daily Report"
+],
+"summary": "Get chair utilization data for Daily Report",
+"description": "obtains data points for daily report chair utilization",
+"operationId": "getDailyReport",
+"schemes": [
+"http",
+"https"
+],
+"consumes": [
+"application/json"
+],
+"produces": [
+"application/json"
+],
+"parameters": [
+{
+"in": "body",
+"name": "body",
+"description": "Reporting Request",
+"required": true,
+"schema": {
+"$ref": "#/definitions/ReportingRequestObj"
+}
+}
+],
+"responses": {
+"200": {
+"description": "SUCCESS"
+},
+"400": {
+"description": "Not found"
+},
+"500": {
+"description": "Internal Server Error"
+}
+}
+}
+},
+"/api/daily-huddle": {
+"post": {
+"tags": [
+"Daily Report"
+],
+"summary": "Get data for Daily Huddle",
+"description": "obtains data points for daily huddle plot",
+"operationId": "getDailyHuddleReport",
+"schemes": [
+"http",
+"https"
+],
+"consumes": [
+"application/json"
+],
+"produces": [
+"application/json"
+],
+"parameters": [
+{
+"in": "body",
+"name": "body",
+"description": "Reporting Request",
+"required": true,
+"schema": {
+"$ref": "#/definitions/ReportingRequestObj"
+}
+}
+],
+"responses": {
+"200": {
+"description": "SUCCESS"
+},
+"400": {
+"description": "Not found"
+},
+"500": {
+"description": "Internal Server Error"
+}
+}
+}
+},
+"/api/files": {
+"post": {
+"tags": [
+"List the files"
+],
+"summary": "Get all files (getAllFiles)",
+"description": "Get all files (getAllFiles)",
+"operationId": "getAllFiles",
+"schemes": [
+"http",
+"https"
+],
+"consumes": [
+"application/json"
+],
+"produces": [
+"application/json"
+],
+"parameters": [
+{
+"in": "body",
+"name": "body",
+"description": "File list criteria",
+"required": true,
+"schema": {
+"$ref": "#/definitions/FileListCriteria"
+}
+}
+],
+"responses": {
+"200": {
+"description": "SUCCESS"
+},
+"400": {
+"description": "Not found"
+}
+}
+}
+}
+},
+"definitions": {
+"Cookies": {
+"type": "object"
+},
+"HttpEntity": {
+"type": "object",
+"required": [
+"knownEmpty"
+],
+"properties": {
+"knownEmpty": {
+"type": "boolean"
+}
+}
+},
+"Result": {
+"type": "object",
+"required": [
+"body",
+"cookies",
+"flash",
+"session"
+],
+"properties": {
+"body": {
+"$ref": "#/definitions/HttpEntity"
+},
+"flash": {
+"type": "object",
+"additionalProperties": {
+"type": "string"
+}
+},
+"session": {
+"type": "object",
+"additionalProperties": {
+"type": "string"
+}
+},
+"cookies": {
+"$ref": "#/definitions/Cookies"
+}
+}
+},
+"FilterDTO": {
+"type": "object",
+"required": [
+"filterBy",
+"filterValues"
+],
+"properties": {
+"filterBy": {
+"type": "string",
+"enum": [
+"APPOINTMENT_ID",
+"LOCATION",
+"APPOINTMENT_TIME",
+"APPOINTMENT_TYPE",
+"APPOINTMENT_GROUP",
+"EXPECTED_DURATION",
+"APPOINTMENT_STATUS",
+"CHECKIN_TIME",
+"CHAIR_TIME",
+"VITALS_TIME",
+"FIRST_MED_START_TIME",
+"LAST_MED_END_STOP_TIME",
+"CHECKOUT_TIME",
+"IQ_APPT_START",
+"IQ_PATIENT_CHECKOUT",
+"IQ_APPT_END",
+"APPOINTMENT_MADE_DATE",
+"APPOINTMENT_CANCELLED_DATE",
+"NO_SHOW_FLAG",
+"DEPARTMENT",
+"RESOURCE",
+"PROVIDER",
+"FILE_NAME",
+"ACUITY",
+"LINKED_APPOINTMENT_FLAG",
+"CLINIC_PROVIDER_INFO",
+"CLINIC_APPOINTMENT_TIME",
+"CLINIC_APPOINTMENT_DURATION",
+"CLINIC_SCHEDULED_END_TIME",
+"CLINIC_CHECKIN_TIME",
+"CLINIC_APPOINTMENT_START_TIME",
+"CLINIC_APPOINTMENT_END_TIME",
+"ADD_ON_STATUS"
+]
+},
+"filterValues": {
+"type": "array",
+"items": {
+"type": "string"
+}
+}
+}
+},
+"SearchFilter": {
+"type": "object",
+"required": [
+"allFields",
+"filterKey",
+"filters",
+"format",
+"fromDate",
+"isDownload",
+"limit",
+"offset",
+"sortBy",
+"sortOrder",
+"toDate",
+"unit"
+],
+"properties": {
+"unit": {
+"type": "string"
+},
+"fromDate": {
+"type": "string"
+},
+"toDate": {
+"type": "string"
+},
+"limit": {
+"type": "integer",
+"format": "int32"
+},
+"offset": {
+"type": "integer",
+"format": "int32"
+},
+"isDownload": {
+"type": "boolean"
+},
+"format": {
+"type": "string"
+},
+"allFields": {
+"type": "boolean"
+},
+"sortBy": {
+"type": "string",
+"enum": [
+"APPOINTMENT_ID",
+"LOCATION",
+"APPOINTMENT_TIME",
+"APPOINTMENT_TYPE",
+"APPOINTMENT_GROUP",
+"EXPECTED_DURATION",
+"APPOINTMENT_STATUS",
+"CHECKIN_TIME",
+"CHAIR_TIME",
+"VITALS_TIME",
+"FIRST_MED_START_TIME",
+"LAST_MED_END_STOP_TIME",
+"CHECKOUT_TIME",
+"IQ_APPT_START",
+"IQ_PATIENT_CHECKOUT",
+"IQ_APPT_END",
+"APPOINTMENT_MADE_DATE",
+"APPOINTMENT_CANCELLED_DATE",
+"NO_SHOW_FLAG",
+"DEPARTMENT",
+"RESOURCE",
+"PROVIDER",
+"FILE_NAME",
+"ACUITY",
+"LINKED_APPOINTMENT_FLAG",
+"CLINIC_PROVIDER_INFO",
+"CLINIC_APPOINTMENT_TIME",
+"CLINIC_APPOINTMENT_DURATION",
+"CLINIC_SCHEDULED_END_TIME",
+"CLINIC_CHECKIN_TIME",
+"CLINIC_APPOINTMENT_START_TIME",
+"CLINIC_APPOINTMENT_END_TIME",
+"ADD_ON_STATUS"
+]
+},
+"sortOrder": {
+"type": "string",
+"enum": [
+"asc",
+"desc"
+]
+},
+"filters": {
+"type": "array",
+"items": {
+"$ref": "#/definitions/FilterDTO"
+}
+},
+"filterKey": {
+"type": "string",
+"enum": [
+"APPOINTMENT_ID",
+"LOCATION",
+"APPOINTMENT_TIME",
+"APPOINTMENT_TYPE",
+"APPOINTMENT_GROUP",
+"EXPECTED_DURATION",
+"APPOINTMENT_STATUS",
+"CHECKIN_TIME",
+"CHAIR_TIME",
+"VITALS_TIME",
+"FIRST_MED_START_TIME",
+"LAST_MED_END_STOP_TIME",
+"CHECKOUT_TIME",
+"IQ_APPT_START",
+"IQ_PATIENT_CHECKOUT",
+"IQ_APPT_END",
+"APPOINTMENT_MADE_DATE",
+"APPOINTMENT_CANCELLED_DATE",
+"NO_SHOW_FLAG",
+"DEPARTMENT",
+"RESOURCE",
+"PROVIDER",
+"FILE_NAME",
+"ACUITY",
+"LINKED_APPOINTMENT_FLAG",
+"CLINIC_PROVIDER_INFO",
+"CLINIC_APPOINTMENT_TIME",
+"CLINIC_APPOINTMENT_DURATION",
+"CLINIC_SCHEDULED_END_TIME",
+"CLINIC_CHECKIN_TIME",
+"CLINIC_APPOINTMENT_START_TIME",
+"CLINIC_APPOINTMENT_END_TIME",
+"ADD_ON_STATUS"
+]
+}
+}
+},
+"HoursOfOperationDTO": {
+"type": "object",
+"required": [
+"day",
+"fromTime",
+"iqUnitHrsOfOperationId",
+"iqUnitMstr",
+"isEarlierClosingHour",
+"lastApptTime",
+"untilTime"
+],
+"properties": {
+"iqUnitHrsOfOperationId": {
+"type": "string"
+},
+"day": {
+"type": "string",
+"enum": [
+"MONDAY",
+"TUESDAY",
+"WEDNESDAY",
+"THURSDAY",
+"FRIDAY",
+"SATURDAY",
+"SUNDAY"
+]
+},
+"fromTime": {
+"type": "string"
+},
+"untilTime": {
+"type": "string"
+},
+"lastApptTime": {
+"type": "string"
+},
+"iqUnitMstr": {
+"type": "string"
+},
+"isEarlierClosingHour": {
+"type": "boolean"
+}
+}
+},
+"PharmacyHoursDTO": {
+"type": "object",
+"required": [
+"day",
+"fromTime",
+"iqPharmacyHrsOfOperationId",
+"iqUnitMstr",
+"untilTime"
+],
+"properties": {
+"iqPharmacyHrsOfOperationId": {
+"type": "string"
+},
+"day": {
+"type": "string",
+"enum": [
+"MONDAY",
+"TUESDAY",
+"WEDNESDAY",
+"THURSDAY",
+"FRIDAY",
+"SATURDAY",
+"SUNDAY"
+]
+},
+"fromTime": {
+"type": "string"
+},
+"untilTime": {
+"type": "string"
+},
+"iqUnitMstr": {
+"type": "string"
+}
+}
+},
+"BasicUnitDTO": {
+"type": "object",
+"required": [
+"description",
+"earlierClosingHourOn",
+"earlierConstraintTime",
+"id",
+"modifiedDateTime",
+"noOfBeds",
+"noOfChairs",
+"owner",
+"unitCode",
+"unitName"
+],
+"properties": {
+"id": {
+"type": "string"
+},
+"unitName": {
+"type": "string"
+},
+"unitCode": {
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"owner": {
+"type": "string"
+},
+"noOfChairs": {
+"type": "integer",
+"format": "int32"
+},
+"noOfBeds": {
+"type": "integer",
+"format": "int32"
+},
+"modifiedDateTime": {
+"type": "string",
+"format": "date-time"
+},
+"earlierClosingHourOn": {
+"type": "boolean"
+},
+"earlierConstraintTime": {
+"type": "string"
+}
+}
+},
+"UnitEntityDTO": {
+"type": "object",
+"required": [
+"apptStartTime",
+"chairsOrganizedInPods",
+"dedicatedResourcesExist",
+"description",
+"earlierClosingHourOn",
+"earlierConstraintTime",
+"hasUnitSpecificTimestampPriority",
+"id",
+"lastNurseScheduleSync",
+"lastOperatingHoursSync",
+"linkedApptsPercentage",
+"modifiedDateTime",
+"noOfBeds",
+"noOfChairs",
+"nofApptDischargeWithInHour",
+"nofApptStartWithInHour",
+"nonPortLabDrawsDoneInInfusionArea",
+"nurseLunchesAreScheduled",
+"owner",
+"parentId",
+"pharmacyDrugMixingTime",
+"pharmacyHoursConstrainApptStartTimes",
+"pharmacyOtherConstraints",
+"relatedUnits",
+"totalChairsBedsForScheduling",
+"typicalWeekdayInfusionVolumeMax",
+"typicalWeekdayInfusionVolumeMin",
+"unitCode",
+"unitName",
+"unitType",
+"validation"
+],
+"properties": {
+"id": {
+"type": "string"
+},
+"unitName": {
+"type": "string"
+},
+"unitCode": {
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"owner": {
+"type": "string"
+},
+"noOfChairs": {
+"type": "integer",
+"format": "int32"
+},
+"noOfBeds": {
+"type": "integer",
+"format": "int32"
+},
+"modifiedDateTime": {
+"type": "string",
+"format": "date-time"
+},
+"earlierClosingHourOn": {
+"type": "boolean"
+},
+"earlierConstraintTime": {
+"type": "string"
+},
+"parentId": {
+"type": "string"
+},
+"apptStartTime": {
+"type": "string"
+},
+"nofApptStartWithInHour": {
+"type": "integer",
+"format": "int32"
+},
+"nofApptDischargeWithInHour": {
+"type": "integer",
+"format": "int32"
+},
+"validation": {
+"$ref": "#/definitions/ValidationDTO"
+},
+"nurseLunchesAreScheduled": {
+"type": "boolean"
+},
+"pharmacyHoursConstrainApptStartTimes": {
+"type": "boolean"
+},
+"pharmacyDrugMixingTime": {
+"type": "string"
+},
+"pharmacyOtherConstraints": {
+"type": "string"
+},
+"typicalWeekdayInfusionVolumeMin": {
+"type": "integer",
+"format": "int32"
+},
+"typicalWeekdayInfusionVolumeMax": {
+"type": "integer",
+"format": "int32"
+},
+"linkedApptsPercentage": {
+"type": "string"
+},
+"dedicatedResourcesExist": {
+"type": "boolean"
+},
+"totalChairsBedsForScheduling": {
+"type": "integer",
+"format": "int32"
+},
+"chairsOrganizedInPods": {
+"type": "boolean"
+},
+"nonPortLabDrawsDoneInInfusionArea": {
+"type": "boolean"
+},
+"hasUnitSpecificTimestampPriority": {
+"type": "boolean"
+},
+"unitType": {
+"type": "string"
+},
+"relatedUnits": {
+"type": "array",
+"items": {
+"$ref": "#/definitions/BasicUnitDTO"
+}
+},
+"lastOperatingHoursSync": {
+"type": "string",
+"format": "date-time"
+},
+"lastNurseScheduleSync": {
+"type": "string",
+"format": "date-time"
+}
+}
+},
+"ValidationDTO": {
+"type": "object",
+"required": [
+"id",
+"isValid",
+"message",
+"subValidation"
+],
+"properties": {
+"id": {
+"type": "string"
+},
+"isValid": {
+"type": "boolean"
+},
+"subValidation": {
+"type": "array",
+"items": {
+"$ref": "#/definitions/ValidationDTO"
+}
+},
+"message": {
+"type": "string"
+}
+}
+},
+"HolidaysDTO": {
+"type": "object",
+"required": [
+"day",
+"fromTime",
+"holidayDate",
+"iqHolidaysPerUnitId",
+"iqUnitMstr",
+"lastApptTime",
+"nameOfTheHoliday",
+"readOnly",
+"toTime"
+],
+"properties": {
+"iqHolidaysPerUnitId": {
+"type": "string"
+},
+"holidayDate": {
+"type": "string"
+},
+"day": {
+"type": "string"
+},
+"fromTime": {
+"type": "string"
+},
+"lastApptTime": {
+"type": "string"
+},
+"nameOfTheHoliday": {
+"type": "string"
+},
+"toTime": {
+"type": "string"
+},
+"iqUnitMstr": {
+"type": "string"
+},
+"readOnly": {
+"type": "boolean"
+}
+}
+},
+"VolumeAndUtilizationRequestBuilder": {
+"type": "object",
+"required": [
+"dayOfWeeksInterested",
+"endingDate",
+"startingDate",
+"unitId"
+],
+"properties": {
+"startingDate": {
+"type": "string",
+"example": "MM/dd/yyyy",
+"description": "startingDate"
+},
+"endingDate": {
+"type": "string",
+"example": "MM/dd/yyyy",
+"description": "endingDate"
+},
+"unitId": {
+"type": "string",
+"description": "unitId"
+},
+"dayOfWeeksInterested": {
+"type": "array",
+"description": "dayOfWeeksInterested",
+"items": {
+"type": "string"
+}
+}
+}
+},
+"AddOnNoShowRequestObj": {
+"type": "object",
+"required": [
+"apptGroupNames",
+"daysOfWeekInterested",
+"endingDate",
+"filters",
+"sqlParamMap",
+"startingDate",
+"unitId"
+],
+"properties": {
+"unitId": {
+"type": "string"
+},
+"startingDate": {
+"type": "string"
+},
+"endingDate": {
+"type": "string"
+},
+"daysOfWeekInterested": {
+"type": "array",
+"items": {
+"type": "string",
+"enum": [
+"MONDAY",
+"TUESDAY",
+"WEDNESDAY",
+"THURSDAY",
+"FRIDAY",
+"SATURDAY",
+"SUNDAY"
+]
+}
+},
+"apptGroupNames": {
+"type": "array",
+"items": {
+"type": "string"
+}
+},
+"filters": {
+"type": "array",
+"items": {
+"type": "string",
+"enum": [
+"SAME_DAY_CANCELLED",
+"IS_NO_SHOW"
+]
+}
+},
+"sqlParamMap": {
+"type": "object",
+"additionalProperties": {
+"type": "number"
+}
+}
+}
+},
+"HelpSearchFilter": {
+"type": "object",
+"required": [
+"keyWords",
+"parentSection",
+"subSection",
+"tabSection"
+],
+"properties": {
+"parentSection": {
+"type": "string"
+},
+"subSection": {
+"type": "string"
+},
+"tabSection": {
+"type": "string"
+},
+"keyWords": {
+"type": "string"
+}
+}
+},
+"HelpDTO": {
+"type": "object",
+"required": [
+"content",
+"contentType",
+"keyWords",
+"order",
+"parent",
+"subHeading",
+"tabSection",
+"title"
+],
+"properties": {
+"parent": {
+"type": "string"
+},
+"subHeading": {
+"type": "string"
+},
+"tabSection": {
+"type": "string"
+},
+"title": {
+"type": "string"
+},
+"contentType": {
+"type": "string"
+},
+"content": {
+"type": "string"
+},
+"keyWords": {
+"type": "string"
+},
+"order": {
+"type": "string"
+}
+}
+},
+"WaitTimeRequestObj": {
+"type": "object",
+"required": [
+"apptGroupNames",
+"dayOfWeeksInterested",
+"endDate",
+"endingDate",
+"hasApptGroups",
+"sqlParamMap",
+"startDate",
+"startingDate",
+"unitId",
+"waitType"
+],
+"properties": {
+"startingDate": {
+"type": "string"
+},
+"endingDate": {
+"type": "string"
+},
+"unitId": {
+"type": "string"
+},
+"waitType": {
+"type": "string",
+"enum": [
+"INFUSION",
+"DRUG",
+"NONE"
+]
+},
+"dayOfWeeksInterested": {
+"type": "array",
+"uniqueItems": true,
+"items": {
+"type": "string",
+"enum": [
+"MONDAY",
+"TUESDAY",
+"WEDNESDAY",
+"THURSDAY",
+"FRIDAY",
+"SATURDAY",
+"SUNDAY"
+]
+}
+},
+"apptGroupNames": {
+"type": "array",
+"items": {
+"type": "string"
+}
+},
+"hasApptGroups": {
+"type": "boolean"
+},
+"startDate": {
+"type": "string",
+"format": "date"
+},
+"endDate": {
+"type": "string",
+"format": "date"
+},
+"sqlParamMap": {
+"type": "object",
+"additionalProperties": {
+"type": "number"
+}
+}
+}
+},
+"PatientArrivalRequestObj": {
+"type": "object",
+"required": [
+"apptGroupNames",
+"dayOfWeeksInterested",
+"earlyThreshold",
+"endingDate",
+"lateThreshold",
+"sqlParamMap",
+"startingDate",
+"unitId"
+],
+"properties": {
+"unitId": {
+"type": "string"
+},
+"startingDate": {
+"type": "string"
+},
+"endingDate": {
+"type": "string"
+},
+"earlyThreshold": {
+"type": "integer",
+"format": "int32"
+},
+"lateThreshold": {
+"type": "integer",
+"format": "int32"
+},
+"dayOfWeeksInterested": {
+"type": "array",
+"items": {
+"type": "string",
+"enum": [
+"MONDAY",
+"TUESDAY",
+"WEDNESDAY",
+"THURSDAY",
+"FRIDAY",
+"SATURDAY",
+"SUNDAY"
+]
+}
+},
+"apptGroupNames": {
+"type": "array",
+"items": {
+"type": "string"
+}
+},
+"sqlParamMap": {
+"type": "object",
+"additionalProperties": {
+"type": "number"
+}
+}
+}
+},
+"NurseCoverageDTO": {
+"type": "object",
+"required": [
+"assignment",
+"day",
+"endTime",
+"iqNurseCoverageId",
+"iqUnitMstr",
+"noOfNurses",
+"nurseType",
+"shiftLength",
+"startTime"
+],
+"properties": {
+"iqNurseCoverageId": {
+"type": "string"
+},
+"day": {
+"type": "string"
+},
+"noOfNurses": {
+"type": "integer",
+"format": "int32"
+},
+"shiftLength": {
+"type": "string"
+},
+"startTime": {
+"type": "string"
+},
+"endTime": {
+"type": "string"
+},
+"nurseType": {
+"type": "string"
+},
+"assignment": {
+"type": "string"
+},
+"iqUnitMstr": {
+"type": "string"
+}
+}
+},
+"NurseLunchesDTO": {
+"type": "object",
+"required": [
+"id",
+"lunchBreakDuration",
+"lunchesCompleteBy",
+"lunchesStartBy",
+"noApptStartsFromTime",
+"noApptStartsToTime",
+"nofNursesAtATime"
+],
+"properties": {
+"id": {
+"type": "string"
+},
+"lunchesStartBy": {
+"type": "string"
+},
+"lunchesCompleteBy": {
+"type": "string"
+},
+"lunchBreakDuration": {
+"type": "string"
+},
+"nofNursesAtATime": {
+"type": "integer",
+"format": "int32"
+},
+"noApptStartsFromTime": {
+"type": "string"
+},
+"noApptStartsToTime": {
+"type": "string"
+}
+}
+},
+"ApptMstrDTO": {
+"type": "object",
+"required": [
+"appointmentGroupTabIncomplete",
+"apptSetupId",
+"apptSetupName",
+"dataSetId",
+"descr",
+"firstVisit",
+"jobStatus",
+"lastModified",
+"maxStartTimes",
+"maxStarts",
+"owner",
+"pollingChannel",
+"readOnly",
+"simStartPerBucketLimit",
+"simStartPerBucketOn",
+"specificNeedsTabIncomplete",
+"status",
+"unitId",
+"unitName",
+"validation"
+],
+"properties": {
+"pollingChannel": {
+"type": "string"
+},
+"status": {
+"type": "string",
+"enum": [
+"IN_PROGRESS",
+"SUCCESS",
+"FAILED",
+"NO_SOLUTION",
+"TIMEOUT"
+]
+},
+"apptSetupId": {
+"type": "string"
+},
+"apptSetupName": {
+"type": "string"
+},
+"unitId": {
+"type": "string"
+},
+"dataSetId": {
+"type": "string"
+},
+"owner": {
+"type": "string"
+},
+"descr": {
+"type": "string"
+},
+"simStartPerBucketOn": {
+"type": "boolean"
+},
+"simStartPerBucketLimit": {
+"type": "integer",
+"format": "int32"
+},
+"maxStarts": {
+"type": "integer",
+"format": "int32"
+},
+"maxStartTimes": {
+"type": "integer",
+"format": "int32"
+},
+"lastModified": {
+"type": "string",
+"format": "date-time"
+},
+"unitName": {
+"type": "string"
+},
+"firstVisit": {
+"type": "boolean"
+},
+"appointmentGroupTabIncomplete": {
+"type": "boolean"
+},
+"specificNeedsTabIncomplete": {
+"type": "boolean"
+},
+"readOnly": {
+"type": "boolean"
+},
+"jobStatus": {
+"type": "string",
+"enum": [
+"IN_PROGRESS",
+"SUCCESS",
+"FAILED",
+"NO_SOLUTION",
+"TIMEOUT"
+]
+},
+"validation": {
+"$ref": "#/definitions/ValidationDTO"
+}
+}
+},
+"BucketingStrategyDTO": {
+"type": "object",
+"required": [
+"bucketingStrategy",
+"dateApplied",
+"description",
+"id",
+"unitId"
+],
+"properties": {
+"id": {
+"type": "string"
+},
+"unitId": {
+"type": "string"
+},
+"bucketingStrategy": {
+"type": "string",
+"enum": [
+"EXPECTED_DURATION",
+"MAPPED_APPT_TYPES",
+"CHECKOUT_MINUS_CHECKIN"
+]
+},
+"dateApplied": {
+"type": "string"
+},
+"description": {
+"type": "string"
+}
+}
+},
+"CompletionStage": {
+"type": "object"
+},
+"CompletionStageResult": {
+"type": "object"
+},
+"ApptDurationDTO": {
+"type": "object",
+"required": [
+"apptMstrId",
+"apptSpecificMedsByTimesId",
+"checkinToMeds",
+"checkoutToMeds",
+"custApptTypeArray",
+"defaultDuration",
+"durationMax",
+"durationMin",
+"groupName",
+"iqApptDurationMstrId",
+"lastApptStartTimes",
+"lastModified",
+"lowerBound",
+"nofCheckingsDuringMeds",
+"spreadingParameter",
+"spreadingParameterOverride"
+],
+"properties": {
+"iqApptDurationMstrId": {
+"type": "string"
+},
+"checkinToMeds": {
+"type": "integer",
+"format": "int32"
+},
+"checkoutToMeds": {
+"type": "integer",
+"format": "int32"
+},
+"durationMax": {
+"type": "integer",
+"format": "int32"
+},
+"durationMin": {
+"type": "integer",
+"format": "int32"
+},
+"defaultDuration": {
+"type": "integer",
+"format": "int32"
+},
+"lastApptStartTimes": {
+"type": "string"
+},
+"groupName": {
+"type": "string"
+},
+"nofCheckingsDuringMeds": {
+"type": "integer",
+"format": "int32"
+},
+"apptMstrId": {
+"type": "string"
+},
+"apptSpecificMedsByTimesId": {
+"type": "string"
+},
+"lastModified": {
+"type": "string",
+"format": "date-time"
+},
+"lowerBound": {
+"type": "integer",
+"format": "int32"
+},
+"spreadingParameterOverride": {
+"type": "boolean"
+},
+"spreadingParameter": {
+"type": "integer",
+"format": "int32"
+},
+"custApptTypeArray": {
+"type": "array",
+"items": {
+"type": "string"
+}
+}
+}
+},
+"ApptSpecificMedTimesDTO": {
+"type": "object",
+"required": [
+"allGroupId",
+"appointmentDurations",
+"constraintName",
+"constraintOptions",
+"day",
+"durationMasterId",
+"fromTime",
+"iqApptSpecificMedsByTimeId",
+"nofAppts",
+"toTime",
+"unitId"
+],
+"properties": {
+"unitId": {
+"type": "string"
+},
+"iqApptSpecificMedsByTimeId": {
+"type": "string"
+},
+"allGroupId": {
+"type": "string"
+},
+"durationMasterId": {
+"type": "string"
+},
+"day": {
+"type": "string",
+"enum": [
+"MONDAY",
+"TUESDAY",
+"WEDNESDAY",
+"THURSDAY",
+"FRIDAY",
+"SATURDAY",
+"SUNDAY"
+]
+},
+"fromTime": {
+"type": "string"
+},
+"toTime": {
+"type": "string"
+},
+"constraintName": {
+"type": "string"
+},
+"nofAppts": {
+"type": "integer",
+"format": "int32"
+},
+"constraintOptions": {
+"type": "array",
+"items": {
+"$ref": "#/definitions/CommonKeyValuePairDTO"
+}
+},
+"appointmentDurations": {
+"type": "array",
+"items": {
+"$ref": "#/definitions/CommonKeyValuePairDTO"
+}
+}
+}
+},
+"CommonKeyValuePairDTO": {
+"type": "object",
+"required": [
+"key",
+"value"
+],
+"properties": {
+"key": {
+"type": "string"
+},
+"value": {
+"type": "string"
+}
+}
+},
+"ReportingRequestObj": {
+"type": "object",
+"required": [
+"activeTemplateId",
+"apptDate",
+"apptDateLD",
+"date",
+"fromDateTime",
+"isHuddleReportRequest",
+"jsonMap",
+"parentUnitId",
+"primaryNursing",
+"primaryNursingField",
+"priorToLive",
+"schedulingInterval",
+"shiftType",
+"sqlParamMap",
+"toDateTime",
+"unitCode",
+"unitId",
+"unitName",
+"yesterday"
+],
+"properties": {
+"unitId": {
+"type": "string"
+},
+"parentUnitId": {
+"type": "string"
+},
+"unitCode": {
+"type": "string"
+},
+"unitName": {
+"type": "string"
+},
+"shiftType": {
+"type": "string"
+},
+"fromDateTime": {
+"type": "string",
+"format": "date-time"
+},
+"toDateTime": {
+"type": "string",
+"format": "date-time"
+},
+"date": {
+"type": "string",
+"format": "date-time"
+},
+"yesterday": {
+"type": "string"
+},
+"isHuddleReportRequest": {
+"type": "boolean"
+},
+"activeTemplateId": {
+"type": "string"
+},
+"schedulingInterval": {
+"type": "integer",
+"format": "int32"
+},
+"priorToLive": {
+"type": "boolean"
+},
+"primaryNursing": {
+"type": "boolean"
+},
+"primaryNursingField": {
+"type": "string",
+"enum": [
+"APPOINTMENT_ID",
+"LOCATION",
+"APPOINTMENT_TIME",
+"APPOINTMENT_TYPE",
+"APPOINTMENT_GROUP",
+"EXPECTED_DURATION",
+"APPOINTMENT_STATUS",
+"CHECKIN_TIME",
+"CHAIR_TIME",
+"VITALS_TIME",
+"FIRST_MED_START_TIME",
+"LAST_MED_END_STOP_TIME",
+"CHECKOUT_TIME",
+"IQ_APPT_START",
+"IQ_PATIENT_CHECKOUT",
+"IQ_APPT_END",
+"APPOINTMENT_MADE_DATE",
+"APPOINTMENT_CANCELLED_DATE",
+"NO_SHOW_FLAG",
+"DEPARTMENT",
+"RESOURCE",
+"PROVIDER",
+"FILE_NAME",
+"ACUITY",
+"LINKED_APPOINTMENT_FLAG",
+"CLINIC_PROVIDER_INFO",
+"CLINIC_APPOINTMENT_TIME",
+"CLINIC_APPOINTMENT_DURATION",
+"CLINIC_SCHEDULED_END_TIME",
+"CLINIC_CHECKIN_TIME",
+"CLINIC_APPOINTMENT_START_TIME",
+"CLINIC_APPOINTMENT_END_TIME",
+"ADD_ON_STATUS"
+]
+},
+"sqlParamMap": {
+"type": "object",
+"additionalProperties": {
+"type": "number"
+}
+},
+"apptDateLD": {
+"type": "string",
+"format": "date"
+},
+"jsonMap": {
+"type": "object",
+"additionalProperties": {
+"type": "number"
+}
+},
+"apptDate": {
+"type": "string"
+}
+}
+},
+"NurseAllocationDTO": {
+"type": "object",
+"required": [
+"actualEnd",
+"actualStart",
+"categoryId",
+"checkSumCounter",
+"nurseAllocationId",
+"nurseAvailabiltyId",
+"txnlChecksum"
+],
+"properties": {
+"nurseAllocationId": {
+"type": "string"
+},
+"nurseAvailabiltyId": {
+"type": "string"
+},
+"actualStart": {
+"type": "string"
+},
+"actualEnd": {
+"type": "string"
+},
+"txnlChecksum": {
+"type": "string"
+},
+"checkSumCounter": {
+"type": "string"
+},
+"categoryId": {
+"type": "string"
+}
+}
+},
+"NurseAvailabilityDTO": {
+"type": "object",
+"required": [
+"active",
+"dateOn",
+"day",
+"endTime",
+"extraShift",
+"id",
+"nurseName",
+"partial",
+"partialAbsenseReason",
+"partialEndTime",
+"partialStartTime",
+"perDayTemplateId",
+"shiftLength",
+"shiftType",
+"startTime",
+"unitId"
+],
+"properties": {
+"id": {
+"type": "string"
+},
+"perDayTemplateId": {
+"type": "string"
+},
+"dateOn": {
+"type": "string"
+},
+"day": {
+"type": "string",
+"enum": [
+"MONDAY",
+"TUESDAY",
+"WEDNESDAY",
+"THURSDAY",
+"FRIDAY",
+"SATURDAY",
+"SUNDAY"
+]
+},
+"nurseName": {
+"type": "string"
+},
+"shiftType": {
+"type": "string"
+},
+"startTime": {
+"type": "string"
+},
+"endTime": {
+"type": "string"
+},
+"shiftLength": {
+"type": "number",
+"format": "float"
+},
+"partial": {
+"type": "boolean"
+},
+"partialStartTime": {
+"type": "string"
+},
+"partialEndTime": {
+"type": "string"
+},
+"partialAbsenseReason": {
+"type": "string"
+},
+"active": {
+"type": "boolean"
+},
+"extraShift": {
+"type": "string"
+},
+"unitId": {
+"type": "string"
+}
+}
+},
+"KeyValuePairDTO": {
+"type": "object",
+"required": [
+"key",
+"value"
+],
+"properties": {
+"key": {
+"type": "number"
+},
+"value": {
+"type": "number"
+}
+}
+},
+"FileFieldMapperDTO": {
+"type": "object",
+"required": [
+"apptField",
+"displayName",
+"fieldType",
+"isRequired",
+"isTimeField",
+"mappingField",
+"offsetTimeInMins",
+"priority",
+"sourceFieldFormat",
+"sourceFieldName"
+],
+"properties": {
+"mappingField": {
+"type": "string",
+"enum": [
+"APPOINTMENT_ID",
+"LOCATION",
+"APPOINTMENT_TYPE",
+"APPOINTMENT_STATUS",
+"APPOINTMENT_MADE_DATE",
+"APPOINTMENT_CANCELLED_DATE",
+"EXPECTED_DURATION",
+"ACUITY",
+"DEPARTMENT",
+"RESOURCE",
+"PROVIDER",
+"APPOINTMENT_TIME",
+"CHECKIN_TIME",
+"CHAIR_TIME",
+"VITALS_TIME",
+"FIRST_MED_START_TIME",
+"CHECKOUT_TIME",
+"LAST_MED_END_STOP_TIME",
+"LINKED_APPOINTMENT_FLAG",
+"CLINIC_PROVIDER_INFO",
+"CLINIC_APPOINTMENT_TIME",
+"CLINIC_APPOINTMENT_DURATION",
+"CLINIC_SCHEDULED_END_TIME",
+"CLINIC_CHECKIN_TIME",
+"CLINIC_APPOINTMENT_START_TIME",
+"CLINIC_APPOINTMENT_END_TIME"
+]
+},
+"sourceFieldName": {
+"type": "string"
+},
+"sourceFieldFormat": {
+"type": "string"
+},
+"priority": {
+"type": "integer",
+"format": "int32"
+},
+"isRequired": {
+"type": "boolean"
+},
+"apptField": {
+"type": "string",
+"enum": [
+"APPOINTMENT_ID",
+"LOCATION",
+"APPOINTMENT_TIME",
+"APPOINTMENT_TYPE",
+"APPOINTMENT_GROUP",
+"EXPECTED_DURATION",
+"APPOINTMENT_STATUS",
+"CHECKIN_TIME",
+"CHAIR_TIME",
+"VITALS_TIME",
+"FIRST_MED_START_TIME",
+"LAST_MED_END_STOP_TIME",
+"CHECKOUT_TIME",
+"IQ_APPT_START",
+"IQ_PATIENT_CHECKOUT",
+"IQ_APPT_END",
+"APPOINTMENT_MADE_DATE",
+"APPOINTMENT_CANCELLED_DATE",
+"NO_SHOW_FLAG",
+"DEPARTMENT",
+"RESOURCE",
+"PROVIDER",
+"FILE_NAME",
+"ACUITY",
+"LINKED_APPOINTMENT_FLAG",
+"CLINIC_PROVIDER_INFO",
+"CLINIC_APPOINTMENT_TIME",
+"CLINIC_APPOINTMENT_DURATION",
+"CLINIC_SCHEDULED_END_TIME",
+"CLINIC_CHECKIN_TIME",
+"CLINIC_APPOINTMENT_START_TIME",
+"CLINIC_APPOINTMENT_END_TIME",
+"ADD_ON_STATUS"
+]
+},
+"offsetTimeInMins": {
+"type": "integer",
+"format": "int32"
+},
+"displayName": {
+"type": "string"
+},
+"fieldType": {
+"type": "string",
+"enum": [
+"OTHER",
+"CHECK_IN",
+"CHECK_OUT",
+"CLINIC"
+]
+},
+"isTimeField": {
+"type": "boolean"
+}
+}
+},
+"FileFieldMappingDTO": {
+"type": "object",
+"required": [
+"fileId",
+"mappingFieldsDTO"
+],
+"properties": {
+"fileId": {
+"type": "string"
+},
+"mappingFieldsDTO": {
+"type": "array",
+"items": {
+"$ref": "#/definitions/FileFieldMapperDTO"
+}
+}
+}
+},
+"ApptTypeMappingDTO": {
+"type": "object",
+"required": [
+"apptType",
+"fastTrackAppt",
+"include",
+"unitId"
+],
+"properties": {
+"apptType": {
+"type": "string"
+},
+"fastTrackAppt": {
+"type": "boolean"
+},
+"include": {
+"type": "boolean"
+},
+"unitId": {
+"type": "string"
+}
+}
+},
+"ApptStatusMappingDTO": {
+"type": "object",
+"required": [
+"apptStatus",
+"mappingValue",
+"unitId"
+],
+"properties": {
+"apptStatus": {
+"type": "string"
+},
+"mappingValue": {
+"type": "string"
+},
+"unitId": {
+"type": "string"
+}
+}
+},
+"FastTrackMappingRequestObj": {
+"type": "object",
+"required": [
+"apptTypes",
+"expDurations"
+],
+"properties": {
+"expDurations": {
+"type": "array",
+"items": {
+"type": "integer",
+"format": "int32"
+}
+},
+"apptTypes": {
+"type": "array",
+"items": {
+"type": "string"
+}
+}
+}
+},
+"FileListCriteria": {
+"type": "object",
+"required": [
+"echo",
+"maxRecords",
+"startIndex"
+],
+"properties": {
+"startIndex": {
+"type": "integer",
+"format": "int32"
+},
+"maxRecords": {
+"type": "integer",
+"format": "int32"
+},
+"echo": {
+"type": "integer",
+"format": "int32"
+}
+}
+}
+}
+}
